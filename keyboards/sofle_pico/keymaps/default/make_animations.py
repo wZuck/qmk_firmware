@@ -31,12 +31,20 @@ FRAMES = 8
 
 # Figure geometry, in "figure" coordinates: origin on the body centre line,
 # y grows downwards, y = 0 is the head's centre.
-HEAD_CY, HEAD_R = 12.0, 9.5
-EYE_DX, EYE_CY, EYE_R = 5.0, 9.0, 6.0
-PUPIL_R, PUPIL_DX = 2.5, 2.0
-BODY_CY, BODY_RX, BODY_RY = 34.5, 17.0, 23.5
-ARM_X1 = 31.5
-LEG_DX, LEG_Y1 = 13.5, 67.5
+# Vectorised off the reference drawing - fit_reference.py finds the head/eye
+# circles, the pupils and the body ellipse and prints them in this coordinate
+# system (radii are to the middle of the stroke).
+#
+# One deliberate change: in the reference the eyes are as wide as the head, so
+# at 64 px their outlines merge with the head's. The head is drawn a little
+# bigger than measured (13.5 instead of 10.1) so both eyeballs sit clearly
+# *inside* it while still being big, and the face reads at this size.
+HEAD_CY, HEAD_R = 12.0, 13.5
+EYE_DX, EYE_CY, EYE_R = 5.2, 10.0, 6.0
+PUPIL_R, PUPIL_DX, PUPIL_DY = 2.8, 1.4, 0.5
+BODY_CY, BODY_RX, BODY_RY = 34.5, 19.5, 23.9
+ARM_X1, ARM_DY = 31.5, 0.0
+LEG_DX, LEG_Y1 = 13.5, 66.75
 
 BASE_TOP = 32       # where the figure's y = 0 sits when dy is 0
 PIVOT_Y = BASE_TOP + 34.5   # rotation pivot: the middle of the body
@@ -64,7 +72,7 @@ ANIMATIONS = [
          arm_l=[0, 3, 5, 3, 0, -3, -5, -3],
          arm_r=[0, -3, -5, -3, 0, 3, 5, 3],
          blink={4, 5},
-         look=[Z, (1, 0), (2, 0), (2, -1), (2, 0), (1, 0), Z, (-1, 0)],
+         look=[Z, (1, 0), (1, 0), (1, -1), (1, 0), (1, 0), Z, (-1, 0)],
      )),
     ("wave", "standing, waving one arm hello",
      dict(
@@ -72,7 +80,7 @@ ANIMATIONS = [
          arm_l=[0] * FRAMES,
          arm_r=[7, 12, 16, 12, 7, 12, 16, 12],
          blink={4},
-         look=[(1, 0), (1, 0), (2, 0), (1, 0), (1, 0), (2, -1), (1, 0), (1, 0)],
+         look=[(1, 0), (1, 0), (1, 0), (1, 0), (1, 0), (1, -1), (1, 0), (1, 0)],
      )),
     ("walk", "marching in place, arms swinging the other way",
      dict(
@@ -199,7 +207,7 @@ def frame(params, i):
     body_cy = BODY_CY + (BODY_RY - ry)
     head_cy = HEAD_CY + (BODY_RY - ry) * 0.9
     eye_cy = EYE_CY + (head_cy - HEAD_CY)
-    arm_y = body_cy
+    arm_y = body_cy + ARM_DY
 
     # Layering follows the reference drawing: legs first, then the body (its
     # interior is blanked, hiding the legs inside it), then the head on top
@@ -227,7 +235,7 @@ def frame(params, i):
         if blink:
             g.line(X(cx - EYE_R + 1), Y(eye_cy), X(cx + EYE_R - 1), Y(eye_cy), thickness=2)
         else:
-            g.disc(X(cx + PUPIL_DX + look[0]), Y(eye_cy) + look[1], PUPIL_R)
+            g.disc(X(cx + PUPIL_DX + look[0]), Y(eye_cy) + PUPIL_DY + look[1], PUPIL_R)
 
     # decorations, drawn in canvas coordinates (no lean)
     if params.get("sleep_z"):

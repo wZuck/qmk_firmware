@@ -30,6 +30,8 @@
 | `keymap_layers.svg` | **四层键位图（矢量）**：按真实坐标绘制，放多大都不糊 |
 | `keymap_layers.png` | 同一张图的光栅版，默认 2 倍（1468×3300），可 `python3 gen_keymap_image.py 4` 出 4 倍 |
 | `gen_keymap_image.py` | 由 `keymap.c` + `keyboard.json` 重新生成键位图（PNG + SVG）与 `keymap.md` |
+| `oled_preview/fit_reference.py` | 把参考图矢量化（Hough 找圆、最小二乘拟合椭圆），算出角色各图元的参数 |
+| `oled_preview/reference.png` | 参考原图（角色的出处） |
 | `oled_preview/` | **OLED 显示内容预览**：信息屏 13 种 + 四组动画共 32 帧 + logo，含 `1x`/`4x`/4 个 GIF/总览图 |
 | `index.html` | **一页看全**：固件信息 + 键位图 + OLED 三种画面（打开即可，图片走相对路径） |
 | `gen_index.py` | 重新生成 `index.html`（自动带上 uf2 的 SHA-256、QMK 版本、图片清单） |
@@ -41,7 +43,7 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-d6b04b43d725573bb98cbd326effe9cd29637d21d10992def1115871b939e59e  sofle_pico_default.uf2
+13bf47e98f9885f2683072eca809259a1b66f6ce2a316968b7282c67e86a5997  sofle_pico_default.uf2
 ```
 
 ## 3. 烧录方法
