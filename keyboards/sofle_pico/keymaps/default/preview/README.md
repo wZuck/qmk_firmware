@@ -6,7 +6,8 @@
 
 | 内容 | 原始位置 |
 |---|---|
-| `keymap_layers.png` | `build_soflepico/keymap_layers.png`（四层键位图） |
+| `keymap_layers.svg` | `build_soflepico/keymap_layers.svg`（四层键位图，矢量，放多大都不糊） |
+| `keymap_layers.png` | `build_soflepico/keymap_layers.png`（同一张图，2 倍光栅） |
 | `oled_overview.png` | `build_soflepico/oled_preview/oled_overview.png`（三种画面总览） |
 | `anim_*.gif` | `build_soflepico/oled_preview/anim_*.gif`（五组动画各自的 8 帧循环） |
 | `1x/` `4x/` | `build_soflepico/oled_preview/1x|4x/`（status 6 张 + 动画 40 张 + logo 1 张） |

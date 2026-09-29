@@ -29,7 +29,8 @@ README = """<!-- 由 build_soflepico/sync_to_keymap.py 同步，勿手改 -->
 
 | 内容 | 原始位置 |
 |---|---|
-| `keymap_layers.png` | `build_soflepico/keymap_layers.png`（四层键位图） |
+| `keymap_layers.svg` | `build_soflepico/keymap_layers.svg`（四层键位图，矢量，放多大都不糊） |
+| `keymap_layers.png` | `build_soflepico/keymap_layers.png`（同一张图，2 倍光栅） |
 | `oled_overview.png` | `build_soflepico/oled_preview/oled_overview.png`（三种画面总览） |
 | `anim_*.gif` | `build_soflepico/oled_preview/anim_*.gif`（五组动画各自的 8 帧循环） |
 | `1x/` `4x/` | `build_soflepico/oled_preview/1x|4x/`（status 6 张 + 动画 40 张 + logo 1 张） |
@@ -59,14 +60,15 @@ def main():
     for sub in ("", "1x", "4x"):
         d = os.path.join(PREV, sub)
         for f in os.listdir(d):
-            if f.endswith((".png", ".gif")):
+            if f.endswith((".png", ".gif", ".svg")):
                 os.remove(os.path.join(d, f))
 
     # 键位表：图片路径改写成 preview/ 下
     src = open(os.path.join(HERE, "keymap.md")).read()
     open(os.path.join(DST, "keymap.md"), "w").write(src.replace("](keymap_layers.png)", "](preview/keymap_layers.png)"))
 
-    shutil.copy2(os.path.join(HERE, "keymap_layers.png"), PREV)
+    for name in ("keymap_layers.png", "keymap_layers.svg"):
+        shutil.copy2(os.path.join(HERE, name), PREV)
     shutil.copy2(os.path.join(HERE, "oled_preview", "oled_overview.png"), PREV)
     gifs = [f for f in sorted(os.listdir(os.path.join(HERE, "oled_preview"))) if f.endswith(".gif")]
     for name in gifs:

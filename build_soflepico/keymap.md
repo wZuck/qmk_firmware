@@ -2,6 +2,8 @@
 
 ![四层键位图](keymap_layers.png)
 
+> 放大看不糊的矢量版：[keymap_layers.svg](keymap_layers.svg)
+
 > 图片由 `gen_keymap_image.py` 从 `keymap.c` + `keyboard.json` 自动生成，改键后重跑该脚本即可刷新。
 
 ## 一、层的切换方式
@@ -110,7 +112,7 @@
 
 ### 第 3 层 · ADJUST — 设置层
 
-模式切换、烧录、媒体键；LOWER+RAISE 同时按住进入。
+模式切换、OLED 画面切换、清 EEPROM、烧录、媒体键；LOWER+RAISE 同时按住进入。
 
 **左手**
 

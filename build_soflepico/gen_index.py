@@ -139,6 +139,7 @@ def main():
       <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · {size:,} 字节 · 构建于 {built}</td></tr>
       <tr><th>SHA-256</th><td class="hash">{sha}</td></tr>
       <tr><th>QMK</th><td>tag <code>{tag}</code> · commit <code>{commit}</code>（{commit_date}）</td></tr>
+      <tr><th>键位图</th><td><code>keymap_layers.svg</code>（矢量）· <code>keymap_layers.png</code>（2 倍光栅）</td></tr>
       <tr><th>编译命令</th><td><code>qmk compile -kb sofle_pico -km default</code></td></tr>
       <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3)，<code>LOWER</code>+<code>RAISE</code> 三键组合出 ADJUST</td></tr>
       <tr><th>旋钮</th><td>左：音量 ± / 按压静音　右：上一首·下一首 / 按压播放暂停</td></tr>
@@ -148,7 +149,7 @@ def main():
 
   <h2>键位图（四层）</h2>
   <div class="grid">
-{card("keymap_layers.png", "四层键位图", "点图看原图；文字版说明见 keymap.md", wide=True)}
+{card("keymap_layers.svg", "四层键位图（矢量）", "矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍，1468x3300）；文字版见 keymap.md", wide=True)}
   </div>
 
   <h2>OLED 画面</h2>

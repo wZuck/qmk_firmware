@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
-"""从 keymap.c + keyboard.json 生成 sofle_pico 键位图（PNG）与分层说明（Markdown）。
+"""从 keymap.c + keyboard.json 生成 sofle_pico 键位图与分层说明。
 
 产物（与本脚本同目录）：
-  keymap_layers.png   五层键位图，按 keyboard.json 的真实坐标绘制
+  keymap_layers.png   键位图（默认 2 倍分辨率，可传倍率参数）
+  keymap_layers.svg   同一张图的矢量版，放多大都不糊
   keymap.md           分层说明 + 每层键位表
 
 keymap.c 改动后重新跑一次即可刷新：
-  python3 gen_keymap_image.py
+  python3 gen_keymap_image.py          # PNG 用 2 倍
+  python3 gen_keymap_image.py 4        # PNG 用 4 倍
+
+布局以"基础单位"计算，PNG 渲染时整体乘以倍率，SVG 直接输出矢量。
 纯标准库 + Pillow。
 """
 
+import html
 import json
 import os
 import re
@@ -22,7 +27,13 @@ ROOT = os.path.dirname(HERE)
 KB_JSON = os.path.join(ROOT, "keyboards/sofle_pico/keyboard.json")
 KEYMAP_C = os.path.join(ROOT, "keyboards/sofle_pico/keymaps/default/keymap.c")
 OUT_PNG = os.path.join(HERE, "keymap_layers.png")
+OUT_SVG = os.path.join(HERE, "keymap_layers.svg")
 OUT_MD = os.path.join(HERE, "keymap.md")
+
+# PNG 的渲染倍率（布局本身是矢量单位，SVG 不受影响）
+SCALE = 2
+if len(sys.argv) > 1:
+    SCALE = max(1, int(sys.argv[1]))
 
 FONT_PATH = "/System/Library/Fonts/Supplemental/Arial Unicode.ttf"
 if not os.path.exists(FONT_PATH):
@@ -147,25 +158,27 @@ NOTE = {
 }
 
 
+LAYER_INTRO = {
+    "_QWERTY": ("基础层（默认）", "开机就是这一层，普通打字用。"),
+    "_LOWER": ("数字/符号层", "符号、F1–F12、方向键等；按住左手 LOWER 进入。"),
+    "_RAISE": ("导航/编辑层", "方向、翻页、词移动、撤销/复制/粘贴；按住右手 RAISE 进入。"),
+    "_ADJUST": ("设置层", "模式切换、OLED 画面切换、清 EEPROM、烧录、媒体键；LOWER+RAISE 同时按住进入。"),
+}
+
+ROW_NAMES = ["数字行", "上排", "中排", "下排"]
+
+
 def load_font(size):
-    return ImageFont.truetype(FONT_PATH, size)
+    return ImageFont.truetype(FONT_PATH, int(round(size)))
 
 
-def fit_font(draw, text, max_w, max_h, hi=16, lo=8):
+def fit_size(draw, text, max_w, max_h, hi=16, lo=8):
+    """挑一个能塞进格子的字号（基础单位）。"""
     for size in range(hi, lo - 1, -1):
-        f = load_font(size)
-        box = draw.textbbox((0, 0), text, font=f)
+        box = draw.textbbox((0, 0), text, font=load_font(size))
         if box[2] - box[0] <= max_w and box[3] - box[1] <= max_h:
-            return f
-    return load_font(lo)
-
-
-def draw_key(d, x, y, w, h, text, fill, outline, fg="#202124", lw=1, bold=False):
-    d.rounded_rectangle([x, y, x + w, y + h], radius=6, fill=fill, outline=outline, width=lw)
-    f = fit_font(d, text, w - 6, h - 6)
-    box = d.textbbox((0, 0), text, font=f)
-    d.text((x + w / 2 - (box[2] - box[0]) / 2 - box[0], y + h / 2 - (box[3] - box[1]) / 2 - box[1]),
-           text, font=f, fill=fg)
+            return size
+    return lo
 
 
 def wrap_text(d, text, font, max_w):
@@ -187,7 +200,15 @@ def wrap_text(d, text, font, max_w):
     return lines
 
 
-def render(layout, layers, base_names):
+# --------------------------------------------------------------------------
+# 先把整张图摊成图元列表（基础单位），再分别渲染成 PNG 和 SVG。
+#   ("rect", x, y, w, h, 圆角, 填充, 描边, 线宽)
+#   ("text", x, y, 文本, 字号, 颜色, "lt" 左上 / "ct" 居中)
+# --------------------------------------------------------------------------
+
+
+def build(layout, layers, base_names):
+    prims = []
     w_panel = PAD * 2 + 15 * S
     header_h, footer_h = 96, 92
     W = w_panel
@@ -206,21 +227,20 @@ def render(layout, layers, base_names):
 
     heights = [TITLE_H + 6 * S + 20 * len(n) + 14 for n in notes]
     H = header_h + sum(heights) + PANEL_GAP * len(layers) + footer_h
-    img = Image.new("RGB", (W, H), "#eef1f5")
-    d = ImageDraw.Draw(img)
 
     # 头部
-    d.text((PAD, 20), "Sofle Pico · default keymap 键位图", font=load_font(26), fill="#1f2933")
-    d.text((PAD, 54), "每个面板：左边 = 左手，右边 = 右手。▽ = 穿透到下一层（用下层的键）　✗ = 无功能",
-           font=load_font(15), fill="#52606d")
+    prims.append(("text", PAD, 20, "Sofle Pico · default keymap 键位图", 26, "#1f2933", "lt"))
+    prims.append(("text", PAD, 54,
+                  "每个面板：左边 = 左手，右边 = 右手。▽ = 穿透到下一层（用下层的键）　✗ = 无功能",
+                  15, "#52606d", "lt"))
 
     top = header_h
     for idx, (name, args) in enumerate(layers):
         h_panel = heights[idx]
-        d.rounded_rectangle([6, top, W - 6, top + h_panel - 4], radius=10, fill="#ffffff", outline="#d7dce3")
+        prims.append(("rect", 6, top, W - 12, h_panel - 4, 10, "#ffffff", "#d7dce3", 1))
         key_fill, key_line, title_color = STYLE.get(name, ("#ffffff", "#c9ced6", "#333333"))
-        d.text((PAD, top + 8), f"第 {idx} 层  {name.lstrip('_')}   ·   {base_names[idx]}",
-               font=load_font(18), fill=title_color)
+        prims.append(("text", PAD, top + 8, f"第 {idx} 层  {name.lstrip('_')}   ·   {base_names[idx]}",
+                      18, title_color, "lt"))
 
         y_off = top + TITLE_H
         for i, k in enumerate(layout):
@@ -232,50 +252,76 @@ def render(layout, layers, base_names):
             text = label(code)
 
             if code in ("_______", "KC_TRNS"):
-                draw_key(d, x0, y0, ww, hh, text, "#f1f3f5", "#dcdfe4", "#9aa5b1")
+                fill, outline, fg, lw = "#f1f3f5", "#dcdfe4", "#9aa5b1", 1
             elif code in ("XXXXXXX", "KC_NO"):
-                draw_key(d, x0, y0, ww, hh, text, "#eceff2", "#e0e3e7", "#b0b8c1")
+                fill, outline, fg, lw = "#eceff2", "#e0e3e7", "#b0b8c1", 1
             elif code in ("MO(_LOWER)", "MO(_RAISE)"):
                 target = "_LOWER" if "_LOWER" in code else "_RAISE"
-                _, tline, _ = STYLE[target]
-                draw_key(d, x0, y0, ww, hh, text, STYLE[target][0], tline, "#202124", lw=3)
+                fill, outline, fg, lw = STYLE[target][0], STYLE[target][1], "#202124", 3
             else:
-                draw_key(d, x0, y0, ww, hh, text, key_fill, key_line)
+                fill, outline, fg, lw = key_fill, key_line, "#202124", 1
+
+            prims.append(("rect", x0, y0, ww, hh, 6, fill, outline, lw))
+            size = fit_size(probe, text, ww - 6, hh - 6)
+            prims.append(("text", x0 + ww / 2, y0 + hh / 2, text, size, fg, "ct"))
 
         ny = y_off + 6 * S + 4
         for line in notes[idx]:
-            d.text((PAD, ny), line, font=note_font, fill="#52606d")
+            prims.append(("text", PAD, ny, line, 14, "#52606d", "lt"))
             ny += 20
         top += h_panel + PANEL_GAP
 
     # 底部图例
     ftop = H - footer_h + 8
-    d.rounded_rectangle([6, ftop, W - 6, H - 10], radius=10, fill="#ffffff", outline="#d7dce3")
-    d.text((PAD, ftop + 8), "旋钮（左右各一个 EC11）", font=load_font(16), fill="#1f2933")
+    prims.append(("rect", 6, ftop, W - 12, footer_h - 18, 10, "#ffffff", "#d7dce3", 1))
+    prims.append(("text", PAD, ftop + 8, "旋钮（左右各一个 EC11）", 16, "#1f2933", "lt"))
     for i, line in enumerate(foot1):
-        d.text((PAD, ftop + 32 + 20 * i), line, font=footer_font, fill="#52606d")
+        prims.append(("text", PAD, ftop + 32 + 20 * i, line, 13, "#52606d", "lt"))
     for i, line in enumerate(foot2):
-        d.text((PAD + int(maxw * 0.50), ftop + 32 + 20 * i), line, font=footer_font, fill="#52606d")
+        prims.append(("text", PAD + int(maxw * 0.50), ftop + 32 + 20 * i, line, 13, "#52606d", "lt"))
     y = ftop + 32 + 20 * max(len(foot1), len(foot2)) + 4
     for line in foot3:
-        d.text((PAD, y), line, font=footer_font, fill="#52606d")
+        prims.append(("text", PAD, y, line, 13, "#52606d", "lt"))
         y += 20
 
-    img.save(OUT_PNG)
-    return OUT_PNG
+    return prims, W, H
 
 
-# --------------------------------------------------------------------------
-# Markdown
-# --------------------------------------------------------------------------
+def emit_png(prims, W, H, path, scale):
+    img = Image.new("RGB", (int(round(W * scale)), int(round(H * scale))), "#eef1f5")
+    d = ImageDraw.Draw(img)
+    for p in prims:
+        if p[0] == "rect":
+            _, x, y, w, h, r, fill, outline, lw = p
+            d.rounded_rectangle([x * scale, y * scale, (x + w) * scale, (y + h) * scale],
+                                radius=r * scale, fill=fill, outline=outline, width=max(1, int(round(lw * scale))))
+        else:
+            _, x, y, s, size, fill, anchor = p
+            d.text((x * scale, y * scale), s, font=load_font(size * scale), fill=fill,
+                   anchor="la" if anchor == "lt" else "mm")
+    img.save(path)
+    return path
 
-ROW_NAMES = ["数字行", "上排", "中排", "下排"]
-LAYER_INTRO = {
-    "_QWERTY": ("基础层（默认）", "开机就是这一层，普通打字用。"),
-    "_LOWER": ("数字/符号层", "符号、F1–F12、方向键等；按住左手 LOWER 进入。"),
-    "_RAISE": ("导航/编辑层", "方向、翻页、词移动、撤销/复制/粘贴；按住右手 RAISE 进入。"),
-    "_ADJUST": ("设置层", "模式切换、烧录、媒体键；LOWER+RAISE 同时按住进入。"),
-}
+
+def emit_svg(prims, W, H, path):
+    out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">',
+           f'<rect width="{W}" height="{H}" fill="#eef1f5"/>',
+           '<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",'
+           'Helvetica,Arial,sans-serif;}</style>']
+    for p in prims:
+        if p[0] == "rect":
+            _, x, y, w, h, r, fill, outline, lw = p
+            out.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h:.1f}" rx="{r}" '
+                       f'fill="{fill}" stroke="{outline}" stroke-width="{lw}"/>')
+        else:
+            _, x, y, s, size, fill, anchor = p
+            pos = ('text-anchor="middle" dominant-baseline="central"' if anchor == "ct"
+                   else 'dominant-baseline="hanging"')
+            out.append(f'<text x="{x:.1f}" y="{y:.1f}" font-size="{size}" fill="{fill}" {pos}>'
+                       f'{html.escape(s)}</text>')
+    out.append("</svg>")
+    open(path, "w").write("\n".join(out) + "\n")
+    return path
 
 
 def md_tables(layout, name, args):
@@ -310,6 +356,7 @@ def write_md(layout, layers):
     parts = []
     parts.append("# sofle_pico `default` 键位图与分层说明\n")
     parts.append("![四层键位图](keymap_layers.png)\n")
+    parts.append("> 放大看不糊的矢量版：[keymap_layers.svg](keymap_layers.svg)\n")
     parts.append("> 图片由 `gen_keymap_image.py` 从 `keymap.c` + `keyboard.json` 自动生成，"
                  "改键后重跑该脚本即可刷新。\n")
 
@@ -386,13 +433,16 @@ def main():
     unknown = sorted({a for _, args in layers for a in args
                       if a not in LABELS and not a.startswith("KC_")})
     base_names = ["基础层 · QWERTY", "符号层", "导航/编辑层", "设置层"]
-    png = render(layout, layers, base_names[: len(layers)])
+    prims, W, H = build(layout, layers, base_names[: len(layers)])
+    png = emit_png(prims, W, H, OUT_PNG, SCALE)
+    svg = emit_svg(prims, W, H, OUT_SVG)
     md = write_md(layout, layers)
     print("层:", ", ".join(n for n, _ in layers))
     print("键位数/层:", len(layout))
     if unknown:
         print("未映射的键码（用了 fallback 显示）:", unknown)
-    print("已生成:", png)
+    print(f"已生成: {png}  ({int(round(W * SCALE))}x{int(round(H * SCALE))}, {SCALE} 倍)")
+    print(f"已生成: {svg}  (矢量, {W}x{H} 单位)")
     print("已生成:", md)
 
 

@@ -27,8 +27,9 @@
 | `sofle_pico_default.elf` | 带调试符号的可执行文件（gdb / 反汇编用） |
 | `sofle_pico_default.map` | 链接映射表（查符号地址、占用大小用） |
 | `keymap.md` | **键位图与分层说明**：每层有哪些键、怎么换层 |
-| `keymap_layers.png` | 四层键位图（按真实坐标绘制，可直接看图） |
-| `gen_keymap_image.py` | 由 `keymap.c` + `keyboard.json` 重新生成上面两个文件 |
+| `keymap_layers.svg` | **四层键位图（矢量）**：按真实坐标绘制，放多大都不糊 |
+| `keymap_layers.png` | 同一张图的光栅版，默认 2 倍（1468×3300），可 `python3 gen_keymap_image.py 4` 出 4 倍 |
+| `gen_keymap_image.py` | 由 `keymap.c` + `keyboard.json` 重新生成键位图（PNG + SVG）与 `keymap.md` |
 | `oled_preview/` | **OLED 显示内容预览**：信息屏 13 种 + 五组动画共 40 帧 + logo，含 `1x`/`4x`/5 个 GIF/总览图 |
 | `index.html` | **一页看全**：固件信息 + 键位图 + OLED 三种画面（打开即可，图片走相对路径） |
 | `gen_index.py` | 重新生成 `index.html`（自动带上 uf2 的 SHA-256、QMK 版本、图片清单） |
