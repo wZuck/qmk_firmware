@@ -1,0 +1,11 @@
+# The root .gitignore drops every image and every build product. This folder is
+# the "build + docs" bundle, so the pictures the docs refer to are let back in
+# (those under oled_preview/ are the same ones shown in the keymap folder),
+# along with the flashable .uf2 and the generated index.html.
+#
+# The intermediate products stay ignored: .hex / .bin / .elf / .map are derived
+# from the same build, are large, and change on every rebuild.
+!*.png
+!*.gif
+!*.uf2
+!index.html
