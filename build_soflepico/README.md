@@ -29,7 +29,7 @@
 | `keymap.md` | **键位图与分层说明**：每层有哪些键、怎么换层 |
 | `keymap_layers.png` | 四层键位图（按真实坐标绘制，可直接看图） |
 | `gen_keymap_image.py` | 由 `keymap.c` + `keyboard.json` 重新生成上面两个文件 |
-| `oled_preview/` | **OLED 显示内容预览**：三种画面（status 6 种 + anim 8 帧 + logo），含 `1x`/`4x`/GIF/总览图 |
+| `oled_preview/` | **OLED 显示内容预览**：status 6 种 + 五组动画共 40 帧 + logo，含 `1x`/`4x`/5 个 GIF/总览图 |
 | `index.html` | **一页看全**：固件信息 + 键位图 + OLED 三种画面（打开即可，图片走相对路径） |
 | `gen_index.py` | 重新生成 `index.html`（自动带上 uf2 的 SHA-256、QMK 版本、图片清单） |
 | `sync_to_keymap.py` | 把 `keymap.md` 和预览图同步到 `keyboards/sofle_pico/keymaps/default/` |
@@ -40,7 +40,7 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-1439ad2687c25f50ca7764572b4d2f9e23e276ea5b0272fb538d8d52564b7db9  sofle_pico_default.uf2
+bf23091244dab2c0df2cf7dd52f2df054efc5accadc2a624d4e4f8b3121fb746  sofle_pico_default.uf2
 ```
 
 ## 3. 烧录方法
@@ -91,13 +91,21 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 ### 4.3 OLED 画面切换
 
 `ADJUST` 层上**左右各有一个 `OLED` 键**（左半在 `E` 键位置，右半在镜像的 `O` 键位置），
-按一下切换**本侧**的画面，三种循环：
+按一下切换**本侧**的画面，依次循环：
 
 | 画面 | 内容 | 默认 |
 |---|---|---|
 | `status` | 层名大字 · Mac/Win · 实时修饰键（C S A G）· 峰值 WPM · 当前 WPM 与进度条 · Caps Lock | 左半 |
-| `anim` | `oled_anim.h` 的大眼小怪物动画（8 帧 8 fps） | 右半 |
+| `anim 0` | bounce：跳 + 落地压扁 + 眨眼 + 摆手 | 右半 |
+| `anim 1` | wave：站着挥手打招呼 | — |
+| `anim 2` | walk：原地踏步，手臂反向摆 | — |
+| `anim 3` | dance：左右摇摆，边上飘音符 | — |
+| `anim 4` | sleep：闭眼呼吸，飘 z | — |
 | `logo` | `oled_image.h` 的 Sofle Pico 静态图（64x96） | — |
+
+五组动画都是 8 帧、8 fps 的 64x128 循环，一共 40 KB（`SOFLE_ANIM_COUNT` / `SOFLE_ANIM_FRAMES`）。
+加一组动画只要在 `make_animations.py` 的 `ANIMATIONS` 里加一项，重跑脚本并重新编译——
+`oled_screen` 枚举里的动画区间会自动跟着 `SOFLE_ANIM_COUNT` 变。
 
 - 两边互相独立，也互不影响（左半可以是 `anim`，右半可以是 `status`）。
 - 选择只存在 RAM，重启回到默认（左 status / 右 anim）；上电后两半都会先播约 1.8 秒动画（`SOFLE_BOOT_MS`）。
@@ -121,6 +129,8 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 - 从 ELF 中核对按键：`keymaps[0][4][5] = 0x00a8`（`KC_MUTE`）、`keymaps[0][9][5] = 0x00ae`（`KC_MPLY`）。
 - 从 ELF 中核对 `keymaps` 为 4 层（480 字节），`ADJUST` 层上
   `[1,3] = [6,2] = 0x7E40`（`OLED_NEXT`）、`[1,5] = 0x7C03`（`EE_CLR`）。
+- 从 ELF 中核对 `oled_anim` = `0xA000` = 40960 字节 = 5 组 × 8 帧 × 1024 字节，
+  且每一帧与 `oled_anim.h` 逐字节一致（预览就是面板上会显示的内容）。
 
 ## 6. 注意事项
 

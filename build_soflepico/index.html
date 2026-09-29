@@ -43,9 +43,9 @@
   <div class="panel">
     <table>
       <tr><th>键盘 / keymap</th><td><code>sofle_pico</code> / <code>default</code>（RP2040，分体，左右各一个 EC11）</td></tr>
-      <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 152,064 字节 · 构建于 2026-09-30 01:12</td></tr>
-      <tr><th>SHA-256</th><td class="hash">1439ad2687c25f50ca7764572b4d2f9e23e276ea5b0272fb538d8d52564b7db9</td></tr>
-      <tr><th>QMK</th><td>tag <code>0.34.4</code> · commit <code>08c662f286</code>（2026-09-05）</td></tr>
+      <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 217,600 字节 · 构建于 2026-09-30 01:23</td></tr>
+      <tr><th>SHA-256</th><td class="hash">bf23091244dab2c0df2cf7dd52f2df054efc5accadc2a624d4e4f8b3121fb746</td></tr>
+      <tr><th>QMK</th><td>tag <code>0.34.5-2-ge993d7c22b</code> · commit <code>e993d7c22b</code>（2026-09-30）</td></tr>
       <tr><th>编译命令</th><td><code>qmk compile -kb sofle_pico -km default</code></td></tr>
       <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3)，<code>LOWER</code>+<code>RAISE</code> 三键组合出 ADJUST</td></tr>
       <tr><th>旋钮</th><td>左：音量 ± / 按压静音　右：上一首·下一首 / 按压播放暂停</td></tr>
@@ -62,7 +62,7 @@
   </div>
 
   <h2>OLED 画面</h2>
-  <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键在三种画面之间循环：status → anim → logo。
+  <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键循环切换：status → 5 组动画 → logo。
      默认左边 status、右边 anim；选择只存 RAM，重启回到默认。开机时两半都会先播 ~1.8 秒动画。</p>
 
   <h3>① status 状态屏（默认：左手）</h3>
@@ -94,44 +94,201 @@
       </figure>
   </div>
 
-  <h3>② anim 动画（默认：右手）</h3>
-  <p class="lead">大眼小怪物：弹跳 + 落地压扁 + 眨眼 + 摆手 + 眼珠转动，8 帧、8 fps。
-     <a href="oled_preview/anim.gif">打开 GIF</a> 看动态效果。</p>
+  <h3>② anim 动画（默认：右手第一组）</h3>
+  <p class="lead">五组大眼小怪物的 8 帧循环（8 fps）：bounce / wave / walk / dance / sleep。
+     每组都有 GIF，下面按组列出全部帧。</p>
+  <h4>anim 1/5 · bounce <span class="dim">— hop, squash on landing, blink, arms swing</span></h4>
   <div class="grid">
       <figure class="card">
-        <a href="oled_preview/anim.gif"><img src="oled_preview/anim.gif" alt="动画循环（GIF）" loading="lazy"></a>
-        <figcaption><b>动画循环（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
+        <a href="oled_preview/anim_bounce.gif"><img src="oled_preview/anim_bounce.gif" alt="bounce 循环（GIF）" loading="lazy"></a>
+        <figcaption><b>bounce 循环（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
       </figure>
       <figure class="card">
-        <a href="oled_preview/1x/anim_00.png"><img src="oled_preview/4x/anim_00.png" alt="帧 1" loading="lazy"></a>
+        <a href="oled_preview/1x/anim_bounce_00.png"><img src="oled_preview/4x/anim_bounce_00.png" alt="帧 1" loading="lazy"></a>
         <figcaption><b>帧 1</b></figcaption>
       </figure>
       <figure class="card">
-        <a href="oled_preview/1x/anim_01.png"><img src="oled_preview/4x/anim_01.png" alt="帧 2" loading="lazy"></a>
+        <a href="oled_preview/1x/anim_bounce_01.png"><img src="oled_preview/4x/anim_bounce_01.png" alt="帧 2" loading="lazy"></a>
         <figcaption><b>帧 2</b></figcaption>
       </figure>
       <figure class="card">
-        <a href="oled_preview/1x/anim_02.png"><img src="oled_preview/4x/anim_02.png" alt="帧 3" loading="lazy"></a>
+        <a href="oled_preview/1x/anim_bounce_02.png"><img src="oled_preview/4x/anim_bounce_02.png" alt="帧 3" loading="lazy"></a>
         <figcaption><b>帧 3</b></figcaption>
       </figure>
       <figure class="card">
-        <a href="oled_preview/1x/anim_03.png"><img src="oled_preview/4x/anim_03.png" alt="帧 4" loading="lazy"></a>
+        <a href="oled_preview/1x/anim_bounce_03.png"><img src="oled_preview/4x/anim_bounce_03.png" alt="帧 4" loading="lazy"></a>
         <figcaption><b>帧 4</b></figcaption>
       </figure>
       <figure class="card">
-        <a href="oled_preview/1x/anim_04.png"><img src="oled_preview/4x/anim_04.png" alt="帧 5" loading="lazy"></a>
+        <a href="oled_preview/1x/anim_bounce_04.png"><img src="oled_preview/4x/anim_bounce_04.png" alt="帧 5" loading="lazy"></a>
         <figcaption><b>帧 5</b></figcaption>
       </figure>
       <figure class="card">
-        <a href="oled_preview/1x/anim_05.png"><img src="oled_preview/4x/anim_05.png" alt="帧 6" loading="lazy"></a>
+        <a href="oled_preview/1x/anim_bounce_05.png"><img src="oled_preview/4x/anim_bounce_05.png" alt="帧 6" loading="lazy"></a>
         <figcaption><b>帧 6</b></figcaption>
       </figure>
       <figure class="card">
-        <a href="oled_preview/1x/anim_06.png"><img src="oled_preview/4x/anim_06.png" alt="帧 7" loading="lazy"></a>
+        <a href="oled_preview/1x/anim_bounce_06.png"><img src="oled_preview/4x/anim_bounce_06.png" alt="帧 7" loading="lazy"></a>
         <figcaption><b>帧 7</b></figcaption>
       </figure>
       <figure class="card">
-        <a href="oled_preview/1x/anim_07.png"><img src="oled_preview/4x/anim_07.png" alt="帧 8" loading="lazy"></a>
+        <a href="oled_preview/1x/anim_bounce_07.png"><img src="oled_preview/4x/anim_bounce_07.png" alt="帧 8" loading="lazy"></a>
+        <figcaption><b>帧 8</b></figcaption>
+      </figure>
+  </div>
+  <h4>anim 2/5 · wave <span class="dim">— standing, waving one arm hello</span></h4>
+  <div class="grid">
+      <figure class="card">
+        <a href="oled_preview/anim_wave.gif"><img src="oled_preview/anim_wave.gif" alt="wave 循环（GIF）" loading="lazy"></a>
+        <figcaption><b>wave 循环（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_wave_00.png"><img src="oled_preview/4x/anim_wave_00.png" alt="帧 1" loading="lazy"></a>
+        <figcaption><b>帧 1</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_wave_01.png"><img src="oled_preview/4x/anim_wave_01.png" alt="帧 2" loading="lazy"></a>
+        <figcaption><b>帧 2</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_wave_02.png"><img src="oled_preview/4x/anim_wave_02.png" alt="帧 3" loading="lazy"></a>
+        <figcaption><b>帧 3</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_wave_03.png"><img src="oled_preview/4x/anim_wave_03.png" alt="帧 4" loading="lazy"></a>
+        <figcaption><b>帧 4</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_wave_04.png"><img src="oled_preview/4x/anim_wave_04.png" alt="帧 5" loading="lazy"></a>
+        <figcaption><b>帧 5</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_wave_05.png"><img src="oled_preview/4x/anim_wave_05.png" alt="帧 6" loading="lazy"></a>
+        <figcaption><b>帧 6</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_wave_06.png"><img src="oled_preview/4x/anim_wave_06.png" alt="帧 7" loading="lazy"></a>
+        <figcaption><b>帧 7</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_wave_07.png"><img src="oled_preview/4x/anim_wave_07.png" alt="帧 8" loading="lazy"></a>
+        <figcaption><b>帧 8</b></figcaption>
+      </figure>
+  </div>
+  <h4>anim 3/5 · walk <span class="dim">— marching in place, arms swinging the other way</span></h4>
+  <div class="grid">
+      <figure class="card">
+        <a href="oled_preview/anim_walk.gif"><img src="oled_preview/anim_walk.gif" alt="walk 循环（GIF）" loading="lazy"></a>
+        <figcaption><b>walk 循环（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_walk_00.png"><img src="oled_preview/4x/anim_walk_00.png" alt="帧 1" loading="lazy"></a>
+        <figcaption><b>帧 1</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_walk_01.png"><img src="oled_preview/4x/anim_walk_01.png" alt="帧 2" loading="lazy"></a>
+        <figcaption><b>帧 2</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_walk_02.png"><img src="oled_preview/4x/anim_walk_02.png" alt="帧 3" loading="lazy"></a>
+        <figcaption><b>帧 3</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_walk_03.png"><img src="oled_preview/4x/anim_walk_03.png" alt="帧 4" loading="lazy"></a>
+        <figcaption><b>帧 4</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_walk_04.png"><img src="oled_preview/4x/anim_walk_04.png" alt="帧 5" loading="lazy"></a>
+        <figcaption><b>帧 5</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_walk_05.png"><img src="oled_preview/4x/anim_walk_05.png" alt="帧 6" loading="lazy"></a>
+        <figcaption><b>帧 6</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_walk_06.png"><img src="oled_preview/4x/anim_walk_06.png" alt="帧 7" loading="lazy"></a>
+        <figcaption><b>帧 7</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_walk_07.png"><img src="oled_preview/4x/anim_walk_07.png" alt="帧 8" loading="lazy"></a>
+        <figcaption><b>帧 8</b></figcaption>
+      </figure>
+  </div>
+  <h4>anim 4/5 · dance <span class="dim">— leaning left and right, with music notes</span></h4>
+  <div class="grid">
+      <figure class="card">
+        <a href="oled_preview/anim_dance.gif"><img src="oled_preview/anim_dance.gif" alt="dance 循环（GIF）" loading="lazy"></a>
+        <figcaption><b>dance 循环（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_dance_00.png"><img src="oled_preview/4x/anim_dance_00.png" alt="帧 1" loading="lazy"></a>
+        <figcaption><b>帧 1</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_dance_01.png"><img src="oled_preview/4x/anim_dance_01.png" alt="帧 2" loading="lazy"></a>
+        <figcaption><b>帧 2</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_dance_02.png"><img src="oled_preview/4x/anim_dance_02.png" alt="帧 3" loading="lazy"></a>
+        <figcaption><b>帧 3</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_dance_03.png"><img src="oled_preview/4x/anim_dance_03.png" alt="帧 4" loading="lazy"></a>
+        <figcaption><b>帧 4</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_dance_04.png"><img src="oled_preview/4x/anim_dance_04.png" alt="帧 5" loading="lazy"></a>
+        <figcaption><b>帧 5</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_dance_05.png"><img src="oled_preview/4x/anim_dance_05.png" alt="帧 6" loading="lazy"></a>
+        <figcaption><b>帧 6</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_dance_06.png"><img src="oled_preview/4x/anim_dance_06.png" alt="帧 7" loading="lazy"></a>
+        <figcaption><b>帧 7</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_dance_07.png"><img src="oled_preview/4x/anim_dance_07.png" alt="帧 8" loading="lazy"></a>
+        <figcaption><b>帧 8</b></figcaption>
+      </figure>
+  </div>
+  <h4>anim 5/5 · sleep <span class="dim">— eyes shut, breathing slowly, z&#x27;s drifting up</span></h4>
+  <div class="grid">
+      <figure class="card">
+        <a href="oled_preview/anim_sleep.gif"><img src="oled_preview/anim_sleep.gif" alt="sleep 循环（GIF）" loading="lazy"></a>
+        <figcaption><b>sleep 循环（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_sleep_00.png"><img src="oled_preview/4x/anim_sleep_00.png" alt="帧 1" loading="lazy"></a>
+        <figcaption><b>帧 1</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_sleep_01.png"><img src="oled_preview/4x/anim_sleep_01.png" alt="帧 2" loading="lazy"></a>
+        <figcaption><b>帧 2</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_sleep_02.png"><img src="oled_preview/4x/anim_sleep_02.png" alt="帧 3" loading="lazy"></a>
+        <figcaption><b>帧 3</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_sleep_03.png"><img src="oled_preview/4x/anim_sleep_03.png" alt="帧 4" loading="lazy"></a>
+        <figcaption><b>帧 4</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_sleep_04.png"><img src="oled_preview/4x/anim_sleep_04.png" alt="帧 5" loading="lazy"></a>
+        <figcaption><b>帧 5</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_sleep_05.png"><img src="oled_preview/4x/anim_sleep_05.png" alt="帧 6" loading="lazy"></a>
+        <figcaption><b>帧 6</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_sleep_06.png"><img src="oled_preview/4x/anim_sleep_06.png" alt="帧 7" loading="lazy"></a>
+        <figcaption><b>帧 7</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_sleep_07.png"><img src="oled_preview/4x/anim_sleep_07.png" alt="帧 8" loading="lazy"></a>
         <figcaption><b>帧 8</b></figcaption>
       </figure>
   </div>
@@ -176,7 +333,7 @@
     <li><code>gen_index.py</code> / <code>gen_keymap_image.py</code> / <code>oled_preview/gen_oled_preview.py</code> —— 本页图片的生成脚本</li>
   </ul>
 
-  <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">1439ad2687c25f50…</span></footer>
+  <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">bf23091244dab2c0…</span></footer>
 </div>
 </body>
 </html>

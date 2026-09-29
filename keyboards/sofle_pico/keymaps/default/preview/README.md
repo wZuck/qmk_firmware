@@ -8,8 +8,8 @@
 |---|---|
 | `keymap_layers.png` | `build_soflepico/keymap_layers.png`（四层键位图） |
 | `oled_overview.png` | `build_soflepico/oled_preview/oled_overview.png`（三种画面总览） |
-| `anim.gif` | `build_soflepico/oled_preview/anim.gif`（动画 8 帧循环） |
-| `1x/` `4x/` | `build_soflepico/oled_preview/1x|4x/`（status 6 张 + anim 8 张 + logo 1 张） |
+| `anim_*.gif` | `build_soflepico/oled_preview/anim_*.gif`（五组动画各自的 8 帧循环） |
+| `1x/` `4x/` | `build_soflepico/oled_preview/1x|4x/`（status 6 张 + 动画 40 张 + logo 1 张） |
 | 键位表文字版 | 同目录上一级的 `keymap.md` |
 
 OLED 三种画面（status / anim / logo）的内容、切换键和换图方法，

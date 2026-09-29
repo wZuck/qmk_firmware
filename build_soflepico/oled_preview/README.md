@@ -21,11 +21,17 @@
 | 画面 | 内容 | 默认 |
 |---|---|---|
 | `status` | 层名大字 · Mac/Win · 实时修饰键 · 峰值 WPM · 当前 WPM 与进度条 · Caps Lock | 左半 |
-| `anim` | 大眼小怪物的 8 帧动画（8 fps） | 右半 |
+| `anim 0` bounce | 跳 + 落地压扁 + 眨眼 + 摆手 | 右半 |
+| `anim 1` wave | 站着挥手打招呼 | — |
+| `anim 2` walk | 原地踏步，手臂反向摆 | — |
+| `anim 3` dance | 左右摇摆，边上飘音符 | — |
+| `anim 4` sleep | 闭眼呼吸，飘 z | — |
 | `logo` | Sofle Pico 静态图（`oled_image.h`，64x96） | — |
 
+五组动画都是 8 帧、8 fps 的 64x128 循环，一共 40 KB。
+
 - 切换键：`ADJUST` 层上**左右各一个 `OLED` 键**（左半在 `E` 键位置，右半在镜像的 `O` 键位置）。
-  按一下切换**本侧**画面：status → anim → logo → status。
+  按一下切换**本侧**画面：status → anim 0 → anim 1 → … → anim 4 → logo → status。
 - 两边互不影响：左半可以放动画、右半可以放状态屏。
 - 选择只存在 RAM，重启回到默认（左 status / 右 anim）。
 - **开机动画**：上电后两半都先播约 1.8 秒动画（`SOFLE_BOOT_MS`），然后才切到各自选的画面。
@@ -39,17 +45,17 @@
 ```
 oled_preview/
 ├── 1x/                        ← 64 x 128 真实像素，面板上就是这样的
-│   ├── status_01_idle_win.png                    状态屏：空闲、无修饰键
-│   ├── status_02_typing_wpm42.png                状态屏：打字中 WPM 42 / 峰值 58
-│   ├── status_03_mac_wpm76.png                   状态屏：Mac 模式、按住 Alt
-│   ├── status_04_layer_lower_wpm55.png           状态屏：按住 LOWER + Shift
-│   ├── status_05_layer_raise_wpm12.png           状态屏：按住 RAISE + Ctrl
-│   ├── status_06_adjust_mac_wpm88_caps.png       状态屏：四个修饰键全按、Caps Lock 开
-│   ├── anim_00..07.png                           动画 8 帧
+│   ├── status_01..06_*.png                       状态屏 6 种（空闲/打字/Mac/LOWER/RAISE/ADJUST）
+│   ├── anim_bounce_00..07.png                    动画 5 组，每组 8 帧
+│   ├── anim_wave_00..07.png
+│   ├── anim_walk_00..07.png
+│   ├── anim_dance_00..07.png
+│   ├── anim_sleep_00..07.png
 │   └── screen_logo.png                           logo 静态图
-├── 4x/                        ← 同样 15 张，256 x 512 放大版，方便看
-├── anim.gif                   ← 动画循环（8 帧，8 fps）
-├── oled_overview.png          ← 一图看全：三种画面
+├── 4x/                        ← 同样 47 张，256 x 512 放大版，方便看
+├── anim_bounce.gif            ← 每组动画一个循环 GIF（共 5 个）
+├── anim_wave.gif  anim_walk.gif  anim_dance.gif  anim_sleep.gif
+├── oled_overview.png          ← 一图看全：状态屏 + 五组动画的全部帧 + logo
 └── gen_oled_preview.py        ← 生成器
 ```
 
@@ -87,10 +93,24 @@ python3 gen_oled_preview.py
 它显示的层、LED、WPM 都得靠 split 链路同步过来 —— 这就是 keymap 的 `config.h` 里
 `SPLIT_LAYER_STATE_ENABLE`、`SPLIT_LED_STATE_ENABLE`、`SPLIT_WPM_ENABLE` 的作用。
 
-## 四、anim 画面
+## 四、anim 画面（五组）
 
-大眼小怪物的弹跳循环：整体上下弹跳、落地时压扁、期间眨眼、双臂一上一下摆动、眼珠左右看，
-8 帧、8 fps（`SOFLE_ANIM_FPS`），每帧都是整块 64x128 画布（1024 字节）。
+五组都是同一个大眼小怪物，8 帧、8 fps（`SOFLE_ANIM_FPS`），每帧整块 64x128 画布（1024 字节）：
+
+| # | 名字 | 动作 |
+|---|---|---|
+| 0 | `bounce` | 上下弹跳、落地压扁、眨眼、双臂一上一下摆、眼珠转 |
+| 1 | `wave` | 站着不动，右手抬起挥动打招呼，中途眨一次眼 |
+| 2 | `walk` | 原地踏步：两脚交替抬起并前移，手臂反向摆，身体随步起伏 |
+| 3 | `dance` | 整体左右倾斜 ±7°，双臂上下甩，嘴角上方飘两个音符（字体里的 ♪ ♫） |
+| 4 | `sleep` | 眼睛闭着，身体随呼吸起伏，三个大小不同的 `z` 向上飘 |
+
+想加一组：在 `keyboards/sofle_pico/keymaps/default/make_animations.py` 的 `ANIMATIONS`
+里加一项（给 `dy`/`squash`/`rot`/`arm_l`/`arm_r`/`lift_l`/`lift_r`/`blink`/`look` 这些
+逐帧参数表），重跑脚本 → 重新编译 → 回来重跑本目录的生成器。
+
+除了角色，还可以用 `notes=True` / `sleep_z=True` 那种装饰，或者直接用 `Grid.glyph()`
+把字体里的任意字符画到画布上。
 
 角色是按参考图（圆头 + 两只大眼睛 + 椭圆身体 + 平伸手臂 + 两条腿）测出比例后，
 用 `line` / `ellipse` / `disc` 这些图元重新画成 1 bit 的，画法与图层顺序也照参考图来：
@@ -113,13 +133,15 @@ python3 gen_oled_preview.py
 
 | 目的 | 脚本 | 产物 |
 |---|---|---|
-| 改动画角色/动作 | `make_mascot_anim.py` | `oled_anim.h`（当前用的） |
-| 要回原来的心形占位动画 | `make_anim.py` | `oled_anim.h` |
+| 改/加动画（角色与动作） | `make_animations.py` | `oled_anim.h`（五组动画都在里面） |
+| 层名大字用的 2x 字体 | `make_bigfont.py` | `oled_bigfont.h` |
+| 画布模板（64x128 的图画纸） | `make_template.py` | `oled_template*.png` |
 | 把自己的 PNG 转成屏幕图 | `img2c.py` | 任意头文件，如 `oled_image.h` |
 
 ```sh
 cd keyboards/sofle_pico/keymaps/default
-python3 make_mascot_anim.py
+python3 make_animations.py            # 重新生成五组动画
+python3 make_bigfont.py               # 需要用到大字时
 python3 img2c.py my_picture.png --height 96 --helper-color ff00ff -o my_logo.h
 ```
 

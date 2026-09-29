@@ -24,12 +24,17 @@ enum custom_keycodes {
 };
 
 #ifdef OLED_ENABLE
-/* What each half draws. The choice is per half and lives in RAM only, so a
- * power cycle goes back to the defaults set in keyboard_post_init_user(). */
+// The animation library: SOFLE_ANIM_COUNT loops of SOFLE_ANIM_FRAMES frames.
+#    include "oled_anim.h"
+
+/* What each half draws. Every animation counts as its own screen, so the OLED
+ * key walks status -> animation 0..N-1 -> logo -> status. The choice is per
+ * half and lives in RAM only, so a power cycle goes back to the defaults set
+ * in keyboard_post_init_user(). */
 enum oled_screen {
     OLED_SCREEN_STATUS,
-    OLED_SCREEN_ANIM,
-    OLED_SCREEN_LOGO,
+    OLED_SCREEN_ANIM,                                  // first animation
+    OLED_SCREEN_LOGO = OLED_SCREEN_ANIM + SOFLE_ANIM_COUNT,
     OLED_SCREEN_COUNT
 };
 
@@ -137,14 +142,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Both halves run the OLED task independently - oled_task() is called from
  * keyboard_task(), which is not gated on being master - so each half draws
  * its own screen with nothing going over the split link. Each half can show
- * any of three screens and cycles through them with its own OLED_NEXT key on
- * the ADJUST layer (see housekeeping_task_user()):
+ * any of the screens below and cycles through them with its own OLED_NEXT key
+ * on the ADJUST layer (see housekeeping_task_user()):
  *
- *   status  layer as a 2x banner, mods mode, WPM with a bar, caps lock
- *   anim    the animation in oled_anim.h
- *   logo    the image in oled_image.h
+ *   status        layer as a 2x banner, mods mode, WPM with a bar, caps lock
+ *   anim 0..N-1   one of the SOFLE_ANIM_COUNT loops in oled_anim.h
+ *                 (bounce / wave / walk / dance / sleep)
+ *   logo          the image in oled_image.h
  *
- * Out of the box the left half starts on status and the right on anim.
+ * Out of the box the left half starts on status and the right on anim 0.
  *
  * Which half is "left" comes from is_keyboard_left(), i.e. from the
  * handedness in EEPROM, not from whichever half is plugged into USB. The
@@ -187,14 +193,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Play the animation for this long after power-up, whatever screen is picked.
 #    define SOFLE_BOOT_MS 1800
 
-#    include "oled_anim.h"
 #    include "oled_bigfont.h"
 #    include "oled_image.h"
 
 STATIC_ASSERT(SOFLE_OLED_ROTATION == OLED_ROTATION_90 || SOFLE_OLED_ROTATION == OLED_ROTATION_270,
               "SOFLE_OLED_WIDTH/HEIGHT assume the panel sits a quarter turn over");
 STATIC_ASSERT(OLED_BIGFONT_H == 2 * OLED_FONT_HEIGHT, "the banner is blitted as two text lines");
-STATIC_ASSERT(sizeof(oled_anim[0]) == OLED_MATRIX_SIZE, "an animation frame must fill the buffer");
+STATIC_ASSERT(sizeof(oled_anim[0][0]) == OLED_MATRIX_SIZE, "an animation frame must fill the buffer");
 
 // Where each part of the status screen goes, in text lines. The banner takes
 // two, so the rules that bracket it sit on its neighbours' inner edges.
@@ -370,7 +375,10 @@ static void render_logo(void) {
  * Animation screen
  * ------------------------------------------------------------------------ */
 
-static void render_animation(void) {
+// One of the SOFLE_ANIM_COUNT loops in oled_anim.h. The frame counter is
+// shared, so switching animation picks up wherever the old one was, which is
+// fine - every loop is the same length.
+static void render_animation(uint8_t which) {
     static uint32_t next_frame;
     static uint8_t  frame;
 
@@ -380,7 +388,7 @@ static void render_animation(void) {
     }
 
     oled_set_cursor(0, 0);
-    oled_write_raw_P(oled_anim[frame], sizeof(oled_anim[0]));
+    oled_write_raw_P(oled_anim[which][frame], sizeof(oled_anim[0][0]));
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
@@ -412,17 +420,14 @@ bool oled_task_user(void) {
         drawn = want;
     }
 
-    switch (want) {
-        case SOFLE_SCREEN_BOOT:
-        case OLED_SCREEN_ANIM:
-            render_animation();
-            break;
-        case OLED_SCREEN_LOGO:
-            render_logo();
-            break;
-        default:
-            render_status();
-            break;
+    if (want == SOFLE_SCREEN_BOOT) {
+        render_animation(0); // the hop is the "hello" one
+    } else if (want >= OLED_SCREEN_ANIM && want < OLED_SCREEN_LOGO) {
+        render_animation(want - OLED_SCREEN_ANIM);
+    } else if (want == OLED_SCREEN_LOGO) {
+        render_logo();
+    } else {
+        render_status();
     }
     return false;
 }

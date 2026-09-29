@@ -66,10 +66,22 @@ def main():
         card(f"oled_preview/4x/{name}.png", desc, link=f"oled_preview/1x/{name}.png")
         for name, desc, _ in preview.LEFT_STATES
     )
-    anim_cards = "\n".join(
-        card(f"oled_preview/4x/anim_{i:02d}.png", f"帧 {i + 1}", link=f"oled_preview/1x/anim_{i:02d}.png")
-        for i in range(len(preview.parse_anim(os.path.join(preview.KM_DIR, "oled_anim.h"))))
-    )
+    anims = preview.parse_anims(os.path.join(preview.KM_DIR, "oled_anim.h"))
+    anim_titles = dict(preview.parse_anim_titles(os.path.join(preview.KM_DIR, "oled_anim.h")))
+
+    def anim_section(idx, name, frames):
+        gif = card(f"oled_preview/anim_{name}.gif", f"{name} 循环（GIF）", "8 帧 / 8 fps",
+                   link=f"oled_preview/anim_{name}.gif")
+        strip = "\n".join(
+            card(f"oled_preview/4x/anim_{name}_{i:02d}.png", f"帧 {i + 1}",
+                 link=f"oled_preview/1x/anim_{name}_{i:02d}.png")
+            for i in range(len(frames))
+        )
+        return (f'  <h4>anim {idx}/{len(anims)} · {name} <span class="dim">— '
+                f'{html.escape(anim_titles.get(name, ""))}</span></h4>\n  <div class="grid">\n'
+                + gif + "\n" + strip + "\n  </div>")
+
+    anim_sections = "\n".join(anim_section(i + 1, n, f) for i, (n, f) in enumerate(anims))
     logo_card = card(
         "oled_preview/4x/screen_logo.png", "logo",
         "oled_image.h（64x96 静态图）", link="oled_preview/1x/screen_logo.png",
@@ -136,7 +148,7 @@ def main():
   </div>
 
   <h2>OLED 画面</h2>
-  <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键在三种画面之间循环：status → anim → logo。
+  <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键循环切换：status → 5 组动画 → logo。
      默认左边 status、右边 anim；选择只存 RAM，重启回到默认。开机时两半都会先播 ~1.8 秒动画。</p>
 
   <h3>① status 状态屏（默认：左手）</h3>
@@ -145,13 +157,10 @@ def main():
 {status_cards}
   </div>
 
-  <h3>② anim 动画（默认：右手）</h3>
-  <p class="lead">大眼小怪物：弹跳 + 落地压扁 + 眨眼 + 摆手 + 眼珠转动，8 帧、8 fps。
-     <a href="oled_preview/anim.gif">打开 GIF</a> 看动态效果。</p>
-  <div class="grid">
-{card("oled_preview/anim.gif", "动画循环（GIF）", "8 帧 / 8 fps", link="oled_preview/anim.gif")}
-{anim_cards}
-  </div>
+  <h3>② anim 动画（默认：右手第一组）</h3>
+  <p class="lead">五组大眼小怪物的 8 帧循环（8 fps）：bounce / wave / walk / dance / sleep。
+     每组都有 GIF，下面按组列出全部帧。</p>
+{anim_sections}
 
   <h3>③ logo 静态图</h3>
   <div class="grid">
@@ -199,7 +208,7 @@ def main():
         fh.write(doc)
     print("已生成:", OUT)
     print(f"固件 {size} 字节, sha256 {sha[:16]}…, QMK {tag} @ {commit}")
-    print(f"图片: 键位图 1 + status {len(preview.LEFT_STATES)} + anim 8 + logo 1")
+    print(f"图片: 键位图 1 + status {len(preview.LEFT_STATES)} + anim {sum(len(f) for _, f in anims)} + logo 1")
 
 
 if __name__ == "__main__":

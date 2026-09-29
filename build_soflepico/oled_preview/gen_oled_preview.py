@@ -73,15 +73,22 @@ def parse_bigfont(path):
     return index, glyphs
 
 
-def parse_anim(path):
-    """oled_anim.h：N 帧，每帧 1024 字节。"""
+def parse_anims(path):
+    """oled_anim.h：SOFLE_ANIM_COUNT 组动画，每组 N 帧、每帧 1024 字节。
+
+    返回 [(名字, [帧...]), ...]，名字取自生成器写在每组前面的 "// name"。
+    """
     src = open(path).read()
-    frames = []
-    for grp in re.findall(r"\{\s*//\s*frame \d+\s*(.*?)\n\s*\}", src, flags=re.S):
-        vals = [int(v, 16) for v in re.findall(r"0x([0-9A-Fa-f]{2})", grp)]
-        if vals:
-            frames.append(vals)
-    return frames
+    body = src[src.index("oled_anim[") :]
+    anims = []
+    for name, block in re.findall(r"\{\s*//\s*([a-z_]+)\s*\n(.*?)\n    \},", body, flags=re.S):
+        frames = []
+        for grp in re.findall(r"\{\s*//\s*frame \d+\s*(.*?)\n\s*\},", block, flags=re.S):
+            vals = [int(v, 16) for v in re.findall(r"0x([0-9A-Fa-f]{2})", grp)]
+            if vals:
+                frames.append(vals)
+        anims.append((name, frames))
+    return anims
 
 
 # --------------------------------------------------------------------------
@@ -201,101 +208,111 @@ def load_font(size):
     return ImageFont.truetype(FONT_PATH, size)
 
 
+def parse_anim_titles(path):
+    """从 oled_anim.h 的头部注释取 (名字, 说明)，图上的说明就跟着生成器走。"""
+    out = []
+    for line in open(path):
+        m = re.match(r"//\s+\d+\s+(\w+)\s+-\s+(.*)", line)
+        if m:
+            out.append((m.group(1), m.group(2).strip()))
+    return out
+
+
+def png(sc, sub, name):
+    return os.path.join(HERE, sub, name + ".png")
+
+
 def main():
     font = parse_glcdfont(GLCDFONT)
     bigfont = parse_bigfont(BIGFONT_H)
-    frames = parse_anim(ANIM_H)
-    print(f"字体 {len(font)} 个字符；大字 {len(bigfont[1])} 个字形；动画 {len(frames)} 帧 x {len(frames[0])} 字节")
+    anims = parse_anims(ANIM_H)
+    titles = dict(parse_anim_titles(ANIM_H))
+    nframes = len(anims[0][1])
+    print(f"字体 {len(font)} 字符；大字 {len(bigfont[1])} 字形；动画 {len(anims)} 组 x {nframes} 帧 x {len(anims[0][1][0])} 字节")
 
     for d in ("1x", "4x"):
         os.makedirs(os.path.join(HERE, d), exist_ok=True)
-
-    # 清掉上一版命名留下的图（left_* / right_anim*），避免新旧混在一起
-    for d in ("1x", "4x"):
+        # 旧版本的图（left_* / right_anim* / anim_NN）直接清掉，避免新旧混在一起
         for f in os.listdir(os.path.join(HERE, d)):
-            if f.startswith("left_") or f.startswith("right_anim"):
+            if f.endswith((".png", ".gif")):
                 os.remove(os.path.join(HERE, d, f))
-    for f in ("right_anim.gif",):
-        if os.path.exists(os.path.join(HERE, f)):
+    for f in os.listdir(HERE):
+        if f.endswith(".gif"):
             os.remove(os.path.join(HERE, f))
 
+    # ① status 状态屏
     made = []
     for name, desc, (banner, mode, mods, peak, wpm, caps) in LEFT_STATES:
         c = status_screen(banner, mode, mods, peak, wpm, caps, font, bigfont)
-        c.to_image(1).save(os.path.join(HERE, "1x", name + ".png"))
-        c.to_image(4).save(os.path.join(HERE, "4x", name + ".png"))
+        c.to_image(1).save(png(1, "1x", name))
+        c.to_image(4).save(png(4, "4x", name))
         made.append((name, desc))
 
-    # logo 画面（两边都能切到）
+    # ② 动画：每组的帧图 + 一个 GIF
+    anim_rows = []
+    for aname, frames in anims:
+        imgs = []
+        for i, frame in enumerate(frames):
+            c = Canvas()
+            c.buf[:] = bytes(frame)
+            c.to_image(1).save(png(1, "1x", f"anim_{aname}_{i:02d}"))
+            imgs.append(c.to_image(4))
+            imgs[-1].save(png(4, "4x", f"anim_{aname}_{i:02d}"))
+        imgs[0].save(os.path.join(HERE, f"anim_{aname}.gif"), save_all=True,
+                     append_images=imgs[1:], duration=125, loop=0, optimize=False)
+        anim_rows.append((aname, titles.get(aname, ""), [im.resize((W * 2, H * 2), Image.NEAREST) for im in imgs]))
+
+    # ③ logo
     logo = logo_screen()
-    logo.to_image(1).save(os.path.join(HERE, "1x", logo_name + ".png"))
+    logo.to_image(1).save(png(1, "1x", logo_name))
     logo_img = logo.to_image(4)
-    logo_img.save(os.path.join(HERE, "4x", logo_name + ".png"))
+    logo_img.save(png(4, "4x", logo_name))
 
-    anim_imgs = []
-    for i, frame in enumerate(frames):
-        c = Canvas()
-        c.buf[:] = bytes(frame)
-        img = c.to_image(1)
-        img.save(os.path.join(HERE, "1x", f"anim_{i:02d}.png"))
-        anim_imgs.append(c.to_image(4))
-        anim_imgs[-1].save(os.path.join(HERE, "4x", f"anim_{i:02d}.png"))
-        # 旧的 right_anim_* 名字清掉，避免和上一版混淆
-        for old in (f"right_anim_{i:02d}.png",):
-            for sub in ("1x", "4x"):
-                p = os.path.join(HERE, sub, old)
-                if os.path.exists(p):
-                    os.remove(p)
-
-    # 动画 GIF
-    anim_imgs[0].save(os.path.join(HERE, "anim.gif"), save_all=True,
-                      append_images=anim_imgs[1:], duration=125, loop=0, optimize=False)
-    if os.path.exists(os.path.join(HERE, "right_anim.gif")):
-        os.remove(os.path.join(HERE, "right_anim.gif"))
-
-    # 总览图
-    pad, cap_h, gap = 26, 52, 22
-    cols = max(len(LEFT_STATES), len(frames), 3)
-    cell_w, cell_h = W * 4, H * 4
-    sheet_w = pad * 2 + cols * (cell_w + gap) - gap
-    sheet_h = pad * 3 + 60 + (cell_h + cap_h) * 3 + 60
+    # 总览图：一行 status（4x），下面动画按两列排（2x），最后一格放 logo
+    pad, gap = 26, 22
+    sc_w, sc_h = W * 4, H * 4            # 状态屏 4x
+    af_w, af_h = W * 2, H * 2            # 动画帧 2x
+    row_w = 8 * (af_w + 4) + 24          # 一组动画的宽度
+    grid_w = 2 * (row_w + gap) - gap
+    sheet_w = pad * 2 + max(6 * (sc_w + gap) - gap, grid_w)
+    row_h = 34 + af_h + 26
+    sheet_h = 128 + (sc_h + 52) + 30 + 3 * (row_h + 20) + 60
     sheet = Image.new("RGB", (sheet_w, sheet_h), "#f2f4f7")
     d = ImageDraw.Draw(sheet)
-    d.text((pad, 22), "Sofle Pico OLED 显示内容预览", font=load_font(30), fill="#1f2933")
-    d.text((pad, 62), "每一半都能在 ADJUST 层用自己那侧的 OLED 键在三种画面之间切换；下面是三种画面的样子",
+    d.text((pad, 20), "Sofle Pico OLED 显示内容预览", font=load_font(30), fill="#1f2933")
+    d.text((pad, 60), "每一半都能在 ADJUST 层用自己那侧的 OLED 键在 status / 5 组动画 / logo 之间循环",
            font=load_font(17), fill="#52606d")
 
-    y = 128
-    d.text((pad, y - 28), "① status 状态屏（默认：左手）—— 层名 / 模式 / 修饰键 / 峰值 / WPM / Caps", font=load_font(19), fill="#1a56b8")
+    y = 122
+    d.text((pad, y - 26), "① status 状态屏（默认：左手）—— 层名 / 模式 / 修饰键 / 峰值 / WPM / Caps",
+           font=load_font(19), fill="#1a56b8")
     for i, (name, desc) in enumerate(made):
-        x = pad + i * (cell_w + gap)
-        sheet.paste(Image.open(os.path.join(HERE, "4x", name + ".png")), (x, y))
-        d.rectangle([x - 1, y - 1, x + cell_w, y + cell_h], outline="#c9ced6")
-        for n, line in enumerate(wrap(d, desc, load_font(14), cell_w)):
-            d.text((x, y + cell_h + 8 + n * 18), line, font=load_font(14), fill="#52606d")
+        x = pad + i * (sc_w + gap)
+        sheet.paste(Image.open(png(4, "4x", name)), (x, y))
+        d.rectangle([x - 1, y - 1, x + sc_w, y + sc_h], outline="#c9ced6")
+        for n, line in enumerate(wrap(d, desc, load_font(14), sc_w)):
+            d.text((x, y + sc_h + 8 + n * 18), line, font=load_font(14), fill="#52606d")
 
-    y = y + cell_h + cap_h + 46
-    d.text((pad, y - 28), "② anim 动画（默认：右手） 8 帧循环，8 fps，弹跳 + 眨眼 + 摆手",
+    y = y + sc_h + 52 + 30
+    d.text((pad, y - 26), "② 动画（默认：右手第一组）—— 每组 8 帧、8 fps，另有独立的 GIF",
            font=load_font(19), fill="#a85a06")
-    for i, img in enumerate(anim_imgs):
-        x = pad + i * (cell_w + gap)
-        sheet.paste(img, (x, y))
-        d.rectangle([x - 1, y - 1, x + cell_w, y + cell_h], outline="#c9ced6")
-        d.text((x, y + cell_h + 8), f"帧 {i + 1}", font=load_font(14), fill="#52606d")
-
-    y = y + cell_h + cap_h + 46
-    d.text((pad, y - 28), "③ logo 静态图", font=load_font(19), fill="#1b7f4b")
-    x = pad
-    sheet.paste(logo_img, (x, y))
-    d.rectangle([x - 1, y - 1, x + cell_w, y + cell_h], outline="#c9ced6")
-    d.text((x, y + cell_h + 8), "oled_image.h（64x96）", font=load_font(14), fill="#52606d")
-    d.text((pad + cell_w + gap, y + 8),
-           "两边都能切到；切换时固件会先清屏，所以不会留下上一屏的残影。",
-           font=load_font(16), fill="#52606d")
+    cells = [(n, desc, imgs) for n, desc, imgs in anim_rows] + [(logo_name, "oled_image.h（64x96 静态图）", None)]
+    for k, (aname, desc, imgs) in enumerate(cells):
+        col, row = k % 2, k // 2
+        x = pad + col * (row_w + gap)
+        yy = y + row * (row_h + 20)
+        label = f"anim {k + 1}/{len(anim_rows)}：{aname}" if imgs else f"③ {aname}"
+        d.text((x, yy), label, font=load_font(16), fill="#1f2933")
+        d.text((x + 150, yy + 2), desc, font=load_font(13), fill="#66727f")
+        if imgs:
+            for i, im in enumerate(imgs):
+                sheet.paste(im, (x + i * (af_w + 4), yy + 26))
+        else:
+            sheet.paste(logo_img.resize((sc_w, sc_h), Image.NEAREST), (x, yy + 26))
 
     sheet.save(os.path.join(HERE, "oled_overview.png"))
     print("已生成:", os.path.join(HERE, "oled_overview.png"))
-    print("状态屏画面:", len(made), " 动画帧:", len(frames), " logo: 1")
+    print(f"状态屏 {len(made)} 张，动画 {len(anim_rows)} 组 x {nframes} 帧，logo 1 张，GIF {len(anim_rows)} 个")
 
 
 def wrap(d, text, font, max_w):

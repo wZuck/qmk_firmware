@@ -31,8 +31,8 @@ README = """<!-- 由 build_soflepico/sync_to_keymap.py 同步，勿手改 -->
 |---|---|
 | `keymap_layers.png` | `build_soflepico/keymap_layers.png`（四层键位图） |
 | `oled_overview.png` | `build_soflepico/oled_preview/oled_overview.png`（三种画面总览） |
-| `anim.gif` | `build_soflepico/oled_preview/anim.gif`（动画 8 帧循环） |
-| `1x/` `4x/` | `build_soflepico/oled_preview/1x|4x/`（status 6 张 + anim 8 张 + logo 1 张） |
+| `anim_*.gif` | `build_soflepico/oled_preview/anim_*.gif`（五组动画各自的 8 帧循环） |
+| `1x/` `4x/` | `build_soflepico/oled_preview/1x|4x/`（status 6 张 + 动画 40 张 + logo 1 张） |
 | 键位表文字版 | 同目录上一级的 `keymap.md` |
 
 OLED 三种画面（status / anim / logo）的内容、切换键和换图方法，
@@ -55,12 +55,21 @@ def main():
     os.makedirs(os.path.join(PREV, "1x"), exist_ok=True)
     os.makedirs(os.path.join(PREV, "4x"), exist_ok=True)
 
+    # 目标目录先清空图片，避免上一版命名的残留（动画改名/增删时尤其明显）
+    for sub in ("", "1x", "4x"):
+        d = os.path.join(PREV, sub)
+        for f in os.listdir(d):
+            if f.endswith((".png", ".gif")):
+                os.remove(os.path.join(d, f))
+
     # 键位表：图片路径改写成 preview/ 下
     src = open(os.path.join(HERE, "keymap.md")).read()
     open(os.path.join(DST, "keymap.md"), "w").write(src.replace("](keymap_layers.png)", "](preview/keymap_layers.png)"))
 
     shutil.copy2(os.path.join(HERE, "keymap_layers.png"), PREV)
-    for name in ("oled_overview.png", "anim.gif"):
+    shutil.copy2(os.path.join(HERE, "oled_preview", "oled_overview.png"), PREV)
+    gifs = [f for f in sorted(os.listdir(os.path.join(HERE, "oled_preview"))) if f.endswith(".gif")]
+    for name in gifs:
         shutil.copy2(os.path.join(HERE, "oled_preview", name), PREV)
     n = 0
     for sub in ("1x", "4x"):
@@ -71,7 +80,7 @@ def main():
 
     open(os.path.join(PREV, "README.md"), "w").write(README)
     print(f"已同步到 {DST}")
-    print(f"  keymap.md + preview/{{keymap_layers.png, oled_overview.png, anim.gif, README.md, 1x|4x ({n} 张)}}")
+    print(f"  keymap.md + preview/{{keymap_layers.png, oled_overview.png, {len(gifs)} 个 GIF, README.md, 1x|4x ({n} 张)}}")
 
 
 if __name__ == "__main__":
