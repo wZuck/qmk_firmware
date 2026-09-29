@@ -30,7 +30,7 @@
 | `keymap_layers.svg` | **四层键位图（矢量）**：按真实坐标绘制，放多大都不糊 |
 | `keymap_layers.png` | 同一张图的光栅版，默认 2 倍（1468×3300），可 `python3 gen_keymap_image.py 4` 出 4 倍 |
 | `gen_keymap_image.py` | 由 `keymap.c` + `keyboard.json` 重新生成键位图（PNG + SVG）与 `keymap.md` |
-| `oled_preview/` | **OLED 显示内容预览**：信息屏 13 种 + 五组动画共 40 帧 + logo，含 `1x`/`4x`/5 个 GIF/总览图 |
+| `oled_preview/` | **OLED 显示内容预览**：信息屏 13 种 + 四组动画共 32 帧 + logo，含 `1x`/`4x`/4 个 GIF/总览图 |
 | `index.html` | **一页看全**：固件信息 + 键位图 + OLED 三种画面（打开即可，图片走相对路径） |
 | `gen_index.py` | 重新生成 `index.html`（自动带上 uf2 的 SHA-256、QMK 版本、图片清单） |
 | `sync_to_keymap.py` | 把 `keymap.md` 和预览图同步到 `keyboards/sofle_pico/keymaps/default/` |
@@ -41,7 +41,7 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-0a2f9474a69cc338e8b0fbd99703e4fd0dac291369113e669a4110142097bce4  sofle_pico_default.uf2
+d6b04b43d725573bb98cbd326effe9cd29637d21d10992def1115871b939e59e  sofle_pico_default.uf2
 ```
 
 ## 3. 烧录方法
@@ -86,7 +86,7 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 
 - 层：`QWERTY`(0) / `LOWER`(1) / `RAISE`(2) / `ADJUST`(3)（Colemak 层已删除），`LOWER`+`RAISE` 三键组合出 `ADJUST`。
 - Mac/Win 模式在 `ADJUST` 层切换，选择存 EEPROM；`QK_BOOT`、`EE_CLR` 也在该层。
-- OLED：每一半都能在 11 个画面之间切换（见 4.3），切换键是 `ADJUST` 层左右各一个 `OLED` 键（按住可快速翻页）。
+- OLED：每一半都能在 10 个画面之间切换（见 4.3），切换键是 `ADJUST` 层左右各一个 `OLED` 键（按住可快速翻页）。
 - VIA 已启用（层数用核心默认的 4 层），可用 VIA 网页版改键。
 
 ### 4.3 OLED 画面切换
@@ -103,12 +103,11 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 | `anim 0` | bounce：跳 + 落地压扁 + 眨眼 + 摆手 | 右半 |
 | `anim 1` | wave：站着挥手打招呼 | — |
 | `anim 2` | walk：原地踏步，手臂反向摆 | — |
-| `anim 3` | dance：左右摇摆，边上飘音符 | — |
-| `anim 4` | sleep：闭眼呼吸，飘 z | — |
+| `anim 3` | sleep：闭眼呼吸，飘 z | — |
 | `logo` | `oled_image.h` 的 Sofle Pico 静态图（64x96） | — |
 
-五组动画都是 8 帧、8 fps 的 64x128 循环，一共 40 KB（`SOFLE_ANIM_COUNT` / `SOFLE_ANIM_FRAMES`）。
-一共 11 个画面，所以**按住 OLED 键不放会每 400 ms 自动翻一张**，不用点十几次。
+四组动画都是 8 帧、8 fps 的 64x128 循环，一共 32 KB（`SOFLE_ANIM_COUNT` / `SOFLE_ANIM_FRAMES`）。
+一共 10 个画面，所以**按住 OLED 键不放会每 400 ms 自动翻一张**，不用点十几次。
 `stats` 的按键数是**本半边**扫到的次数（两半各自计数）；`graph` 的 WPM 通过 split 同步，两半画出来一样。
 加一组动画只要在 `make_animations.py` 的 `ANIMATIONS` 里加一项，重跑脚本并重新编译——
 `oled_screen` 枚举里的动画区间会自动跟着 `SOFLE_ANIM_COUNT` 变。
@@ -136,7 +135,7 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 - 从 ELF 中核对按键：`keymaps[0][4][5] = 0x00a8`（`KC_MUTE`）、`keymaps[0][9][5] = 0x00ae`（`KC_MPLY`）。
 - 从 ELF 中核对 `keymaps` 为 4 层（480 字节），`ADJUST` 层上
   `[1,3] = [6,2] = 0x7E40`（`OLED_NEXT`）、`[1,5] = 0x7C03`（`EE_CLR`）。
-- 从 ELF 中核对 `oled_anim` = `0xA000` = 40960 字节 = 5 组 × 8 帧 × 1024 字节，
+- 从 ELF 中核对 `oled_anim` = `0x8000` = 32768 字节 = 4 组 × 8 帧 × 1024 字节，
   且每一帧与 `oled_anim.h` 逐字节一致（预览就是面板上会显示的内容）。
 
 ## 6. 注意事项

@@ -27,15 +27,14 @@
 | `anim 0` bounce | 跳 + 落地压扁 + 眨眼 + 摆手 | 右半 |
 | `anim 1` wave | 站着挥手打招呼 | — |
 | `anim 2` walk | 原地踏步，手臂反向摆 | — |
-| `anim 3` dance | 左右摇摆，边上飘音符 | — |
-| `anim 4` sleep | 闭眼呼吸，飘 z | — |
+| `anim 3` sleep | 闭眼呼吸，飘 z | — |
 | `logo` | Sofle Pico 静态图（`oled_image.h`，64x96） | — |
 
-五组动画都是 8 帧、8 fps 的 64x128 循环，一共 40 KB。
+四组动画都是 8 帧、8 fps 的 64x128 循环，一共 32 KB。
 
 - 切换键：`ADJUST` 层上**左右各一个 `OLED` 键**（左半在 `E` 键位置，右半在镜像的 `O` 键位置）。
-  按一下切换**本侧**画面：status → stats → graph → layers → anim 0 → … → anim 4 → logo → status。
-- **按住不放**会每 400 ms 自动往下翻（`SOFLE_OLED_HOLD_MS`），所以 11 个画面不用点十几次。
+  按一下切换**本侧**画面：status → stats → graph → layers → anim 0 → … → anim 3 → logo → status。
+- **按住不放**会每 400 ms 自动往下翻（`SOFLE_OLED_HOLD_MS`），所以 10 个画面不用点十几次。
 - 两边互不影响：左半可以放动画、右半可以放状态屏。
 - 选择只存在 RAM，重启回到默认（左 status / 右 anim）。
 - **开机动画**：上电后两半都先播约 1.8 秒动画（`SOFLE_BOOT_MS`），然后才切到各自选的画面。
@@ -53,16 +52,15 @@ oled_preview/
 │   ├── stats_01..02_*.png                        统计屏 2 种（刚上电 / 用了一会儿）
 │   ├── graph_01..02_*.png                        WPM 曲线 2 种（空闲 / 打字中）
 │   ├── layers_01..03_*.png                       层状态 3 种（基础 / LOWER / ADJUST）
-│   ├── anim_bounce_00..07.png                    动画 5 组，每组 8 帧
+│   ├── anim_bounce_00..07.png                    动画 4 组，每组 8 帧
 │   ├── anim_wave_00..07.png
 │   ├── anim_walk_00..07.png
-│   ├── anim_dance_00..07.png
 │   ├── anim_sleep_00..07.png
 │   └── screen_logo.png                           logo 静态图
 ├── 4x/                        ← 同样 54 张，256 x 512 放大版，方便看
 ├── anim_bounce.gif            ← 每组动画一个循环 GIF（共 5 个）
-├── anim_wave.gif  anim_walk.gif  anim_dance.gif  anim_sleep.gif
-├── oled_overview.png          ← 一图看全：状态屏 + 五组动画的全部帧 + logo
+├── anim_wave.gif  anim_walk.gif  anim_sleep.gif
+├── oled_overview.png          ← 一图看全：状态屏 + 四组动画的全部帧 + logo
 └── gen_oled_preview.py        ← 生成器
 ```
 
@@ -100,17 +98,16 @@ python3 gen_oled_preview.py
 它显示的层、LED、WPM 都得靠 split 链路同步过来 —— 这就是 keymap 的 `config.h` 里
 `SPLIT_LAYER_STATE_ENABLE`、`SPLIT_LED_STATE_ENABLE`、`SPLIT_WPM_ENABLE` 的作用。
 
-## 四、anim 画面（五组）
+## 四、anim 画面（四组）
 
-五组都是同一个大眼小怪物，8 帧、8 fps（`SOFLE_ANIM_FPS`），每帧整块 64x128 画布（1024 字节）：
+四组都是同一个大眼小怪物，8 帧、8 fps（`SOFLE_ANIM_FPS`），每帧整块 64x128 画布（1024 字节）：
 
 | # | 名字 | 动作 |
 |---|---|---|
 | 0 | `bounce` | 上下弹跳、落地压扁、眨眼、双臂一上一下摆、眼珠转 |
 | 1 | `wave` | 站着不动，右手抬起挥动打招呼，中途眨一次眼 |
 | 2 | `walk` | 原地踏步：两脚交替抬起并前移，手臂反向摆，身体随步起伏 |
-| 3 | `dance` | 整体左右倾斜 ±7°，双臂上下甩，嘴角上方飘两个音符（字体里的 ♪ ♫） |
-| 4 | `sleep` | 眼睛闭着，身体随呼吸起伏，三个大小不同的 `z` 向上飘 |
+| 3 | `sleep` | 眼睛闭着，身体随呼吸起伏，三个大小不同的 `z` 向上飘 |
 
 想加一组：在 `keyboards/sofle_pico/keymaps/default/make_animations.py` 的 `ANIMATIONS`
 里加一项（给 `dy`/`squash`/`rot`/`arm_l`/`arm_r`/`lift_l`/`lift_r`/`blink`/`look` 这些
@@ -148,14 +145,14 @@ python3 gen_oled_preview.py
 
 | 目的 | 脚本 | 产物 |
 |---|---|---|
-| 改/加动画（角色与动作） | `make_animations.py` | `oled_anim.h`（五组动画都在里面） |
+| 改/加动画（角色与动作） | `make_animations.py` | `oled_anim.h`（四组动画都在里面） |
 | 层名大字用的 2x 字体 | `make_bigfont.py` | `oled_bigfont.h` |
 | 画布模板（64x128 的图画纸） | `make_template.py` | `oled_template*.png` |
 | 把自己的 PNG 转成屏幕图 | `img2c.py` | 任意头文件，如 `oled_image.h` |
 
 ```sh
 cd keyboards/sofle_pico/keymaps/default
-python3 make_animations.py            # 重新生成五组动画
+python3 make_animations.py            # 重新生成四组动画
 python3 make_bigfont.py               # 需要用到大字时
 python3 img2c.py my_picture.png --height 96 --helper-color ff00ff -o my_logo.h
 ```

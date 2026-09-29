@@ -43,9 +43,9 @@
   <div class="panel">
     <table>
       <tr><th>键盘 / keymap</th><td><code>sofle_pico</code> / <code>default</code>（RP2040，分体，左右各一个 EC11）</td></tr>
-      <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 220,160 字节 · 构建于 2026-09-30 01:28</td></tr>
-      <tr><th>SHA-256</th><td class="hash">0a2f9474a69cc338e8b0fbd99703e4fd0dac291369113e669a4110142097bce4</td></tr>
-      <tr><th>QMK</th><td>tag <code>0.34.5-4-gdfc1daa3b7</code> · commit <code>dfc1daa3b7</code>（2026-09-30）</td></tr>
+      <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 203,776 字节 · 构建于 2026-09-30 02:01</td></tr>
+      <tr><th>SHA-256</th><td class="hash">d6b04b43d725573bb98cbd326effe9cd29637d21d10992def1115871b939e59e</td></tr>
+      <tr><th>QMK</th><td>tag <code>0.34.5-5-g91cac8518c</code> · commit <code>91cac8518c</code>（2026-09-30）</td></tr>
       <tr><th>键位图</th><td><code>keymap_layers.svg</code>（矢量）· <code>keymap_layers.png</code>（2 倍光栅）</td></tr>
       <tr><th>编译命令</th><td><code>qmk compile -kb sofle_pico -km default</code></td></tr>
       <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3)，<code>LOWER</code>+<code>RAISE</code> 三键组合出 ADJUST</td></tr>
@@ -64,7 +64,7 @@
 
   <h2>OLED 画面</h2>
   <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键循环切换：
-     status → stats → graph → layers → 5 组动画 → logo。按住不放会自动往下翻（每 400 ms 一张），
+     status → stats → graph → layers → 4 组动画 → logo。按住不放会自动往下翻（每 400 ms 一张），
      不用点十几次。默认左边 status、右边第一组动画；选择只存 RAM，重启回到默认。
      开机时两半都会先播 ~1.8 秒动画。</p>
 
@@ -129,9 +129,9 @@
   </div>
 
   <h3>② anim 动画（默认：右手第一组）</h3>
-  <p class="lead">五组大眼小怪物的 8 帧循环（8 fps）：bounce / wave / walk / dance / sleep。
+  <p class="lead">四组大眼小怪物的 8 帧循环（8 fps）：bounce / wave / walk / sleep。
      每组都有 GIF，下面按组列出全部帧。</p>
-  <h4>anim 1/5 · bounce <span class="dim">— hop, squash on landing, blink, arms swing</span></h4>
+  <h4>anim 1/4 · bounce <span class="dim">— hop, squash on landing, blink, arms swing</span></h4>
   <div class="grid">
       <figure class="card">
         <a href="oled_preview/anim_bounce.gif"><img src="oled_preview/anim_bounce.gif" alt="bounce 循环（GIF）" loading="lazy"></a>
@@ -170,7 +170,7 @@
         <figcaption><b>帧 8</b></figcaption>
       </figure>
   </div>
-  <h4>anim 2/5 · wave <span class="dim">— standing, waving one arm hello</span></h4>
+  <h4>anim 2/4 · wave <span class="dim">— standing, waving one arm hello</span></h4>
   <div class="grid">
       <figure class="card">
         <a href="oled_preview/anim_wave.gif"><img src="oled_preview/anim_wave.gif" alt="wave 循环（GIF）" loading="lazy"></a>
@@ -209,7 +209,7 @@
         <figcaption><b>帧 8</b></figcaption>
       </figure>
   </div>
-  <h4>anim 3/5 · walk <span class="dim">— marching in place, arms swinging the other way</span></h4>
+  <h4>anim 3/4 · walk <span class="dim">— marching in place, arms swinging the other way</span></h4>
   <div class="grid">
       <figure class="card">
         <a href="oled_preview/anim_walk.gif"><img src="oled_preview/anim_walk.gif" alt="walk 循环（GIF）" loading="lazy"></a>
@@ -248,46 +248,7 @@
         <figcaption><b>帧 8</b></figcaption>
       </figure>
   </div>
-  <h4>anim 4/5 · dance <span class="dim">— leaning left and right, with music notes</span></h4>
-  <div class="grid">
-      <figure class="card">
-        <a href="oled_preview/anim_dance.gif"><img src="oled_preview/anim_dance.gif" alt="dance 循环（GIF）" loading="lazy"></a>
-        <figcaption><b>dance 循环（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
-      </figure>
-      <figure class="card">
-        <a href="oled_preview/1x/anim_dance_00.png"><img src="oled_preview/4x/anim_dance_00.png" alt="帧 1" loading="lazy"></a>
-        <figcaption><b>帧 1</b></figcaption>
-      </figure>
-      <figure class="card">
-        <a href="oled_preview/1x/anim_dance_01.png"><img src="oled_preview/4x/anim_dance_01.png" alt="帧 2" loading="lazy"></a>
-        <figcaption><b>帧 2</b></figcaption>
-      </figure>
-      <figure class="card">
-        <a href="oled_preview/1x/anim_dance_02.png"><img src="oled_preview/4x/anim_dance_02.png" alt="帧 3" loading="lazy"></a>
-        <figcaption><b>帧 3</b></figcaption>
-      </figure>
-      <figure class="card">
-        <a href="oled_preview/1x/anim_dance_03.png"><img src="oled_preview/4x/anim_dance_03.png" alt="帧 4" loading="lazy"></a>
-        <figcaption><b>帧 4</b></figcaption>
-      </figure>
-      <figure class="card">
-        <a href="oled_preview/1x/anim_dance_04.png"><img src="oled_preview/4x/anim_dance_04.png" alt="帧 5" loading="lazy"></a>
-        <figcaption><b>帧 5</b></figcaption>
-      </figure>
-      <figure class="card">
-        <a href="oled_preview/1x/anim_dance_05.png"><img src="oled_preview/4x/anim_dance_05.png" alt="帧 6" loading="lazy"></a>
-        <figcaption><b>帧 6</b></figcaption>
-      </figure>
-      <figure class="card">
-        <a href="oled_preview/1x/anim_dance_06.png"><img src="oled_preview/4x/anim_dance_06.png" alt="帧 7" loading="lazy"></a>
-        <figcaption><b>帧 7</b></figcaption>
-      </figure>
-      <figure class="card">
-        <a href="oled_preview/1x/anim_dance_07.png"><img src="oled_preview/4x/anim_dance_07.png" alt="帧 8" loading="lazy"></a>
-        <figcaption><b>帧 8</b></figcaption>
-      </figure>
-  </div>
-  <h4>anim 5/5 · sleep <span class="dim">— eyes shut, breathing slowly, z&#x27;s drifting up</span></h4>
+  <h4>anim 4/4 · sleep <span class="dim">— eyes shut, breathing slowly, z&#x27;s drifting up</span></h4>
   <div class="grid">
       <figure class="card">
         <a href="oled_preview/anim_sleep.gif"><img src="oled_preview/anim_sleep.gif" alt="sleep 循环（GIF）" loading="lazy"></a>
@@ -367,7 +328,7 @@
     <li><code>gen_index.py</code> / <code>gen_keymap_image.py</code> / <code>oled_preview/gen_oled_preview.py</code> —— 本页图片的生成脚本</li>
   </ul>
 
-  <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">0a2f9474a69cc338…</span></footer>
+  <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">d6b04b43d725573b…</span></footer>
 </div>
 </body>
 </html>

@@ -154,7 +154,7 @@ def main():
 
   <h2>OLED 画面</h2>
   <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键循环切换：
-     status → stats → graph → layers → 5 组动画 → logo。按住不放会自动往下翻（每 400 ms 一张），
+     status → stats → graph → layers → 4 组动画 → logo。按住不放会自动往下翻（每 400 ms 一张），
      不用点十几次。默认左边 status、右边第一组动画；选择只存 RAM，重启回到默认。
      开机时两半都会先播 ~1.8 秒动画。</p>
 
@@ -168,7 +168,7 @@ def main():
   </div>
 
   <h3>② anim 动画（默认：右手第一组）</h3>
-  <p class="lead">五组大眼小怪物的 8 帧循环（8 fps）：bounce / wave / walk / dance / sleep。
+  <p class="lead">四组大眼小怪物的 8 帧循环（8 fps）：bounce / wave / walk / sleep。
      每组都有 GIF，下面按组列出全部帧。</p>
 {anim_sections}
 

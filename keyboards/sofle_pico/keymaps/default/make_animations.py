@@ -8,8 +8,7 @@ the SSD1306 page format the driver wants.
   0 bounce  hop, squash on landing, blink, arms swinging
   1 wave    standing still, one arm waving hello
   2 walk    marching in place, arms swinging the other way
-  3 dance   leaning left and right, with music notes
-  4 sleep   eyes shut, breathing slowly, z's drifting up
+  3 sleep   eyes shut, breathing slowly, z's drifting up
 
 The character's proportions come from the reference drawing (ink box 114 x 120
 px) scaled by 64/114, so the arms span the full 64 px canvas and the figure is
@@ -83,17 +82,6 @@ ANIMATIONS = [
          lift_l=[0, 5, 9, 5, 0, 0, 0, 0],
          lift_r=[0, 0, 0, 0, 0, 5, 9, 5],
          look=[Z, (0, 0), (0, -1), (0, 0), Z, (0, 0), (0, -1), (0, 0)],
-     )),
-    ("dance", "leaning left and right, with music notes",
-     dict(
-         dy=[0, -1, -2, -1, 0, -1, -2, -1],
-         squash=[0, 0.3, 0.5, 0.3, 0, 0.3, 0.5, 0.3],
-         rot=[0, 4, 7, 4, 0, -4, -7, -4],
-         arm_l=[0, 4, 7, 4, 0, -4, -7, -4],
-         arm_r=[0, -4, -7, -4, 0, 4, 7, 4],
-         blink={2, 6},
-         look=[(2, 0), (2, 0), (2, -1), (2, 0), (2, 0), (2, 0), (2, -1), (2, 0)],
-         notes=True,
      )),
     ("sleep", "eyes shut, breathing slowly, z's drifting up",
      dict(
@@ -242,10 +230,6 @@ def frame(params, i):
             g.disc(X(cx + PUPIL_DX + look[0]), Y(eye_cy) + look[1], PUPIL_R)
 
     # decorations, drawn in canvas coordinates (no lean)
-    if params.get("notes"):
-        bob = [0, 2, 4, 6, 4, 2, 0, -2][i]
-        g.glyph("\r", 3, 24 - bob, scale=2)          # 0x0D is a quaver in this font
-        g.glyph("\x0e", 48, 34 + bob, scale=2)       # 0x0E is a pair of quavers
     if params.get("sleep_z"):
         # kept above y ~34 so the z's never sit on the head
         zs = ((40, 12, 2, [0, 3, 5, 6, 5, 3, 0, -3]),

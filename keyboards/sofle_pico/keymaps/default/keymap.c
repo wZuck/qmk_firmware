@@ -165,7 +165,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *
  *   status        layer as a 2x banner, mods mode, WPM with a bar, caps lock
  *   anim 0..N-1   one of the SOFLE_ANIM_COUNT loops in oled_anim.h
- *                 (bounce / wave / walk / dance / sleep)
+ *                 (bounce / wave / walk / sleep)
  *   logo          the image in oled_image.h
  *
  * Out of the box the left half starts on status and the right on anim 0.

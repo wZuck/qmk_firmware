@@ -411,7 +411,7 @@ def main():
     sheet = Image.new("RGB", (sheet_w, sheet_h), "#f2f4f7")
     d = ImageDraw.Draw(sheet)
     d.text((pad, 20), "Sofle Pico OLED 显示内容预览", font=load_font(30), fill="#1f2933")
-    d.text((pad, 60), "每一半都能在 ADJUST 层用自己那侧的 OLED 键在 status / 5 组动画 / logo 之间循环",
+    d.text((pad, 60), "每一半都能在 ADJUST 层用自己那侧的 OLED 键在 status / stats / graph / layers / 4 组动画 / logo 之间循环",
            font=load_font(17), fill="#52606d")
 
     y = 122
