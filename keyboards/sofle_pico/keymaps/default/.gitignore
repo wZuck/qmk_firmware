@@ -1,0 +1,8 @@
+# QMK's root .gitignore drops every *.png. The drawing templates are source,
+# not build output, so keep them.
+!oled_template*.png
+
+# Generated previews (build_soflepico/sync_to_keymap.py) - keep those too, so
+# the keymap folder carries its own pictures.
+!preview/**/*.png
+!preview/**/*.gif
