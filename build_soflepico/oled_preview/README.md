@@ -21,6 +21,9 @@
 | 画面 | 内容 | 默认 |
 |---|---|---|
 | `status` | 层名大字 · Mac/Win · 实时修饰键 · 峰值 WPM · 当前 WPM 与进度条 · Caps Lock | 左半 |
+| `stats` | 统计：按键数（本半边）· WPM · 峰值 · 当前层 · 运行时间 · Caps | — |
+| `graph` | WPM 曲线：2 倍大号当前 WPM + 最近 21 秒柱状图 | — |
+| `layers` | 四个层的开关状态（看清 LOWER+RAISE → ADJUST）| — |
 | `anim 0` bounce | 跳 + 落地压扁 + 眨眼 + 摆手 | 右半 |
 | `anim 1` wave | 站着挥手打招呼 | — |
 | `anim 2` walk | 原地踏步，手臂反向摆 | — |
@@ -31,7 +34,8 @@
 五组动画都是 8 帧、8 fps 的 64x128 循环，一共 40 KB。
 
 - 切换键：`ADJUST` 层上**左右各一个 `OLED` 键**（左半在 `E` 键位置，右半在镜像的 `O` 键位置）。
-  按一下切换**本侧**画面：status → anim 0 → anim 1 → … → anim 4 → logo → status。
+  按一下切换**本侧**画面：status → stats → graph → layers → anim 0 → … → anim 4 → logo → status。
+- **按住不放**会每 400 ms 自动往下翻（`SOFLE_OLED_HOLD_MS`），所以 11 个画面不用点十几次。
 - 两边互不影响：左半可以放动画、右半可以放状态屏。
 - 选择只存在 RAM，重启回到默认（左 status / 右 anim）。
 - **开机动画**：上电后两半都先播约 1.8 秒动画（`SOFLE_BOOT_MS`），然后才切到各自选的画面。
@@ -46,13 +50,16 @@
 oled_preview/
 ├── 1x/                        ← 64 x 128 真实像素，面板上就是这样的
 │   ├── status_01..06_*.png                       状态屏 6 种（空闲/打字/Mac/LOWER/RAISE/ADJUST）
+│   ├── stats_01..02_*.png                        统计屏 2 种（刚上电 / 用了一会儿）
+│   ├── graph_01..02_*.png                        WPM 曲线 2 种（空闲 / 打字中）
+│   ├── layers_01..03_*.png                       层状态 3 种（基础 / LOWER / ADJUST）
 │   ├── anim_bounce_00..07.png                    动画 5 组，每组 8 帧
 │   ├── anim_wave_00..07.png
 │   ├── anim_walk_00..07.png
 │   ├── anim_dance_00..07.png
 │   ├── anim_sleep_00..07.png
 │   └── screen_logo.png                           logo 静态图
-├── 4x/                        ← 同样 47 张，256 x 512 放大版，方便看
+├── 4x/                        ← 同样 54 张，256 x 512 放大版，方便看
 ├── anim_bounce.gif            ← 每组动画一个循环 GIF（共 5 个）
 ├── anim_wave.gif  anim_walk.gif  anim_dance.gif  anim_sleep.gif
 ├── oled_overview.png          ← 一图看全：状态屏 + 五组动画的全部帧 + logo
@@ -79,7 +86,7 @@ python3 gen_oled_preview.py
    4    |  ------------- |   分隔线
    6    | MODE WIN       |   Mac/Win 模式（MODE WIN / MODE MAC）
    7    | MODS C..G      |   实时修饰键：C S A G，没按住显示 '.'
-   8    | PEAK    88     |   本轮打字最高 WPM（停手 5 秒后归零）
+   8    | PEAK    88     |   最近 21 秒内的最高 WPM（和 graph 屏同一个历史缓冲）
    9    | WPM    42      |   当前打字速度（0-99，两位数）
   10    | [----bar-----] |   WPM 进度条（底部有一条基线）
   13    | CAPS OFF       |   Caps Lock 状态
@@ -122,12 +129,20 @@ python3 gen_oled_preview.py
 | 身体 | 压扁 | 略扁 | 拉伸 | 拉伸 | 拉伸 | 略扁 | 略扁 | 压扁 |
 | 眼睛 | 睁 | 睁 | 睁 | 睁 | 闭 | 闭 | 睁 | 睁 |
 
-## 五、logo 画面
+## 五、另外三种信息屏
+
+- **stats**：`KEY 12345`（本半边按键数，5 位）· `WPM` · `PEAK` · `LAYER` · `UP 03:21`（上电运行时间）· `CAPS`。
+  按键数是**本半边**扫到的次数——从机收不到主机的键码，所以两半各自计数。
+- **graph**：顶部 2 倍大号当前 WPM，下面把最近 21 秒的 WPM 画成 21 根柱子（每根 2px 宽、3px 一格，
+  高度按 100 WPM 占满算）。WPM 本身通过 split 同步，所以两半的曲线一致。
+- **layers**：`BASE`/`LOWER`/`RAISE`/`ADJ` 四行 `ON`/`OFF`，按住 LOWER+RAISE 时能看到 `ADJ` 变 `ON`。
+
+## 六、logo 画面
 
 `oled_image.h` 是一张 64x96 的 1 bit 图（12 个 page、768 字节），画在画布最上面，
 下面 32 px 留空。由 `img2c.py` 从 PNG 生成。
 
-## 六、换成自己的图
+## 七、换成自己的图
 
 三个脚本都写在 `keyboards/sofle_pico/keymaps/default/` 里，都是纯标准库：
 
@@ -147,7 +162,7 @@ python3 img2c.py my_picture.png --height 96 --helper-color ff00ff -o my_logo.h
 
 改完记得：重新编译烧录 → 回到本目录跑 `gen_oled_preview.py` 刷新预览。
 
-## 七、几个实际注意点
+## 八、几个实际注意点
 
 1. **面板是单色的**：SSD1306 128x64，只有"亮/灭"，预览里的青白色只是常见的显示颜色，
    实际颜色取决于你买的模块（白、蓝、黄蓝双色等）。

@@ -28,11 +28,15 @@ enum custom_keycodes {
 #    include "oled_anim.h"
 
 /* What each half draws. Every animation counts as its own screen, so the OLED
- * key walks status -> animation 0..N-1 -> logo -> status. The choice is per
- * half and lives in RAM only, so a power cycle goes back to the defaults set
- * in keyboard_post_init_user(). */
+ * key walks status -> stats -> graph -> layers -> animation 0..N-1 -> logo ->
+ * status, and holding it down auto-advances. The choice is per half and lives
+ * in RAM only, so a power cycle goes back to the defaults set in
+ * keyboard_post_init_user(). */
 enum oled_screen {
     OLED_SCREEN_STATUS,
+    OLED_SCREEN_STATS,
+    OLED_SCREEN_GRAPH,
+    OLED_SCREEN_LAYERS,
     OLED_SCREEN_ANIM,                                  // first animation
     OLED_SCREEN_LOGO = OLED_SCREEN_ANIM + SOFLE_ANIM_COUNT,
     OLED_SCREEN_COUNT
@@ -41,8 +45,22 @@ enum oled_screen {
 // Not a screen that can be selected - the animation shown while booting.
 #    define SOFLE_SCREEN_BOOT 0xFF
 
+// Holding the OLED key this long starts auto-advancing, so walking through a
+// dozen screens is one press and a wait instead of a dozen taps.
+#    define SOFLE_OLED_HOLD_MS 400
+
+// WPM readings kept for the graph screen, one per second.
+#    define SOFLE_GRAPH_SAMPLES 21
+
 static uint8_t  oled_screen = OLED_SCREEN_STATUS;
 static uint32_t oled_boot_time;
+
+// Counted per half: each half only ever sees its own matrix presses (plus the
+// other half's, if it happens to be the master), so this is "keys scanned by
+// this half", not a keyboard-wide total.
+static uint32_t key_count;
+
+static uint8_t wpm_history[SOFLE_GRAPH_SAMPLES];
 #endif
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -301,21 +319,21 @@ static void render_mods(void) {
     oled_write_ln(text, false);
 }
 
-static void render_wpm(void) {
-    uint8_t wpm = get_current_wpm();
-
-    // "Peak" is per typing burst rather than per power cycle: it tracks the
-    // best WPM while typing, and is dropped once the typing stops for a bit.
-    static uint8_t  peak;
-    static uint32_t last_active;
-    if (wpm > 0) {
-        last_active = timer_read32();
-        if (wpm > peak) {
-            peak = wpm;
+// The best WPM over the last SOFLE_GRAPH_SAMPLES seconds. Both the status
+// screen's PEAK line and the stats screen use this, so they always agree.
+static uint8_t wpm_peak(void) {
+    uint8_t peak = 0;
+    for (uint8_t i = 0; i < SOFLE_GRAPH_SAMPLES; i++) {
+        if (wpm_history[i] > peak) {
+            peak = wpm_history[i];
         }
-    } else if (peak > 0 && timer_elapsed32(last_active) > 5000) {
-        peak = 0;
     }
+    return peak;
+}
+
+static void render_wpm(void) {
+    uint8_t wpm  = get_current_wpm();
+    uint8_t peak = wpm_peak();
 
     char    text[10] = "WPM    "; // three characters, plus the two digits below
     uint8_t shown    = wpm > 99 ? 99 : wpm;
@@ -358,6 +376,182 @@ static void render_status(void) {
 
     oled_set_cursor(0, SOFLE_LINE_CAPS);
     oled_write_ln_P(host_keyboard_led_state().caps_lock ? PSTR("CAPS ON  ") : PSTR("CAPS OFF "), false);
+}
+
+/* ------------------------------------------------------------------------
+ * Stats screen
+ *
+ * The numbers that do not belong on the status screen. KEYS counts what this
+ * half scans (the two halves count their own presses); LAYER is the topmost
+ * active layer, UP is since power-on.
+ * ------------------------------------------------------------------------ */
+
+// Every screen line is exactly nine characters (see render_status()), so the
+// label is placed and the rest is padded - never ten characters.
+static void line_start(char *text, const char *label) {
+    memset(text, ' ', 9);
+    text[9] = '\0';
+    memcpy(text, label, strlen(label));
+}
+
+static void render_stats(void) {
+    uint32_t keys  = key_count > 99999 ? 99999 : key_count;
+    uint32_t secs  = timer_read32() / 1000;
+    uint32_t mins  = secs / 60;
+    uint32_t hours = mins / 60;
+    uint8_t  wpm   = get_current_wpm();
+    uint8_t  peak  = wpm_peak();
+    if (wpm > 99) {
+        wpm = 99;
+    }
+    if (peak > 99) {
+        peak = 99;
+    }
+
+    char text[10];
+
+    render_rule(SOFLE_LINE_RULE_TOP, true);
+    render_banner(SOFLE_LINE_BANNER, "STATS");
+    render_rule(SOFLE_LINE_RULE_BOTTOM, false);
+
+    line_start(text, "KEY"); // "KEY 12345"
+    for (uint8_t i = 0; i < 5; i++) {
+        text[8 - i] = '0' + keys % 10;
+        keys /= 10;
+    }
+    oled_set_cursor(0, SOFLE_LINE_MODE);
+    oled_write_ln(text, false);
+
+    line_start(text, "WPM"); // "WPM    42"
+    text[7] = '0' + wpm / 10;
+    text[8] = '0' + wpm % 10;
+    oled_set_cursor(0, SOFLE_LINE_MODS);
+    oled_write_ln(text, false);
+
+    line_start(text, "PEAK"); // "PEAK   88"
+    text[7] = '0' + peak / 10;
+    text[8] = '0' + peak % 10;
+    oled_set_cursor(0, SOFLE_LINE_PEAK);
+    oled_write_ln(text, false);
+
+    line_start(text, "LAYER"); // "LAYER   2"
+    text[8] = '0' + get_highest_layer(layer_state | default_layer_state);
+    oled_set_cursor(0, SOFLE_LINE_WPM);
+    oled_write_ln(text, false);
+
+    line_start(text, "UP"); // "UP  03:21"
+    text[4] = '0' + (hours / 10) % 10;
+    text[5] = '0' + hours % 10;
+    text[6] = ':';
+    text[7] = '0' + (mins % 60) / 10;
+    text[8] = '0' + (mins % 60) % 10;
+    oled_set_cursor(0, SOFLE_LINE_WPM_BAR);
+    oled_write_ln(text, false);
+
+    oled_set_cursor(0, SOFLE_LINE_CAPS);
+    oled_write_ln_P(host_keyboard_led_state().caps_lock ? PSTR("CAPS ON  ") : PSTR("CAPS OFF "), false);
+}
+
+/*
+ * The graph and the layers screen share the lines below the banner with the
+ * status screen, so they use the same SOFLE_LINE_* constants.
+ */
+
+/* ------------------------------------------------------------------------
+ * Graph screen
+ *
+ * The current WPM in 2x digits, with the last SOFLE_GRAPH_SAMPLES seconds as a
+ * scrolling bar chart along the bottom. WPM is mirrored over the split link,
+ * so both halves draw the same chart.
+ * ------------------------------------------------------------------------ */
+
+// Called on every OLED frame whatever the screen, so PEAK and the graph keep
+// up even if the graph is not the screen being shown.
+static void wpm_history_sample(void) {
+    static uint32_t next_sample;
+
+    if (timer_elapsed32(next_sample) < 1000) {
+        return;
+    }
+    next_sample = timer_read32();
+
+    memmove(&wpm_history[0], &wpm_history[1], SOFLE_GRAPH_SAMPLES - 1);
+    wpm_history[SOFLE_GRAPH_SAMPLES - 1] = get_current_wpm();
+}
+
+static void render_graph(void) {
+    uint8_t wpm = get_current_wpm();
+    wpm         = wpm > 99 ? 99 : wpm;
+
+    char big[3] = {'0' + wpm / 10, '0' + wpm % 10, '\0'};
+    render_rule(SOFLE_LINE_RULE_TOP, true);
+    render_banner(SOFLE_LINE_BANNER, big);
+
+    oled_set_cursor(0, SOFLE_LINE_MODE);
+    oled_write_ln("WPM      ", false);
+
+    // 21 bars, 3 px apart: 2 px of bar and 1 px of gap
+    const uint8_t chart_line = SOFLE_LINE_WPM;   // bars start 8 px text lines down
+    const uint8_t chart_h    = SOFLE_OLED_HEIGHT - chart_line * OLED_FONT_HEIGHT;
+
+    for (uint8_t page = 0; page < chart_h / 8; page++) {
+        char row[SOFLE_OLED_WIDTH];
+        memset(row, 0, sizeof(row));
+
+        for (uint8_t i = 0; i < SOFLE_GRAPH_SAMPLES; i++) {
+            uint8_t height = (uint16_t)wpm_history[i] * chart_h / 100;
+            for (uint8_t w = 0; w < 2; w++) {
+                uint8_t x = 1 + i * 3 + w;
+                if (x >= SOFLE_OLED_WIDTH) {
+                    continue;
+                }
+                for (uint8_t bit = 0; bit < 8; bit++) {
+                    uint8_t y = chart_line * OLED_FONT_HEIGHT + page * 8 + bit;
+                    if (SOFLE_OLED_HEIGHT - 1 - y < height) {
+                        row[x] |= 1 << bit;
+                    }
+                }
+            }
+        }
+        write_row(chart_line + page, row);
+    }
+}
+
+/* ------------------------------------------------------------------------
+ * Layers screen
+ *
+ * Which of the four layers are active. LOWER and RAISE are only on while held,
+ * and both together bring up ADJUST (update_tri_layer_state), so this is also
+ * a way to see the tri-layer do its thing.
+ * ------------------------------------------------------------------------ */
+
+static void render_layers(void) {
+    static const char *const names[] = {"BASE", "LOWER", "RAISE", "ADJ"};
+    layer_state_t           active  = layer_state | default_layer_state;
+    char                    text[11];
+
+    render_rule(SOFLE_LINE_RULE_TOP, true);
+    render_banner(SOFLE_LINE_BANNER, "LAYER");
+    render_rule(SOFLE_LINE_RULE_BOTTOM, false);
+
+    for (uint8_t i = 0; i < 4; i++) {
+        bool        on    = active & ((layer_state_t)1 << i);
+        const char *state = on ? "ON" : "OFF";
+        uint8_t     len   = strlen(names[i]);
+        uint8_t     pad   = 9 - len - strlen(state);
+
+        // nine characters: name, padding, then "ON" or "OFF"
+        memset(text, ' ', sizeof(text));
+        memcpy(text, names[i], len);
+        memcpy(text + len + pad, state, strlen(state));
+        text[9] = '\0';
+
+        oled_set_cursor(0, SOFLE_LINE_MODE + i);
+        oled_write_ln(text, false);
+    }
+
+    oled_set_cursor(0, SOFLE_LINE_CAPS);
+    oled_write_ln_P(keymap_config.swap_lctl_lgui ? PSTR("MODE MAC ") : PSTR("MODE WIN "), false);
 }
 
 /* ------------------------------------------------------------------------
@@ -407,6 +601,8 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
  * ------------------------------------------------------------------------ */
 
 bool oled_task_user(void) {
+    wpm_history_sample();
+
     // The animation plays for a moment after power-up on both halves, then
     // each half settles on whatever screen it has selected.
     uint8_t want = timer_elapsed32(oled_boot_time) < SOFLE_BOOT_MS ? SOFLE_SCREEN_BOOT : oled_screen;
@@ -426,13 +622,19 @@ bool oled_task_user(void) {
         render_animation(want - OLED_SCREEN_ANIM);
     } else if (want == OLED_SCREEN_LOGO) {
         render_logo();
+    } else if (want == OLED_SCREEN_STATS) {
+        render_stats();
+    } else if (want == OLED_SCREEN_GRAPH) {
+        render_graph();
+    } else if (want == OLED_SCREEN_LAYERS) {
+        render_layers();
     } else {
         render_status();
     }
     return false;
 }
 
-// Out of the box: status on the left, mascot on the right.
+// Out of the box: status on the left, the first animation on the right.
 void keyboard_post_init_user(void) {
     oled_screen    = is_keyboard_left() ? OLED_SCREEN_STATUS : OLED_SCREEN_ANIM;
     oled_boot_time = timer_read32();
@@ -473,6 +675,8 @@ static bool oled_switch_key(uint8_t row, uint8_t col) {
 
 void housekeeping_task_user(void) {
     static matrix_row_t last[MATRIX_ROWS_PER_HAND];
+    static uint8_t      held_row = 0xFF, held_col;
+    static uint32_t     last_advance;
 
     for (uint8_t i = 0; i < MATRIX_ROWS_PER_HAND; i++) {
         uint8_t      row = is_keyboard_left() ? i : i + MATRIX_ROWS_PER_HAND;
@@ -483,9 +687,26 @@ void housekeeping_task_user(void) {
         while (hit) {
             uint8_t col = __builtin_ctz(hit);
             hit &= hit - 1;
+
             if (oled_switch_key(row, col)) {
-                oled_screen = (oled_screen + 1) % OLED_SCREEN_COUNT;
+                oled_screen  = (oled_screen + 1) % OLED_SCREEN_COUNT;
+                held_row     = row;
+                held_col     = col;
+                last_advance = timer_read32();
+            } else {
+                key_count++; // the display key is not typing
             }
+        }
+    }
+
+    // Keep advancing while the key is held, so walking through a dozen screens
+    // is one press and a wait rather than a dozen taps.
+    if (held_row != 0xFF) {
+        if (!matrix_is_on(held_row, held_col)) {
+            held_row = 0xFF;
+        } else if (timer_elapsed32(last_advance) >= SOFLE_OLED_HOLD_MS) {
+            oled_screen  = (oled_screen + 1) % OLED_SCREEN_COUNT;
+            last_advance = timer_read32();
         }
     }
 }

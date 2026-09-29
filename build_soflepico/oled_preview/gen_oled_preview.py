@@ -194,6 +194,117 @@ LEFT_STATES = [
 logo_name = "screen_logo"
 
 
+# --------------------------------------------------------------------------
+# 复刻 keymap.c 的 render_stats() / render_graph() / render_layers()
+# --------------------------------------------------------------------------
+
+GRAPH_SAMPLES = 21
+
+
+def line_start(text, label):
+    """keymap.c 里的同名辅助：9 个字符，标签靠左，其余补空格。"""
+    s = list(" " * 9)
+    for i, ch in enumerate(label):
+        s[i] = ch
+    return s
+
+
+def right_digits(text, value, digits, end=8):
+    v = min(value, 10**digits - 1)
+    for i in range(digits):
+        text[end - i] = chr(ord("0") + v % 10)
+        v //= 10
+    return text
+
+
+def stats_screen(keys, wpm, peak, layer, hours, mins, caps, mode, font, bigfont):
+    c = Canvas()
+    c.raw(1, 0, [0x80] * W)
+    c.banner(2, "STATS", bigfont)
+    c.raw(4, 0, [0x01] * W)
+
+    c.text(6, "".join(right_digits(line_start(None, "KEY"), keys, 5)), font)
+    c.text(7, "".join(right_digits(line_start(None, "WPM"), wpm, 2)), font)
+    c.text(8, "".join(right_digits(line_start(None, "PEAK"), peak, 2)), font)
+    c.text(9, "".join(right_digits(line_start(None, "LAYER"), layer, 1)), font)
+
+    up = line_start(None, "UP")
+    up[4], up[5] = str((hours // 10) % 10), str(hours % 10)
+    up[6] = ":"
+    up[7], up[8] = str((mins % 60) // 10), str((mins % 60) % 10)
+    c.text(10, "".join(up), font)
+
+    c.text(13, "CAPS ON  " if caps else "CAPS OFF ", font)
+    mode = "MODE MAC " if mode == "MAC" else "MODE WIN "
+    c.text(14, mode, font)
+    return c
+
+
+def graph_screen(history, font, bigfont):
+    """history 是 21 个采样（旧的在前），和自己维护的历史一致。"""
+    c = Canvas()
+    wpm = min(history[-1], 99)
+    c.raw(1, 0, [0x80] * W)
+    c.banner(2, "%02d" % wpm, bigfont)
+    c.text(6, "WPM      ", font)
+
+    chart_line, chart_h = 9, H - 9 * 8
+    for page in range(chart_h // 8):
+        row = bytearray(W)
+        for i, val in enumerate(history):
+            height = val * chart_h // 100
+            for w in range(2):
+                x = 1 + i * 3 + w
+                if x >= W:
+                    continue
+                for bit in range(8):
+                    y = chart_line * 8 + page * 8 + bit
+                    if H - 1 - y < height:
+                        row[x] |= 1 << bit
+        c.raw(chart_line + page, 0, row)
+    return c
+
+
+def layers_screen(active, mode, font, bigfont):
+    c = Canvas()
+    c.raw(1, 0, [0x80] * W)
+    c.banner(2, "LAYER", bigfont)
+    c.raw(4, 0, [0x01] * W)
+
+    for i, name in enumerate(("BASE", "LOWER", "RAISE", "ADJ")):
+        state = "ON" if i in active else "OFF"
+        text = line_start(None, name)
+        pad = 9 - len(name) - len(state)
+        for k, ch in enumerate(state):
+            text[len(name) + pad + k] = ch
+        c.text(6 + i, "".join(text), font)
+
+    c.text(13, "MODE MAC " if mode == "MAC" else "MODE WIN ", font)
+    return c
+
+
+# 三种信息屏的典型画面
+STATS_STATES = [
+    ("stats_01_fresh", "刚上电：0 键 · 层 0 · 运行 0 分钟",
+     dict(keys=0, wpm=0, peak=0, layer=0, hours=0, mins=0, caps=False, mode="WIN")),
+    ("stats_02_busy", "用了一会儿：KEY 12345 · WPM 62 · 峰值 88 · 层 1 · 运行 3:21 · Caps 开",
+     dict(keys=12345, wpm=62, peak=88, layer=1, hours=3, mins=21, caps=True, mode="WIN")),
+]
+
+GRAPH_STATES = [
+    ("graph_01_idle", "空闲：21 秒里没有输入，曲线贴底",
+     [0] * GRAPH_SAMPLES),
+    ("graph_02_typing", "打字中：先热身再掉速，最后两秒回到 74",
+     [0, 0, 12, 35, 48, 60, 52, 44, 70, 82, 74, 60, 0, 0, 25, 45, 58, 66, 74, 78, 74]),
+]
+
+LAYER_STATES = [
+    ("layers_01_base", "只有基础层（QWERTY）", {0}),
+    ("layers_02_lower", "按住左拇指 LOWER", {0, 1}),
+    ("layers_03_adjust", "LOWER + RAISE 同时按住 → ADJUST", {0, 3}),
+]
+
+
 def logo_screen():
     """oled_image.h：64x96 的图（12 个 page），下半屏留空。"""
     src = open(os.path.join(KM_DIR, "oled_image.h")).read()
@@ -248,7 +359,25 @@ def main():
         c.to_image(4).save(png(4, "4x", name))
         made.append((name, desc))
 
-    # ② 动画：每组的帧图 + 一个 GIF
+    # ② 另外三种信息屏：stats / graph / layers
+    info = []
+    for name, desc, kw in STATS_STATES:
+        c = stats_screen(font=font, bigfont=bigfont, **kw)
+        c.to_image(1).save(png(1, "1x", name))
+        c.to_image(4).save(png(4, "4x", name))
+        info.append((name, desc))
+    for name, desc, hist in GRAPH_STATES:
+        c = graph_screen(hist, font, bigfont)
+        c.to_image(1).save(png(1, "1x", name))
+        c.to_image(4).save(png(4, "4x", name))
+        info.append((name, desc))
+    for name, desc, active in LAYER_STATES:
+        c = layers_screen(active, "WIN", font, bigfont)
+        c.to_image(1).save(png(1, "1x", name))
+        c.to_image(4).save(png(4, "4x", name))
+        info.append((name, desc))
+
+    # ③ 动画：每组的帧图 + 一个 GIF
     anim_rows = []
     for aname, frames in anims:
         imgs = []
@@ -262,7 +391,7 @@ def main():
                      append_images=imgs[1:], duration=125, loop=0, optimize=False)
         anim_rows.append((aname, titles.get(aname, ""), [im.resize((W * 2, H * 2), Image.NEAREST) for im in imgs]))
 
-    # ③ logo
+    # ④ logo
     logo = logo_screen()
     logo.to_image(1).save(png(1, "1x", logo_name))
     logo_img = logo.to_image(4)
@@ -276,7 +405,9 @@ def main():
     grid_w = 2 * (row_w + gap) - gap
     sheet_w = pad * 2 + max(6 * (sc_w + gap) - gap, grid_w)
     row_h = 34 + af_h + 26
-    sheet_h = 128 + (sc_h + 52) + 30 + 3 * (row_h + 20) + 60
+    info_cols = 4
+    info_rows = (len(info) + info_cols - 1) // info_cols
+    sheet_h = 128 + (sc_h + 52) + 34 + info_rows * (sc_h + 52) + 30 + 3 * (row_h + 20) + 60
     sheet = Image.new("RGB", (sheet_w, sheet_h), "#f2f4f7")
     d = ImageDraw.Draw(sheet)
     d.text((pad, 20), "Sofle Pico OLED 显示内容预览", font=load_font(30), fill="#1f2933")
@@ -293,15 +424,27 @@ def main():
         for n, line in enumerate(wrap(d, desc, load_font(14), sc_w)):
             d.text((x, y + sc_h + 8 + n * 18), line, font=load_font(14), fill="#52606d")
 
-    y = y + sc_h + 52 + 30
-    d.text((pad, y - 26), "② 动画（默认：右手第一组）—— 每组 8 帧、8 fps，另有独立的 GIF",
+    y = y + sc_h + 52 + 34
+    d.text((pad, y - 26), "② 另外三种信息屏：stats 统计 / graph WPM 曲线 / layers 层状态",
+           font=load_font(19), fill="#1b7f4b")
+    for i, (name, desc) in enumerate(info):
+        col, row = i % info_cols, i // info_cols
+        x = pad + col * (sc_w + gap)
+        yy = y + row * (sc_h + 52)
+        sheet.paste(Image.open(png(4, "4x", name)), (x, yy))
+        d.rectangle([x - 1, yy - 1, x + sc_w, yy + sc_h], outline="#c9ced6")
+        for n, line in enumerate(wrap(d, desc, load_font(14), sc_w)):
+            d.text((x, yy + sc_h + 8 + n * 18), line, font=load_font(14), fill="#52606d")
+
+    y = y + info_rows * (sc_h + 52) + 34
+    d.text((pad, y - 26), "③ 动画（默认：右手第一组）—— 每组 8 帧、8 fps，另有独立的 GIF",
            font=load_font(19), fill="#a85a06")
     cells = [(n, desc, imgs) for n, desc, imgs in anim_rows] + [(logo_name, "oled_image.h（64x96 静态图）", None)]
     for k, (aname, desc, imgs) in enumerate(cells):
         col, row = k % 2, k // 2
         x = pad + col * (row_w + gap)
         yy = y + row * (row_h + 20)
-        label = f"anim {k + 1}/{len(anim_rows)}：{aname}" if imgs else f"③ {aname}"
+        label = f"anim {k + 1}/{len(anim_rows)}：{aname}" if imgs else f"④ {aname}"
         d.text((x, yy), label, font=load_font(16), fill="#1f2933")
         d.text((x + 150, yy + 2), desc, font=load_font(13), fill="#66727f")
         if imgs:
@@ -312,7 +455,7 @@ def main():
 
     sheet.save(os.path.join(HERE, "oled_overview.png"))
     print("已生成:", os.path.join(HERE, "oled_overview.png"))
-    print(f"状态屏 {len(made)} 张，动画 {len(anim_rows)} 组 x {nframes} 帧，logo 1 张，GIF {len(anim_rows)} 个")
+    print(f"状态屏 {len(made)} 张，信息屏 {len(info)} 张，动画 {len(anim_rows)} 组 x {nframes} 帧，logo 1 张，GIF {len(anim_rows)} 个")
 
 
 def wrap(d, text, font, max_w):

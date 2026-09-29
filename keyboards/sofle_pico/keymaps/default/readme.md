@@ -12,9 +12,9 @@ Features:
 
 - Symmetric modifiers (CMD/Super, Alt/Opt, Ctrl, Shift)
 - Modes for Mac vs Linux/Win support -> different order of modifiers and different action shortcuts on the "UPPER" layer (the red one in the image). Designed to simplify transtions when switching between operating systems often.
-- Each half's OLED can show any of the screens - status, one of five mascot animations, or a logo -
-  and cycles through them with its own `OLED` key on the adjust layer. Status on the left and
-  `bounce` on the right by default.
+- Each half's OLED can show any of eleven screens - status, stats, a WPM graph, the layer states,
+  one of five mascot animations, or a logo - and cycles through them with its own `OLED` key on the
+  adjust layer (hold it to auto-advance). Status on the left and `bounce` on the right by default.
 - Left encoder: volume down/up, press mutes. Right encoder: previous/next track, press play/pause.
 - `EE_CLR` on the adjust layer clears the EEPROM, which VIA needs after the keymap changes.
 
@@ -24,11 +24,18 @@ Features:
 Each half runs the OLED task on its own, so nothing has to cross the split
 link to draw a screen - but that also means each half decides what it shows.
 Every half can cycle through the screens with its own `OLED` key on the adjust
-layer (`OLED_NEXT` in `keymap.c`), in this order:
+layer (`OLED_NEXT` in `keymap.c`), in this order - holding the key down
+auto-advances every 400 ms, so eleven screens are not eleven taps:
 
 - **status** - the current layer as a 2x banner, the mods mode, the live
   modifiers, the peak and current typing speed with a bar, and caps lock.
   Default on the left half.
+- **stats** - keys counted by this half, current and peak WPM, the top active
+  layer and how long the keyboard has been up.
+- **graph** - the current WPM in 2x digits, with the last 21 seconds as a
+  scrolling bar chart (WPM is mirrored over the split, so both halves match).
+- **layers** - which of the four layers are on, which also shows the tri-layer
+  bringing ADJUST up when LOWER and RAISE are held together.
 - **anim 0..N-1** - the loops in `oled_anim.h`: `bounce`, `wave`, `walk`,
   `dance` and `sleep`, eight frames each at 8 fps. Default on the right half
   (`anim 0`).

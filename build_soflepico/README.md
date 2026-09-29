@@ -29,7 +29,7 @@
 | `keymap.md` | **键位图与分层说明**：每层有哪些键、怎么换层 |
 | `keymap_layers.png` | 四层键位图（按真实坐标绘制，可直接看图） |
 | `gen_keymap_image.py` | 由 `keymap.c` + `keyboard.json` 重新生成上面两个文件 |
-| `oled_preview/` | **OLED 显示内容预览**：status 6 种 + 五组动画共 40 帧 + logo，含 `1x`/`4x`/5 个 GIF/总览图 |
+| `oled_preview/` | **OLED 显示内容预览**：信息屏 13 种 + 五组动画共 40 帧 + logo，含 `1x`/`4x`/5 个 GIF/总览图 |
 | `index.html` | **一页看全**：固件信息 + 键位图 + OLED 三种画面（打开即可，图片走相对路径） |
 | `gen_index.py` | 重新生成 `index.html`（自动带上 uf2 的 SHA-256、QMK 版本、图片清单） |
 | `sync_to_keymap.py` | 把 `keymap.md` 和预览图同步到 `keyboards/sofle_pico/keymaps/default/` |
@@ -40,7 +40,7 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-bf23091244dab2c0df2cf7dd52f2df054efc5accadc2a624d4e4f8b3121fb746  sofle_pico_default.uf2
+0a2f9474a69cc338e8b0fbd99703e4fd0dac291369113e669a4110142097bce4  sofle_pico_default.uf2
 ```
 
 ## 3. 烧录方法
@@ -85,7 +85,7 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 
 - 层：`QWERTY`(0) / `LOWER`(1) / `RAISE`(2) / `ADJUST`(3)（Colemak 层已删除），`LOWER`+`RAISE` 三键组合出 `ADJUST`。
 - Mac/Win 模式在 `ADJUST` 层切换，选择存 EEPROM；`QK_BOOT`、`EE_CLR` 也在该层。
-- OLED：每一半都能在三种画面之间切换（见 4.3），切换键是 `ADJUST` 层左右各一个 `OLED` 键。
+- OLED：每一半都能在 11 个画面之间切换（见 4.3），切换键是 `ADJUST` 层左右各一个 `OLED` 键（按住可快速翻页）。
 - VIA 已启用（层数用核心默认的 4 层），可用 VIA 网页版改键。
 
 ### 4.3 OLED 画面切换
@@ -96,6 +96,9 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 | 画面 | 内容 | 默认 |
 |---|---|---|
 | `status` | 层名大字 · Mac/Win · 实时修饰键（C S A G）· 峰值 WPM · 当前 WPM 与进度条 · Caps Lock | 左半 |
+| `stats` | 统计：按键数（本半边）· 当前 WPM · 峰值 WPM · 当前层 · 上电运行时间 · Caps | — |
+| `graph` | WPM 曲线：2 倍大号当前 WPM + 最近 21 秒的柱状图 | — |
+| `layers` | 四个层的开关状态（能直观看到 LOWER+RAISE 组合出 ADJUST）| — |
 | `anim 0` | bounce：跳 + 落地压扁 + 眨眼 + 摆手 | 右半 |
 | `anim 1` | wave：站着挥手打招呼 | — |
 | `anim 2` | walk：原地踏步，手臂反向摆 | — |
@@ -104,13 +107,16 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 | `logo` | `oled_image.h` 的 Sofle Pico 静态图（64x96） | — |
 
 五组动画都是 8 帧、8 fps 的 64x128 循环，一共 40 KB（`SOFLE_ANIM_COUNT` / `SOFLE_ANIM_FRAMES`）。
+一共 11 个画面，所以**按住 OLED 键不放会每 400 ms 自动翻一张**，不用点十几次。
+`stats` 的按键数是**本半边**扫到的次数（两半各自计数）；`graph` 的 WPM 通过 split 同步，两半画出来一样。
 加一组动画只要在 `make_animations.py` 的 `ANIMATIONS` 里加一项，重跑脚本并重新编译——
 `oled_screen` 枚举里的动画区间会自动跟着 `SOFLE_ANIM_COUNT` 变。
 
 - 两边互相独立，也互不影响（左半可以是 `anim`，右半可以是 `status`）。
 - 选择只存在 RAM，重启回到默认（左 status / 右 anim）；上电后两半都会先播约 1.8 秒动画（`SOFLE_BOOT_MS`）。
-- 状态屏上的 `MODS` 行是实时修饰键（按住显示 C/S/A/G，否则显示 `.`），`PEAK` 是**本轮打字**的最高 WPM
-  （停手 5 秒后归零），不是上电以来的历史最高。
+- 状态屏上的 `MODS` 行是实时修饰键（按住显示 C/S/A/G，否则显示 `.`）。
+- `PEAK`（状态屏和 stats 屏同一个值）= **最近 21 秒内的最高 WPM**，来自 graph 屏用的那个历史缓冲，
+  不是上电以来的历史最高。
 - 切换瞬间会先清屏，不会留下上一屏的残影。
 - 实现上两个半边各自扫自己那半边的矩阵（`housekeeping_task_user()`），
   因为 `process_record_user()` 只在主机侧运行，从机收不到键码。

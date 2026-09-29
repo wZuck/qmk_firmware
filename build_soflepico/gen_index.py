@@ -62,9 +62,13 @@ def main():
     commit_date = git("log", "-1", "--format=%cd", "--date=short")
     tag = git("describe", "--tags")
 
+    info_screens = ([(n, d) for n, d, _ in preview.LEFT_STATES]
+                    + [(n, d) for n, d, _ in preview.STATS_STATES]
+                    + [(n, d) for n, d, _ in preview.GRAPH_STATES]
+                    + [(n, d) for n, d, _ in preview.LAYER_STATES])
     status_cards = "\n".join(
         card(f"oled_preview/4x/{name}.png", desc, link=f"oled_preview/1x/{name}.png")
-        for name, desc, _ in preview.LEFT_STATES
+        for name, desc in info_screens
     )
     anims = preview.parse_anims(os.path.join(preview.KM_DIR, "oled_anim.h"))
     anim_titles = dict(preview.parse_anim_titles(os.path.join(preview.KM_DIR, "oled_anim.h")))
@@ -148,11 +152,16 @@ def main():
   </div>
 
   <h2>OLED 画面</h2>
-  <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键循环切换：status → 5 组动画 → logo。
-     默认左边 status、右边 anim；选择只存 RAM，重启回到默认。开机时两半都会先播 ~1.8 秒动画。</p>
+  <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键循环切换：
+     status → stats → graph → layers → 5 组动画 → logo。按住不放会自动往下翻（每 400 ms 一张），
+     不用点十几次。默认左边 status、右边第一组动画；选择只存 RAM，重启回到默认。
+     开机时两半都会先播 ~1.8 秒动画。</p>
 
-  <h3>① status 状态屏（默认：左手）</h3>
-  <p class="lead">层名大字 / Mac-Win / 实时修饰键（C S A G，未按住显示 <code>.</code>）/ 本轮打字峰值 WPM / 当前 WPM 与进度条 / Caps Lock。</p>
+  <h3>① 信息屏（默认：左手显示 status）</h3>
+  <p class="lead">四类共 13 个画面：<b>status</b> 状态屏（层名 / Mac-Win / 实时修饰键 / 峰值 / WPM 进度条 / Caps）、
+     <b>stats</b> 统计（按键数 / WPM / 峰值 / 当前层 / 运行时间）、
+     <b>graph</b> WPM 曲线（大号数字 + 最近 21 秒柱状图）、
+     <b>layers</b> 层状态（四个层的开关，能看出三键组合出 ADJUST）。</p>
   <div class="grid">
 {status_cards}
   </div>
@@ -208,7 +217,7 @@ def main():
         fh.write(doc)
     print("已生成:", OUT)
     print(f"固件 {size} 字节, sha256 {sha[:16]}…, QMK {tag} @ {commit}")
-    print(f"图片: 键位图 1 + status {len(preview.LEFT_STATES)} + anim {sum(len(f) for _, f in anims)} + logo 1")
+    print(f"图片: 键位图 1 + 信息屏 {len(info_screens)} + anim {sum(len(f) for _, f in anims)} + logo 1")
 
 
 if __name__ == "__main__":

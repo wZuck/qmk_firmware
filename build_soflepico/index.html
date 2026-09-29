@@ -43,9 +43,9 @@
   <div class="panel">
     <table>
       <tr><th>键盘 / keymap</th><td><code>sofle_pico</code> / <code>default</code>（RP2040，分体，左右各一个 EC11）</td></tr>
-      <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 217,600 字节 · 构建于 2026-09-30 01:23</td></tr>
-      <tr><th>SHA-256</th><td class="hash">bf23091244dab2c0df2cf7dd52f2df054efc5accadc2a624d4e4f8b3121fb746</td></tr>
-      <tr><th>QMK</th><td>tag <code>0.34.5-2-ge993d7c22b</code> · commit <code>e993d7c22b</code>（2026-09-30）</td></tr>
+      <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 220,160 字节 · 构建于 2026-09-30 01:28</td></tr>
+      <tr><th>SHA-256</th><td class="hash">0a2f9474a69cc338e8b0fbd99703e4fd0dac291369113e669a4110142097bce4</td></tr>
+      <tr><th>QMK</th><td>tag <code>0.34.5-3-g73ec9fb51f</code> · commit <code>73ec9fb51f</code>（2026-09-30）</td></tr>
       <tr><th>编译命令</th><td><code>qmk compile -kb sofle_pico -km default</code></td></tr>
       <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3)，<code>LOWER</code>+<code>RAISE</code> 三键组合出 ADJUST</td></tr>
       <tr><th>旋钮</th><td>左：音量 ± / 按压静音　右：上一首·下一首 / 按压播放暂停</td></tr>
@@ -62,11 +62,16 @@
   </div>
 
   <h2>OLED 画面</h2>
-  <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键循环切换：status → 5 组动画 → logo。
-     默认左边 status、右边 anim；选择只存 RAM，重启回到默认。开机时两半都会先播 ~1.8 秒动画。</p>
+  <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键循环切换：
+     status → stats → graph → layers → 5 组动画 → logo。按住不放会自动往下翻（每 400 ms 一张），
+     不用点十几次。默认左边 status、右边第一组动画；选择只存 RAM，重启回到默认。
+     开机时两半都会先播 ~1.8 秒动画。</p>
 
-  <h3>① status 状态屏（默认：左手）</h3>
-  <p class="lead">层名大字 / Mac-Win / 实时修饰键（C S A G，未按住显示 <code>.</code>）/ 本轮打字峰值 WPM / 当前 WPM 与进度条 / Caps Lock。</p>
+  <h3>① 信息屏（默认：左手显示 status）</h3>
+  <p class="lead">四类共 13 个画面：<b>status</b> 状态屏（层名 / Mac-Win / 实时修饰键 / 峰值 / WPM 进度条 / Caps）、
+     <b>stats</b> 统计（按键数 / WPM / 峰值 / 当前层 / 运行时间）、
+     <b>graph</b> WPM 曲线（大号数字 + 最近 21 秒柱状图）、
+     <b>layers</b> 层状态（四个层的开关，能看出三键组合出 ADJUST）。</p>
   <div class="grid">
       <figure class="card">
         <a href="oled_preview/1x/status_01_idle_win.png"><img src="oled_preview/4x/status_01_idle_win.png" alt="空闲 · Win 模式 · 无修饰键" loading="lazy"></a>
@@ -91,6 +96,34 @@
       <figure class="card">
         <a href="oled_preview/1x/status_06_adjust_mac_wpm88_caps.png"><img src="oled_preview/4x/status_06_adjust_mac_wpm88_caps.png" alt="ADJUST · 四个修饰键全按 · Caps Lock 打开" loading="lazy"></a>
         <figcaption><b>ADJUST · 四个修饰键全按 · Caps Lock 打开</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/stats_01_fresh.png"><img src="oled_preview/4x/stats_01_fresh.png" alt="刚上电：0 键 · 层 0 · 运行 0 分钟" loading="lazy"></a>
+        <figcaption><b>刚上电：0 键 · 层 0 · 运行 0 分钟</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/stats_02_busy.png"><img src="oled_preview/4x/stats_02_busy.png" alt="用了一会儿：KEY 12345 · WPM 62 · 峰值 88 · 层 1 · 运行 3:21 · Caps 开" loading="lazy"></a>
+        <figcaption><b>用了一会儿：KEY 12345 · WPM 62 · 峰值 88 · 层 1 · 运行 3:21 · Caps 开</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/graph_01_idle.png"><img src="oled_preview/4x/graph_01_idle.png" alt="空闲：21 秒里没有输入，曲线贴底" loading="lazy"></a>
+        <figcaption><b>空闲：21 秒里没有输入，曲线贴底</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/graph_02_typing.png"><img src="oled_preview/4x/graph_02_typing.png" alt="打字中：先热身再掉速，最后两秒回到 74" loading="lazy"></a>
+        <figcaption><b>打字中：先热身再掉速，最后两秒回到 74</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/layers_01_base.png"><img src="oled_preview/4x/layers_01_base.png" alt="只有基础层（QWERTY）" loading="lazy"></a>
+        <figcaption><b>只有基础层（QWERTY）</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/layers_02_lower.png"><img src="oled_preview/4x/layers_02_lower.png" alt="按住左拇指 LOWER" loading="lazy"></a>
+        <figcaption><b>按住左拇指 LOWER</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/layers_03_adjust.png"><img src="oled_preview/4x/layers_03_adjust.png" alt="LOWER + RAISE 同时按住 → ADJUST" loading="lazy"></a>
+        <figcaption><b>LOWER + RAISE 同时按住 → ADJUST</b></figcaption>
       </figure>
   </div>
 
@@ -333,7 +366,7 @@
     <li><code>gen_index.py</code> / <code>gen_keymap_image.py</code> / <code>oled_preview/gen_oled_preview.py</code> —— 本页图片的生成脚本</li>
   </ul>
 
-  <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">bf23091244dab2c0…</span></footer>
+  <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">0a2f9474a69cc338…</span></footer>
 </div>
 </body>
 </html>
