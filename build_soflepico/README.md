@@ -43,7 +43,7 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-13bf47e98f9885f2683072eca809259a1b66f6ce2a316968b7282c67e86a5997  sofle_pico_default.uf2
+0465d97e5cd83edd97f2dfc68da00be2c80e1e179b3c434410c3c76eb5de586f  sofle_pico_default.uf2
 ```
 
 ## 3. 烧录方法
@@ -51,8 +51,20 @@
 左右两半要**分别烧各自那一份**（同一份 uf2 文件即可，靠 EEPROM 里的手性 `EE_HANDS` 区分左右；
 首次使用或换主板时，请确认 EEPROM 手性已设置，否则用 `uf2-split-left` / `uf2-split-right` 区分）。
 
+**两个半边必须各烧各的**（这块键盘用手性存在 EEPROM 里的 `EE_HANDS`）。本目录有三个 uf2：
+
+| 文件 | 烧给谁 | 说明 |
+|---|---|---|
+| `sofle_pico_default_split-left.uf2` | **左手** | 开机时强制把 EEPROM 手性设成「左」 |
+| `sofle_pico_default_split-right.uf2` | **右手** | 开机时强制把 EEPROM 手性设成「右」 |
+| `sofle_pico_default.uf2` | 任意半边 | 不动 EEPROM 手性；只在你确定手性本来就对时用 |
+
+**推荐直接烧前两个**：`EE_HANDS` 的手性只存在 EEPROM 里，一旦清了 EEPROM（比如按过 `EE_CLR`）
+或者换了主板，它就变成"两半都以为自己左手"，表现就是按键错乱。带 `split-*` 的两个固件会在启动时
+把本半边的极性纠正过来，一劳永逸。
+
 进入 bootloader：按住 Pico 上的 `BOOT` 键 → 按一下 `RST` → 先松 `RST` 再松 `BOOT`，
-电脑上会出现名为 `RPI-RP2` 的 U 盘，把 `.uf2` 拖进去即可。
+电脑上会出现名为 `RPI-RP2` 的 U 盘，把对应的 `.uf2` 拖进去即可。
 
 用命令烧录（推荐，会按左右半自动区分）：
 
@@ -148,10 +160,9 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
    `encoder_map` / `keymaps` 只在 EEPROM 首次初始化时写入一次。如果之前已经烧过 VIA 版固件
    且 EEPROM 仍然有效，这次的新映射**不会自动生效**，需要：
    - 在 VIA 里重新设置编码器映射，或
-   - 清一次 EEPROM：**`ADJUST` 层已经放了一个 `EE_CLR` 键**（左手 `T` 键位置），按一下即可，
-     或者用 VIA 的 Reset Keymap。
-   - 本次改动删了一个层、加了两个 `OLED` 键和一个 `EE_CLR` 键，所以**烧完必须先清一次 EEPROM**，
-     否则键盘上跑的还是旧键位。
+   - 现在**不需要手动清了**：固件里有个 `SOFLE_EEPROM_VERSION`，启动时发现 EEPROM 里的版本对不上，
+     就自动用固件里的键位重写一遍（`dynamic_keymap_reset()`）。改了层结构之后把这个常量 +1 即可。
+   - 仍然保留 `ADJUST` 层的 `EE_CLR` 键（左手 `T` 键位置）作为手动兜底，VIA 的 Reset Keymap 也一样有效。
 3. 两半都必须烧新固件；只烧一半会出现两层版本不一致的奇怪现象。
 4. 更换旋钮分辨率等编码器硬件配置后，**带旋钮的那一半必须重新烧录**。
 

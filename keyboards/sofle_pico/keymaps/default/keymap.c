@@ -634,10 +634,25 @@ bool oled_task_user(void) {
     return false;
 }
 
+// Bump this whenever the *shape* of the keymap changes in a way that makes an
+// existing EEPROM wrong: a layer moving, MO() pointing at a different layer,
+// keys added or removed. VIA keeps the keymap in EEPROM and only seeds it from
+// the firmware the first time, so without this check a reflash keeps the old
+// layout and the layer keys end up switching the wrong layers. Each half
+// checks its own EEPROM.
+#define SOFLE_EEPROM_VERSION 2
+
 // Out of the box: status on the left, the first animation on the right.
 void keyboard_post_init_user(void) {
     oled_screen    = is_keyboard_left() ? OLED_SCREEN_STATUS : OLED_SCREEN_ANIM;
     oled_boot_time = timer_read32();
+
+#if defined(VIA_ENABLE)
+    if (eeconfig_read_user() != SOFLE_EEPROM_VERSION) {
+        dynamic_keymap_reset(); // re-seed the keymap and encoder map from the firmware
+        eeconfig_update_user(SOFLE_EEPROM_VERSION);
+    }
+#endif
 }
 
 /* ------------------------------------------------------------------------

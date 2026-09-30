@@ -43,9 +43,9 @@
   <div class="panel">
     <table>
       <tr><th>键盘 / keymap</th><td><code>sofle_pico</code> / <code>default</code>（RP2040，分体，左右各一个 EC11）</td></tr>
-      <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 203,776 字节 · 构建于 2026-09-30 02:08</td></tr>
-      <tr><th>SHA-256</th><td class="hash">13bf47e98f9885f2683072eca809259a1b66f6ce2a316968b7282c67e86a5997</td></tr>
-      <tr><th>QMK</th><td>tag <code>0.34.5-6-g106c1abe5e</code> · commit <code>106c1abe5e</code>（2026-09-30）</td></tr>
+      <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 203,776 字节 · 构建于 2026-09-30 20:24</td></tr>
+      <tr><th>SHA-256</th><td class="hash">0465d97e5cd83edd97f2dfc68da00be2c80e1e179b3c434410c3c76eb5de586f</td></tr>
+      <tr><th>QMK</th><td>tag <code>0.34.5-7-g5cb78aef0c</code> · commit <code>5cb78aef0c</code>（2026-09-30）</td></tr>
       <tr><th>键位图</th><td><code>keymap_layers.svg</code>（矢量）· <code>keymap_layers.png</code>（2 倍光栅）</td></tr>
       <tr><th>编译命令</th><td><code>qmk compile -kb sofle_pico -km default</code></td></tr>
       <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3)，<code>LOWER</code>+<code>RAISE</code> 三键组合出 ADJUST</td></tr>
@@ -303,18 +303,20 @@
       <p>按住 Pico 的 <code>BOOT</code> → 点一下 <code>RST</code> → 先松 <code>RST</code> 再松 <code>BOOT</code>，
          会出现名为 <code>RPI-RP2</code> 的 U 盘。</p>
       <p>把 <code>sofle_pico_default.uf2</code> 拖进去即可。或用命令：</p>
-      <p><code>qmk flash -kb sofle_pico -km default -bl uf2-split-left</code><br>
-         <code>qmk flash -kb sofle_pico -km default -bl uf2-split-right</code></p>
-      <p class="dim">两半都要烧同一份固件；手性靠 EEPROM（<code>EE_HANDS</code>）。</p>
+      <p><b>两个半边各烧各的</b>（<code>EE_HANDS</code> 的手性存在 EEPROM 里）：</p>
+      <ul>
+        <li><code>sofle_pico_default_split-left.uf2</code> → 左手（启动时强制手性=左）</li>
+        <li><code>sofle_pico_default_split-right.uf2</code> → 右手（启动时强制手性=右）</li>
+        <li><code>sofle_pico_default.uf2</code> → 任意半边，不动手性（确定本来是对的才用）</li>
+      </ul>
+      <p><code>qmk flash -kb sofle_pico -km default -bl uf2-split-left</code>（右半换成 <code>-right</code>）</p>
     </div>
     <div class="panel">
-      <h3 style="margin-top:0">烧完先清一次 EEPROM</h3>
+      <h3 style="margin-top:0">EEPROM 里的键位会自动跟着更新</h3>
       <p>固件启用了 VIA，键位是<b>从 EEPROM 读</b>的，<code>keymap.c</code> 只在 EEPROM 首次初始化时写进去。
-         改了键位（删层、加 <code>OLED</code> 键）之后，必须清一次才会生效：</p>
-      <ul>
-        <li>在 <code>ADJUST</code> 层按一下 <code>EE_CLR</code>（左手 <code>T</code> 键位置），或</li>
-        <li>用 VIA 的 Reset Keymap。</li>
-      </ul>
+         所以固件里放了一个 <code>SOFLE_EEPROM_VERSION</code>：启动时发现 EEPROM 的版本对不上，
+         就自动用固件里的键位重写一遍。改了层结构只要把这个常量 +1，烧完启动就生效。</p>
+      <p>手动兜底仍然在：<code>ADJUST</code> 层的 <code>EE_CLR</code>（左手 <code>T</code> 键位置）或 VIA 的 Reset Keymap。</p>
       <p class="dim">另外：两个旋钮若拧反了，把 <code>encoder_map</code> 里那一对键码对调即可。</p>
     </div>
   </div>
@@ -328,7 +330,7 @@
     <li><code>gen_index.py</code> / <code>gen_keymap_image.py</code> / <code>oled_preview/gen_oled_preview.py</code> —— 本页图片的生成脚本</li>
   </ul>
 
-  <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">13bf47e98f9885f2…</span></footer>
+  <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">0465d97e5cd83edd…</span></footer>
 </div>
 </body>
 </html>

@@ -16,7 +16,10 @@ Features:
   one of four mascot animations, or a logo - and cycles through them with its own `OLED` key on the
   adjust layer (hold it to auto-advance). Status on the left and `bounce` on the right by default.
 - Left encoder: volume down/up, press mutes. Right encoder: previous/next track, press play/pause.
-- `EE_CLR` on the adjust layer clears the EEPROM, which VIA needs after the keymap changes.
+- `SOFLE_EEPROM_VERSION` in `keymap.c`: VIA keeps the keymap in EEPROM and only seeds it from the
+  firmware once, so on boot each half compares this number with what is stored and re-seeds the
+  keymap (and encoder map) when it differs. Bump it whenever the layer structure or the keys move.
+  `EE_CLR` on the adjust layer still clears the EEPROM by hand if needed.
 
 
 ## OLED

@@ -184,18 +184,20 @@ def main():
       <p>按住 Pico 的 <code>BOOT</code> → 点一下 <code>RST</code> → 先松 <code>RST</code> 再松 <code>BOOT</code>，
          会出现名为 <code>RPI-RP2</code> 的 U 盘。</p>
       <p>把 <code>sofle_pico_default.uf2</code> 拖进去即可。或用命令：</p>
-      <p><code>qmk flash -kb sofle_pico -km default -bl uf2-split-left</code><br>
-         <code>qmk flash -kb sofle_pico -km default -bl uf2-split-right</code></p>
-      <p class="dim">两半都要烧同一份固件；手性靠 EEPROM（<code>EE_HANDS</code>）。</p>
+      <p><b>两个半边各烧各的</b>（<code>EE_HANDS</code> 的手性存在 EEPROM 里）：</p>
+      <ul>
+        <li><code>sofle_pico_default_split-left.uf2</code> → 左手（启动时强制手性=左）</li>
+        <li><code>sofle_pico_default_split-right.uf2</code> → 右手（启动时强制手性=右）</li>
+        <li><code>sofle_pico_default.uf2</code> → 任意半边，不动手性（确定本来是对的才用）</li>
+      </ul>
+      <p><code>qmk flash -kb sofle_pico -km default -bl uf2-split-left</code>（右半换成 <code>-right</code>）</p>
     </div>
     <div class="panel">
-      <h3 style="margin-top:0">烧完先清一次 EEPROM</h3>
+      <h3 style="margin-top:0">EEPROM 里的键位会自动跟着更新</h3>
       <p>固件启用了 VIA，键位是<b>从 EEPROM 读</b>的，<code>keymap.c</code> 只在 EEPROM 首次初始化时写进去。
-         改了键位（删层、加 <code>OLED</code> 键）之后，必须清一次才会生效：</p>
-      <ul>
-        <li>在 <code>ADJUST</code> 层按一下 <code>EE_CLR</code>（左手 <code>T</code> 键位置），或</li>
-        <li>用 VIA 的 Reset Keymap。</li>
-      </ul>
+         所以固件里放了一个 <code>SOFLE_EEPROM_VERSION</code>：启动时发现 EEPROM 的版本对不上，
+         就自动用固件里的键位重写一遍。改了层结构只要把这个常量 +1，烧完启动就生效。</p>
+      <p>手动兜底仍然在：<code>ADJUST</code> 层的 <code>EE_CLR</code>（左手 <code>T</code> 键位置）或 VIA 的 Reset Keymap。</p>
       <p class="dim">另外：两个旋钮若拧反了，把 <code>encoder_map</code> 里那一对键码对调即可。</p>
     </div>
   </div>
