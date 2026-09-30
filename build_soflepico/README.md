@@ -26,6 +26,7 @@
 | `sofle_pico_default.bin` | 裸二进制镜像 |
 | `sofle_pico_default.elf` | 带调试符号的可执行文件（gdb / 反汇编用） |
 | `sofle_pico_default.map` | 链接映射表（查符号地址、占用大小用） |
+| `hardware_check.md` | **硬件排查指南**：从引脚自检、万用表测量到换 Pico 的完整流程 |
 | `keymap.md` | **键位图与分层说明**：每层有哪些键、怎么换层 |
 | `keymap_layers.svg` | **四层键位图（矢量）**：按真实坐标绘制，放多大都不糊 |
 | `keymap_layers.png` | 同一张图的光栅版，默认 2 倍（1468×3300），可 `python3 gen_keymap_image.py 4` 出 4 倍 |
@@ -58,6 +59,7 @@
 | `sofle_pico_default_split-left.uf2` | **左手** | 开机时强制把 EEPROM 手性设成「左」 |
 | `sofle_pico_default_split-right.uf2` | **右手** | 开机时强制把 EEPROM 手性设成「右」 |
 | `sofle_pico_default.uf2` | 任意半边 | 不动 EEPROM 手性；只在你确定手性本来就对时用 |
+| `sofle_pico_pintest.uf2` | 排查用 | **引脚电气自检**：每 5 秒打印每个矩阵脚的 `up/down/low` 读回值和桥接检查，把 Pico 拔下来单独跑就能判断"引脚坏"还是"板上走线坏"。详见 `hardware_check.md` |
 | `sofle_pico_debug.uf2` | 排查用 | **诊断固件（更精确）**：把原始矩阵变化打到 USB 控制台（`qmk console` 看 `DOWN r2 c4`），USB 插在哪半就测哪半自己的矩阵。对照表见 `keymaps/debug/readme.md` |
 | `sofle_pico_probe.uf2` | 排查用 | **诊断固件**：每个按键输出唯一字符（左手小写 a-z/1234，右手大写 A-Z/5678），用来判断哪个矩阵位置没反应、两半手性对不对。关掉了 VIA，所以不受 EEPROM 影响 |
 
@@ -139,6 +141,10 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 - 预览图：`oled_preview/`（`status_*.png` / `anim_*.png` / `screen_logo.png`，含 1x / 4x / GIF / 总览）。
 
 ### 4.5 按键不正常时的排查
+
+完整的硬件排查流程（怀疑 Pico / 板子坏）见 [`hardware_check.md`](hardware_check.md)：先烧
+`sofle_pico_pintest.uf2` 做引脚电气自检，把 Pico 拔下来单独跑即可区分"引脚坏"和"板上走线坏"。
+
 
 烧 `sofle_pico_probe.uf2`（两个半边都烧），切到英文输入法，打开文本编辑器逐个按键：**按下的键应该打出表里对应的字符**。
 想要"哪个矩阵位置真的通了"的原始数据，烧 `sofle_pico_debug.uf2`（USB 插到要测的那半，跑 `qmk console`，
