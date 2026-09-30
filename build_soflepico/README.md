@@ -26,6 +26,9 @@
 | `sofle_pico_default.bin` | 裸二进制镜像 |
 | `sofle_pico_default.elf` | 带调试符号的可执行文件（gdb / 反汇编用） |
 | `sofle_pico_default.map` | 链接映射表（查符号地址、占用大小用） |
+| `matrix_map_left.svg` / `.png` | **左手矩阵排查图**：每个键标出物理键位 + `rXcY`，按实测通/不通着色，边框颜色=所属列 |
+| `pico_pinout.svg` / `.png` | **Pico 引脚对照图**：40 脚里哪些是矩阵行/列、RGB、OLED、旋钮、TRRS |
+| `gen_matrix_image.py` / `gen_pico_pinout.py` | 生成上面两张排查图 |
 | `hardware_check.md` | **硬件排查指南**：从引脚自检、万用表测量到换 Pico 的完整流程 |
 | `keymap.md` | **键位图与分层说明**：每层有哪些键、怎么换层 |
 | `keymap_layers.svg` | **四层键位图（矢量）**：按真实坐标绘制，放多大都不糊 |

@@ -139,6 +139,7 @@ def main():
       <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · {size:,} 字节 · 构建于 {built}</td></tr>
       <tr><th>SHA-256</th><td class="hash">{sha}</td></tr>
       <tr><th>QMK</th><td>tag <code>{tag}</code> · commit <code>{commit}</code>（{commit_date}）</td></tr>
+      <tr><th>硬件排查</th><td><code>matrix_map_left.svg</code>（左手矩阵图）· <code>pico_pinout.svg</code>（Pico 引脚图）· <code>hardware_check.md</code>（排查流程）</td></tr>
       <tr><th>键位图</th><td><code>keymap_layers.svg</code>（矢量）· <code>keymap_layers.png</code>（2 倍光栅）</td></tr>
       <tr><th>编译命令</th><td><code>qmk compile -kb sofle_pico -km default</code></td></tr>
       <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3)，<code>LOWER</code>+<code>RAISE</code> 三键组合出 ADJUST</td></tr>
@@ -150,6 +151,8 @@ def main():
 
   <h2>键位图（四层）</h2>
   <div class="grid">
+{card("matrix_map_left.svg", "左手矩阵排查图", "每个键标出物理键位和 rXcY，绿色=实测能出、红色=实测不出；边框颜色=所属列。配 pico_pinout.svg 一起看", wide=True)}
+{card("pico_pinout.svg", "Pico 引脚对照", "40 脚里矩阵行/列、RGB、OLED、旋钮、TRRS 各是哪些，测引脚时对着找", wide=True)}
 {card("keymap_layers.svg", "四层键位图（矢量）", "矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍，1468x3300）；文字版见 keymap.md", wide=True)}
   </div>
 
@@ -209,7 +212,7 @@ def main():
     <li><a href="keymap.md">keymap.md</a> —— 四层键位表、换层方式、旋钮、自定义键</li>
     <li><a href="oled_preview/README.md">oled_preview/README.md</a> —— OLED 三种画面、切换机制、换图方法</li>
     <li><a href="sofle_pico_default.uf2">sofle_pico_default.uf2</a> · <a href="sofle_pico_default.hex">.hex</a> · <a href="sofle_pico_default.elf">.elf</a> · <a href="sofle_pico_default.map">.map</a></li>
-    <li><code>gen_index.py</code> / <code>gen_keymap_image.py</code> / <code>oled_preview/gen_oled_preview.py</code> —— 本页图片的生成脚本</li>
+    <li><code>gen_index.py</code> / <code>gen_keymap_image.py</code> / <code>gen_matrix_image.py</code> / <code>gen_pico_pinout.py</code> / <code>oled_preview/gen_oled_preview.py</code> —— 本页图片的生成脚本</li>
   </ul>
 
   <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">{sha[:16]}…</span></footer>

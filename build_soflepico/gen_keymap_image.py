@@ -298,7 +298,7 @@ def emit_png(prims, W, H, path, scale):
         else:
             _, x, y, s, size, fill, anchor = p
             d.text((x * scale, y * scale), s, font=load_font(size * scale), fill=fill,
-                   anchor="la" if anchor == "lt" else "mm")
+                   anchor={"lt": "la", "rt": "ra", "ct": "mm"}.get(anchor, "mm"))
     img.save(path)
     return path
 
@@ -315,8 +315,9 @@ def emit_svg(prims, W, H, path):
                        f'fill="{fill}" stroke="{outline}" stroke-width="{lw}"/>')
         else:
             _, x, y, s, size, fill, anchor = p
-            pos = ('text-anchor="middle" dominant-baseline="central"' if anchor == "ct"
-                   else 'dominant-baseline="hanging"')
+            pos = ("text-anchor=\"middle\" dominant-baseline=\"central\"" if anchor == "ct"
+                   else "text-anchor=\"end\" dominant-baseline=\"hanging\"" if anchor == "rt"
+                   else "dominant-baseline=\"hanging\"")
             out.append(f'<text x="{x:.1f}" y="{y:.1f}" font-size="{size}" fill="{fill}" {pos}>'
                        f'{html.escape(s)}</text>')
     out.append("</svg>")
