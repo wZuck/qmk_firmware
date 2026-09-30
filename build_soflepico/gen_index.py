@@ -143,6 +143,7 @@ def main():
       <tr><th>编译命令</th><td><code>qmk compile -kb sofle_pico -km default</code></td></tr>
       <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3)，<code>LOWER</code>+<code>RAISE</code> 三键组合出 ADJUST</td></tr>
       <tr><th>旋钮</th><td>左：音量 ± / 按压静音　右：上一首·下一首 / 按压播放暂停</td></tr>
+      <tr><th>VIA 测试器</th><td>固件里开了 <code>VIA_INSECURE</code>，VIA 网页版的 Key Tester 才能读到实时按键（代价：raw HID 可被读键盘，见 README）</td></tr>
       <tr><th>ADJUST 层</th><td><code>OLED</code>（左右各一个，切换本侧画面）· <code>EE_CLR</code>（清 EEPROM）· <code>Mac/Win</code> · <code>Boot</code> · 媒体键</td></tr>
     </table>
   </div>

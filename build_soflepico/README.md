@@ -43,7 +43,7 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-0465d97e5cd83edd97f2dfc68da00be2c80e1e179b3c434410c3c76eb5de586f  sofle_pico_default.uf2
+319b925dda3021d5153aa79e230cf634af21524f679d529d5980954be5bd8305  sofle_pico_default.uf2
 ```
 
 ## 3. 烧录方法
@@ -151,6 +151,18 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
   `[1,3] = [6,2] = 0x7E40`（`OLED_NEXT`）、`[1,5] = 0x7C03`（`EE_CLR`）。
 - 从 ELF 中核对 `oled_anim` = `0x8000` = 32768 字节 = 4 组 × 8 帧 × 1024 字节，
   且每一帧与 `oled_anim.h` 逐字节一致（预览就是面板上会显示的内容）。
+
+### 4.4 VIA 的按键测试（Key Tester）
+
+VIA 网页版的按键测试是靠 raw HID 读**实时矩阵状态**的，而 QMK 默认把这条请求的返回值全填 0
+（防键盘记录），所以会看到"键盘明明能打字，VIA 测试器却没反应"。本 keymap 的 `config.h` 里开了：
+
+```c
+#define VIA_INSECURE   // 允许 VIA 读取实时矩阵状态（编译时会提示 susceptible to keyloggers）
+```
+
+代价是：任何能访问 raw HID 的程序都能读到你在按哪些键（keylogger 风险）。介意的话把那行删掉重新编译，
+VIA 的改键、宏、灯光等功能不受影响，只是测试器会重新变成没反应。
 
 ## 6. 注意事项
 

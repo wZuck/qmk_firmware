@@ -16,6 +16,9 @@ Features:
   one of four mascot animations, or a logo - and cycles through them with its own `OLED` key on the
   adjust layer (hold it to auto-advance). Status on the left and `bounce` on the right by default.
 - Left encoder: volume down/up, press mutes. Right encoder: previous/next track, press play/pause.
+- `VIA_INSECURE` in this keymap's `config.h` lets VIA's Key Tester read the live matrix over raw
+  HID; without it QMK answers that request with zeroes and the tester looks dead. It does mean any
+  raw HID client can see which keys are down, so drop the line if that matters more than the tester.
 - `SOFLE_EEPROM_VERSION` in `keymap.c`: VIA keeps the keymap in EEPROM and only seeds it from the
   firmware once, so on boot each half compares this number with what is stored and re-seeds the
   keymap (and encoder map) when it differs. Bump it whenever the layer structure or the keys move.

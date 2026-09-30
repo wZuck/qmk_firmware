@@ -16,3 +16,16 @@
 #define SPLIT_LAYER_STATE_ENABLE
 #define SPLIT_LED_STATE_ENABLE
 #define SPLIT_WPM_ENABLE
+
+/* ------------------------------------------------------------------------
+ * VIA's "Key Tester" is driven by the live matrix state over raw HID, and QMK
+ * answers that request with zeroes unless VIA_INSECURE is defined - that is
+ * why the tester shows nothing while the keyboard types perfectly well.
+ *
+ * The trade-off is real: with this on, any program that can talk raw HID can
+ * read which keys are down (the build prints a keylogger warning). Delete the
+ * line if you would rather not expose that; everything else in VIA (remapping,
+ * macros, lighting) keeps working either way.
+ * ------------------------------------------------------------------------ */
+
+#define VIA_INSECURE
