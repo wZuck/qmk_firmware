@@ -58,6 +58,7 @@
 | `sofle_pico_default_split-left.uf2` | **左手** | 开机时强制把 EEPROM 手性设成「左」 |
 | `sofle_pico_default_split-right.uf2` | **右手** | 开机时强制把 EEPROM 手性设成「右」 |
 | `sofle_pico_default.uf2` | 任意半边 | 不动 EEPROM 手性；只在你确定手性本来就对时用 |
+| `sofle_pico_debug.uf2` | 排查用 | **诊断固件（更精确）**：把原始矩阵变化打到 USB 控制台（`qmk console` 看 `DOWN r2 c4`），USB 插在哪半就测哪半自己的矩阵。对照表见 `keymaps/debug/readme.md` |
 | `sofle_pico_probe.uf2` | 排查用 | **诊断固件**：每个按键输出唯一字符（左手小写 a-z/1234，右手大写 A-Z/5678），用来判断哪个矩阵位置没反应、两半手性对不对。关掉了 VIA，所以不受 EEPROM 影响 |
 
 **推荐直接烧前两个**：`EE_HANDS` 的手性只存在 EEPROM 里，一旦清了 EEPROM（比如按过 `EE_CLR`）
@@ -140,6 +141,9 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 ### 4.5 按键不正常时的排查
 
 烧 `sofle_pico_probe.uf2`（两个半边都烧），切到英文输入法，打开文本编辑器逐个按键：**按下的键应该打出表里对应的字符**。
+想要"哪个矩阵位置真的通了"的原始数据，烧 `sofle_pico_debug.uf2`（USB 插到要测的那半，跑 `qmk console`，
+按键会打印 `DOWN r2 c4` / `UP r2 c4`；这样能区分"按键根本没到固件"和"到了但变成了别的字符"）。
+
 完整的对照表和判读方法在 `keyboards/sofle_pico/keymaps/probe/readme.md`，简版：
 
 - 某个键不出字符 → 那个矩阵位置的焊接/二极管/走线有问题
