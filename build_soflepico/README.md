@@ -58,6 +58,7 @@
 | `sofle_pico_default_split-left.uf2` | **左手** | 开机时强制把 EEPROM 手性设成「左」 |
 | `sofle_pico_default_split-right.uf2` | **右手** | 开机时强制把 EEPROM 手性设成「右」 |
 | `sofle_pico_default.uf2` | 任意半边 | 不动 EEPROM 手性；只在你确定手性本来就对时用 |
+| `sofle_pico_probe.uf2` | 排查用 | **诊断固件**：每个按键输出唯一字符（左手小写 a-z/1234，右手大写 A-Z/5678），用来判断哪个矩阵位置没反应、两半手性对不对。关掉了 VIA，所以不受 EEPROM 影响 |
 
 **推荐直接烧前两个**：`EE_HANDS` 的手性只存在 EEPROM 里，一旦清了 EEPROM（比如按过 `EE_CLR`）
 或者换了主板，它就变成"两半都以为自己左手"，表现就是按键错乱。带 `split-*` 的两个固件会在启动时
@@ -135,6 +136,17 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 - 实现上两个半边各自扫自己那半边的矩阵（`housekeeping_task_user()`），
   因为 `process_record_user()` 只在主机侧运行，从机收不到键码。
 - 预览图：`oled_preview/`（`status_*.png` / `anim_*.png` / `screen_logo.png`，含 1x / 4x / GIF / 总览）。
+
+### 4.5 按键不正常时的排查
+
+烧 `sofle_pico_probe.uf2`（两个半边都烧），切到英文输入法，打开文本编辑器逐个按键：**按下的键应该打出表里对应的字符**。
+完整的对照表和判读方法在 `keyboards/sofle_pico/keymaps/probe/readme.md`，简版：
+
+- 某个键不出字符 → 那个矩阵位置的焊接/二极管/走线有问题
+- 整行或整列都不出 → 对应引脚（行 GP9-GP13，列 GP1 GP2 GP3 GP4 GP5 GP8）虚焊
+- 出的是**别的**字符 → 位置错位，能反推出是哪一列/行接错了
+- 按左手出的是**大写** → 两半手性反了，烧 `split-left` / `split-right` 对应半边
+- 单独用某一半（USB 插在它上面）正常，但走分体连接就不行 → 问题在连接线（TRRS / GP16-GP17）而不是按键
 
 ## 5. 已验证
 
