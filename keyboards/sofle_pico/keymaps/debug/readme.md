@@ -39,3 +39,22 @@ MCU.
   firmware is reading the right matrix, the wiring is not where it is expected
 * positions that go down **on their own** -> a shorted row/column, or a diode
   the wrong way round
+
+## Jumper test: does the MCU pin work at all?
+
+This separates "the Pico pin / PCB trace" from "the switch and its diode".
+
+With the debug firmware running and `qmk console` open, touch a jumper wire (or
+tweezers) between a **row pin** and a **column pin** on the Pico, for example
+GP9 (row 0) and GP1 (column 0). The console must print `DOWN r0 c0` and `UP r0
+c0` as you touch and release.
+
+Go through every row pin against one column pin, then every column pin against
+one row pin:
+
+* row/column pair prints nothing -> that pin (or its trace on the PCB) is the
+  problem, not the key
+* the pair prints the *wrong* position -> two traces are bridged, or the pin
+  order does not match the PCB
+* everything prints correctly while the keys of that column do not -> the break
+  is between the pin and the keys (column trace, diode, or switch)
