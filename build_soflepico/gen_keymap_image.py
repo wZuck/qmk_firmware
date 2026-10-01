@@ -445,7 +445,7 @@ def write_md(layout, layers):
     parts.append("| `波扩散` `彩虹波` `信标` `像素流` `彩点` `数字雨` `涟漪` `热图` | `FX_*` | "
                  "另外 8 个灯效直达键（ADJUST 层下排最左边 4~5 列，左 5 右 4），按一下直接切过去 |")
     parts.append("")
-    parts.append("8 个直达灯效的逐帧动画见 `index.html` 的「LED 灯效」一节（数据是用真实灯效源码重放出来的）。"
+    parts.append("9 个直达灯效（含纯白）的逐帧动画见 `index.html` 的「LED 灯效」一节（数据是用真实灯效源码重放出来的）。"
                  "直达键只改 RAM 里的灯效模式，重启后回到 EEPROM 里的设置。\n")
 
     open(OUT_MD, "w").write("\n".join(parts))
