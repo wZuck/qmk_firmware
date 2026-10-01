@@ -34,6 +34,7 @@ README = """<!-- 由 build_soflepico/sync_to_keymap.py 同步，勿手改 -->
 | `oled_overview.png` | `build_soflepico/oled_preview/oled_overview.png`（三种画面总览） |
 | `reference.png` | `build_soflepico/oled_preview/reference.png`（角色的参考原图） |
 | `anim_*.gif` | `build_soflepico/oled_preview/anim_*.gif`（四组动画各自的 8 帧循环） |
+| LED 灯效的 GIF | 在 `build_soflepico/led_effects/fx_*.gif`（9 个灯效，用真实灯效源码逐帧重放出来的）；这里不重复放一份，页面上看 `build_soflepico/index.html` 的「LED 灯效」一节 |
 | `1x/` `4x/` | `build_soflepico/oled_preview/1x|4x/`（status 6 张 + 动画 40 张 + logo 1 张） |
 | 键位表文字版 | 同目录上一级的 `keymap.md` |
 
@@ -84,7 +85,8 @@ def main():
 
     open(os.path.join(PREV, "README.md"), "w").write(README)
     print(f"已同步到 {DST}")
-    print(f"  keymap.md + preview/{{keymap_layers.png, oled_overview.png, {len(gifs)} 个 GIF, README.md, 1x|4x ({n} 张)}}")
+    print(f"  keymap.md + preview/{{keymap_layers.png, oled_overview.png, {len(gifs)} 个 OLED GIF, "
+          f"README.md, 1x|4x ({n} 张)}}")
 
 
 if __name__ == "__main__":

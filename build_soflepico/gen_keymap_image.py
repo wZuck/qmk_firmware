@@ -66,6 +66,14 @@ LABELS = {
     "KC_PRVWD": "词←", "KC_NXTWD": "词→", "KC_LSTRT": "行首", "KC_LEND": "行尾",
     "KC_DLINE": "删行", "KC_UNDO": "Undo", "KC_CUT": "Cut", "KC_COPY": "Copy",
     "KC_PASTE": "Paste",
+    # ADJUST 层上的灯光键（RM_* 是 QMK 现版本的写法，老写法是 RGB_*）
+    "RM_TOGG": "灯 开/关", "RM_NEXT": "灯效→", "RM_PREV": "灯效←",
+    "RM_VALU": "亮 +", "RM_VALD": "亮 −", "RM_HUEU": "色相 +", "RM_HUED": "色相 −",
+    "RM_SATU": "饱和 +", "RM_SATD": "饱和 −", "RM_SPDU": "速度 +", "RM_SPDD": "速度 −",
+    # 9 个灯效直达键，和 build_soflepico/ 里的演示动画一一对应（第一个是默认的纯白常亮）
+    "FX_WHITE": "纯白", "FX_CYCLE_OUT_IN": "波扩散", "FX_HUE_WAVE": "彩虹波", "FX_RAINBOW_BEACON": "信标",
+    "FX_PIXEL_FLOW": "像素流", "FX_JELLYBEAN": "彩点", "FX_DIGITAL_RAIN": "数字雨",
+    "FX_REACTIVE_NEXUS": "涟漪", "FX_TYPING_HEATMAP": "热图",
 }
 for _i in range(1, 13):
     LABELS[f"KC_F{_i}"] = f"F{_i}"
@@ -154,7 +162,10 @@ NOTE = {
     "_QWERTY": "基础层 0：平时就是这个。按住左拇指 LOWER → 第 1 层；按住右拇指 RAISE → 第 2 层；两个同时按住 → 第 3 层 ADJUST",
     "_LOWER": "第 1 层：按住左手 LOWER 键时生效，松开即回到基础层。拇指区 ▽ 表示该键沿用基础层",
     "_RAISE": "第 2 层：按住右手 RAISE 键时生效。右侧是方向键/翻页/词移动/编辑快捷键，左侧是 Ins/Pscr/Menu/修饰键/撤销复制粘贴",
-    "_ADJUST": "第 3 层：LOWER + RAISE 同时按住才进入（三键组合）。放的是 Mac/Win 切换、OLED 画面切换、清 EEPROM、烧录和媒体键",
+    "_ADJUST": "第 3 层：LOWER + RAISE 同时按住才进入（三键组合）。上排是灯光控制（左：开关/切灯效/亮度，"
+               "右：色相/饱和/速度），下排左边 4~5 列是 9 个灯效直达键（第一个「纯白」是默认灯效）；"
+               "此外还有 Mac/Win 切换、OLED 画面切换、清 EEPROM、烧录和媒体键。"
+               "这一层两个旋钮也改成调灯（左=亮度、右=速度）",
 }
 
 
@@ -162,7 +173,8 @@ LAYER_INTRO = {
     "_QWERTY": ("基础层（默认）", "开机就是这一层，普通打字用。"),
     "_LOWER": ("数字/符号层", "符号、F1–F12、方向键等；按住左手 LOWER 进入。"),
     "_RAISE": ("导航/编辑层", "方向、翻页、词移动、撤销/复制/粘贴；按住右手 RAISE 进入。"),
-    "_ADJUST": ("设置层", "模式切换、OLED 画面切换、清 EEPROM、烧录、媒体键；LOWER+RAISE 同时按住进入。"),
+    "_ADJUST": ("设置层", "灯光控制（开关/切换/色相/饱和/亮度/速度 + 9 个灯效直达，含默认的纯白常亮）、"
+                            "模式切换、OLED 画面切换、清 EEPROM、烧录、媒体键；LOWER+RAISE 同时按住进入。"),
 }
 
 ROW_NAMES = ["数字行", "上排", "中排", "下排"]
@@ -221,7 +233,8 @@ def build(layout, layers, base_names):
     notes = [wrap_text(probe, NOTE.get(n, ""), note_font, maxw) for n, _ in layers]
     foot1 = wrap_text(probe, "左旋钮：左转 音量−　右转 音量+　按压 静音", footer_font, maxw * 0.48)
     foot2 = wrap_text(probe, "右旋钮：左转 上一首　右转 下一首　按压 播放/暂停", footer_font, maxw * 0.48)
-    foot3 = wrap_text(probe, "换层：按住 LOWER（左拇指）/ RAISE（右拇指内侧）；两键同时按 = ADJUST；松开自动回基础层",
+    foot3 = wrap_text(probe, "换层：按住 LOWER（左拇指）/ RAISE（右拇指内侧）；两键同时按 = ADJUST；松开自动回基础层"
+                             "　｜　ADJUST 层两个旋钮改成调灯：左 = 亮度、右 = 速度，按压 = 灯开/关、下一个灯效",
                       footer_font, maxw)
     footer_h = 34 + 20 * max(len(foot1), len(foot2)) + 20 * len(foot3) + 12
 
@@ -401,7 +414,9 @@ def write_md(layout, layers):
     parts.append("| 左手 EC11 | 音量 − | 音量 + | 静音 `Mute` |")
     parts.append("| 右手 EC11 | 上一首 `Prev` | 下一首 `Next` | 播放/暂停 `Play` |")
     parts.append("")
-    parts.append("两个旋钮在所有层都可用（上层用 `▽` 穿透到基础层的定义）。\n")
+    parts.append("两个旋钮在 QWERTY / LOWER / RAISE 上都可用（上层写 `▽` 穿透到基础层的定义）。\n")
+    parts.append("**ADJUST 层是例外**：这一层旋钮临时改成调灯——左旋钮 `亮 −/亮 +`、右旋钮 `速度 −/速度 +`，"
+                 "按压键也在这一层变成 `灯 开/关`（左）和 `灯效→`（右）。松开换层键就回到音量 / 切歌。\n")
 
     parts.append("## 四、自定义键说明\n")
     parts.append("| 键位显示 | 键码 | 作用 |")
@@ -416,6 +431,22 @@ def write_md(layout, layers):
     parts.append("| `Undo` `Cut` `Copy` `Paste` | `KC_UNDO` … | 按模式发送 Ctrl 或 Cmd 组合键 |")
     parts.append("| `Boot` | `QK_BOOT` | 进入 bootloader |")
     parts.append("")
+    parts.append("## 五、ADJUST 层的灯光键\n")
+    parts.append("逐键 RGB（左右各 29 颗，共 58 颗）的控制全在 ADJUST 层上，左右手各一组：\n")
+    parts.append("| 键位显示 | 键码 | 作用 |")
+    parts.append("|---|---|---|")
+    parts.append("| `灯 开/关` | `RM_TOGG` | 灯光总开关（ADJUST 层左旋钮**按下**也是它） |")
+    parts.append("| `灯效→` `灯效←` | `RM_NEXT` / `RM_PREV` | 在 41 种已启用灯效里前后翻（右旋钮**按下** = 下一个） |")
+    parts.append("| `纯白` | `FX_WHITE` | 纯白常亮（**出厂默认**）：饱和归零 + 切到 `solid_color`，亮度回到出厂值 127 |")
+    parts.append("| `亮 +` `亮 −` | `RM_VALU` / `RM_VALD` | 亮度（0–127，`RGB_MATRIX_MAXIMUM_BRIGHTNESS`） |")
+    parts.append("| `色相 +` `色相 −` | `RM_HUEU` / `RM_HUED` | 色相 |")
+    parts.append("| `饱和 +` `饱和 −` | `RM_SATU` / `RM_SATD` | 饱和度 |")
+    parts.append("| `速度 +` `速度 −` | `RM_SPDU` / `RM_SPDD` | 灯效速度 |")
+    parts.append("| `波扩散` `彩虹波` `信标` `像素流` `彩点` `数字雨` `涟漪` `热图` | `FX_*` | "
+                 "另外 8 个灯效直达键（ADJUST 层下排最左边 4~5 列，左 5 右 4），按一下直接切过去 |")
+    parts.append("")
+    parts.append("8 个直达灯效的逐帧动画见 `index.html` 的「LED 灯效」一节（数据是用真实灯效源码重放出来的）。"
+                 "直达键只改 RAM 里的灯效模式，重启后回到 EEPROM 里的设置。\n")
 
     open(OUT_MD, "w").write("\n".join(parts))
     return OUT_MD

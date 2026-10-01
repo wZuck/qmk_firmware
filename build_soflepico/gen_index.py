@@ -46,6 +46,16 @@ def preview_module():
     return mod
 
 
+def led_effects_module():
+    """同目录的灯效脚本：借它手里的 EFFECTS 清单（名字/键码/说明）保持一处定义。"""
+    spec = importlib.util.spec_from_file_location(
+        "gen_led_effects", os.path.join(HERE, "gen_led_effects.py")
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def card(src, title, note="", link=None, wide=False):
     link = link or src
     return f"""      <figure class="card{' wide' if wide else ''}">
@@ -56,11 +66,22 @@ def card(src, title, note="", link=None, wide=False):
 
 def main():
     preview = preview_module()
+    ledfx = led_effects_module()
     sha, built = file_info(UF2)
     size = os.path.getsize(UF2) if os.path.exists(UF2) else 0
     commit = git("rev-parse", "--short", "HEAD")
     commit_date = git("log", "-1", "--format=%cd", "--date=short")
     tag = git("describe", "--tags")
+
+    # 灯效：GIF 由 gen_led_effects.py 从「跑真实灯效源码」的逐帧数据画出来
+    fx_files = {cid: f"led_effects/fx_{cid}.gif" for cid, _, _, _ in ledfx.EFFECTS}
+    fx_cards = "\n".join(
+        card(fx_files[cid], f"{title}（GIF）", f"{keycode} · {desc}",
+             link=fx_files[cid])
+        for cid, keycode, title, desc in ledfx.EFFECTS
+        if os.path.exists(os.path.join(HERE, fx_files[cid]))
+    )
+    fx_missing = [cid for cid in fx_files if not os.path.exists(os.path.join(HERE, fx_files[cid]))]
 
     info_screens = ([(n, d) for n, d, _ in preview.LEFT_STATES]
                     + [(n, d) for n, d, _ in preview.STATS_STATES]
@@ -124,6 +145,19 @@ def main():
   a {{ color:#1a56b8; }}
   ul {{ padding-left:22px; }}
   .cols {{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); }}
+  .fx-player {{ padding:14px; }}
+  .fx-bar {{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }}
+  .fx-btn {{ font:inherit; font-size:13.5px; padding:6px 12px; border:1px solid var(--line);
+             background:var(--card); color:var(--ink); border-radius:999px; cursor:pointer; }}
+  .fx-btn:hover {{ border-color:#9aa5b1; }}
+  .fx-btn.on {{ background:#1a56b8; border-color:#1a56b8; color:#fff; }}
+  .fx-canvas {{ display:block; width:100%; height:auto; border-radius:10px; background:var(--oled); }}
+  .fx-caption {{ font-size:13.5px; color:var(--dim); margin:10px 0 0; }}
+  .fx-sliders {{ display:flex; flex-wrap:wrap; gap:14px 18px; align-items:center; margin-top:12px; }}
+  .fx-slider {{ display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--dim); }}
+  .fx-slider input {{ width:128px; }}
+  .fx-slider b {{ color:var(--ink); font-variant-numeric:tabular-nums; min-width:56px; }}
+  .fx-play {{ margin-left:auto; }}
   footer {{ margin-top:54px; color:var(--dim); font-size:13.5px; }}
 </style>
 </head>
@@ -141,11 +175,12 @@ def main():
       <tr><th>QMK</th><td>tag <code>{tag}</code> · commit <code>{commit}</code>（{commit_date}）</td></tr>
       <tr><th>硬件排查</th><td><code>matrix_map_left.svg</code>（左手矩阵图）· <code>pico_pinout.svg</code>（Pico 引脚图）· <code>hardware_check.md</code>（排查流程）</td></tr>
       <tr><th>键位图</th><td><code>keymap_layers.svg</code>（矢量）· <code>keymap_layers.png</code>（2 倍光栅）</td></tr>
+      <tr><th>灯光</th><td><code>led_map.svg</code>（矢量）· <code>led_map.png</code>（2 倍光栅）——58 颗逐键 RGB 的索引、矩阵位置和灯带走向；ADJUST 层上有开关/切换/色相/饱和/亮度/速度键和 9 个灯效直达键（含默认的纯白常亮，见下面「LED 灯效」）</td></tr>
       <tr><th>编译命令</th><td><code>qmk compile -kb sofle_pico -km default</code></td></tr>
       <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3)，<code>LOWER</code>+<code>RAISE</code> 三键组合出 ADJUST</td></tr>
       <tr><th>旋钮</th><td>左：音量 ± / 按压静音　右：上一首·下一首 / 按压播放暂停</td></tr>
       <tr><th>VIA 测试器</th><td>固件里开了 <code>VIA_INSECURE</code>，VIA 网页版的 Key Tester 才能读到实时按键（代价：raw HID 可被读键盘，见 README）</td></tr>
-      <tr><th>ADJUST 层</th><td><code>OLED</code>（左右各一个，切换本侧画面）· <code>EE_CLR</code>（清 EEPROM）· <code>Mac/Win</code> · <code>Boot</code> · 媒体键</td></tr>
+      <tr><th>ADJUST 层</th><td>灯光键（开关 / 切换 / 色相 / 饱和 / 亮度 / 速度 + 9 个灯效直达，第一个是纯白常亮）· <code>OLED</code>（左右各一个，切换本侧画面）· <code>EE_CLR</code>（清 EEPROM）· <code>Mac/Win</code> · <code>Boot</code> · 媒体键；这一层两个旋钮临时改成调灯（左=亮度、右=速度）</td></tr>
     </table>
   </div>
 
@@ -154,6 +189,40 @@ def main():
 {card("matrix_map_left.svg", "左手矩阵排查图", "每个键标出物理键位和 rXcY，绿色=实测能出、红色=实测不出；边框颜色=所属列。配 pico_pinout.svg 一起看", wide=True)}
 {card("pico_pinout.svg", "Pico 引脚对照", "40 脚里矩阵行/列、RGB、OLED、旋钮、TRRS 各是哪些，测引脚时对着找", wide=True)}
 {card("keymap_layers.svg", "四层键位图（矢量）", "矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍，1468x3300）；文字版见 keymap.md", wide=True)}
+{card("led_map.svg", "逐键 RGB 灯位图", "58 颗 WS2812 逐键灯的全局索引、本半灯带序号、矩阵位置和灯带走向；左右各一条独立灯带，数据脚 GP0", wide=True)}
+  </div>
+
+  <h2>LED 灯效（逐键 RGB · 左右各 29 颗）</h2>
+  <p class="lead">出厂默认是<b>纯白常亮</b>（<code>solid_color</code> + 饱和 0，58 颗灯一起白），
+     下面是它和另外 8 种灯效。这些动画都是<b>把固件里的灯效代码拿到电脑上逐帧重放</b>出来的，不是照着效果图临摹：
+     <code>led_effects/harness.c</code> 直接编译 <code>quantum/rgb_matrix/animations/</code> 里的真实源码，
+     用真的 <code>g_led_config</code> 坐标和真的 <code>hsv_to_rgb()</code> 跑 120 帧，再画成 GIF / 网页动画。
+     按键涟漪和打字热图那两种，画面里的“打字”是按固定节奏注入的按键事件（约 59 WPM）打出来的。</p>
+
+  <div id="ledfx" class="panel fx-player">
+    <noscript><p>这块要开 JavaScript 才能点；下面的 GIF 不开 JS 也能看。</p></noscript>
+  </div>
+
+  <h3>ADJUST 层上的灯光键（左右各一组）</h3>
+  <div class="panel">
+    <table>
+      <tr><th>开 / 关</th><td><code>RM_TOGG</code>　（ADJUST 层左旋钮<b>按下</b>也是它）</td></tr>
+      <tr><th>换灯效</th><td><code>RM_NEXT</code> / <code>RM_PREV</code> 在 41 种里前后翻　（右旋钮<b>按下</b> = 下一个）</td></tr>
+      <tr><th>亮度</th><td><code>RM_VALU</code> / <code>RM_VALD</code>　或 ADJUST 层<b>左旋钮</b>（同层的音量键不受影响）</td></tr>
+      <tr><th>色相 / 饱和</th><td><code>RM_HUEU</code> / <code>RM_HUED</code>、<code>RM_SATU</code> / <code>RM_SATD</code></td></tr>
+      <tr><th>速度</th><td><code>RM_SPDU</code> / <code>RM_SPDD</code>　或 ADJUST 层<b>右旋钮</b></td></tr>
+      <tr><th>纯白常亮</th><td><code>FX_WHITE</code>（ADJUST 层下排最左，出厂默认灯效）——饱和度归零 + 切到 <code>solid_color</code>，亮度也回到出厂值（127），相当于「恢复出厂灯效」</td></tr>
+      <tr><th>直达 9 种</th><td>ADJUST 层 row3 最左边 4~5 列（左 5 右 4）：<code>FX_WHITE</code> · <code>FX_CYCLE_OUT_IN</code> · <code>FX_HUE_WAVE</code> ·
+          <code>FX_RAINBOW_BEACON</code> · <code>FX_PIXEL_FLOW</code> · <code>FX_JELLYBEAN</code> ·
+          <code>FX_DIGITAL_RAIN</code> · <code>FX_REACTIVE_NEXUS</code> · <code>FX_TYPING_HEATMAP</code></td></tr>
+      <tr><th>其它层</th><td>这几个键只写在 ADJUST 层，别的层上旋钮照旧是音量 / 切歌；直达键只改 RAM，重启回到 EEPROM 里的设置</td></tr>
+      <tr><th>EEPROM</th><td>键位表变了（<code>SOFLE_EEPROM_VERSION</code> 现在是 4），烧完第一次启动会顺手把键位和<b>灯光设置</b>都刷回固件默认——也就是纯白常亮；之后在 VIA / 键盘上改的灯效会一直留着</td></tr>
+    </table>
+  </div>
+
+  <h3>每个灯效一段 GIF</h3>
+  <div class="grid">
+{fx_cards}
   </div>
 
   <h2>OLED 画面</h2>
@@ -212,11 +281,17 @@ def main():
     <li><a href="keymap.md">keymap.md</a> —— 四层键位表、换层方式、旋钮、自定义键</li>
     <li><a href="oled_preview/README.md">oled_preview/README.md</a> —— OLED 三种画面、切换机制、换图方法</li>
     <li><a href="sofle_pico_default.uf2">sofle_pico_default.uf2</a> · <a href="sofle_pico_default.hex">.hex</a> · <a href="sofle_pico_default.elf">.elf</a> · <a href="sofle_pico_default.map">.map</a></li>
-    <li><code>gen_index.py</code> / <code>gen_keymap_image.py</code> / <code>gen_matrix_image.py</code> / <code>gen_pico_pinout.py</code> / <code>oled_preview/gen_oled_preview.py</code> —— 本页图片的生成脚本</li>
+    <li><code>gen_index.py</code> / <code>gen_keymap_image.py</code> / <code>gen_matrix_image.py</code> / <code>gen_pico_pinout.py</code> / <code>gen_led_map.py</code> / <code>oled_preview/gen_oled_preview.py</code> —— 本页图片的生成脚本</li>
+    <li><a href="verify_keymap.py">verify_keymap.py</a> —— 从编译好的 ELF 里读回 <code>keymaps</code> / <code>encoder_map</code> 并按层打印键码名字（改完 keymap.c 用它确认真的编进去了）</li>
+    <li><a href="led_effects/README.md">led_effects/README.md</a> · <a href="led_effects/harness.c">harness.c</a> —— 灯效逐帧采集器：在电脑上编译真实的 QMK 灯效源码，导出每一帧的 58 颗灯颜色</li>
+    <li><code>gen_led_effects.py</code> · <code>led_effects.js</code> · <code>led_player.js</code> —— 把逐帧数据画成 GIF，并给本页的互动播放器用</li>
   </ul>
 
   <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">{sha[:16]}…</span></footer>
 </div>
+
+<script src="led_effects.js"></script>
+<script src="led_player.js"></script>
 </body>
 </html>
 """
@@ -225,6 +300,10 @@ def main():
     print("已生成:", OUT)
     print(f"固件 {size} 字节, sha256 {sha[:16]}…, QMK {tag} @ {commit}")
     print(f"图片: 键位图 1 + 信息屏 {len(info_screens)} + anim {sum(len(f) for _, f in anims)} + logo 1")
+    print(f"灯效: {len(fx_files) - len(fx_missing)} 个 GIF"
+          + (f"（缺 {'、'.join(fx_missing)}：先跑 led_effects/ 里的采集器再跑 gen_led_effects.py）"
+             if fx_missing else "")
+          + f" · 互动播放器数据{'已就绪' if os.path.exists(os.path.join(HERE, 'led_effects.js')) else '缺失（跑 gen_led_effects.py）'}")
 
 
 if __name__ == "__main__":

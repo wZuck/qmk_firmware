@@ -9,3 +9,9 @@
 !*.gif
 !*.uf2
 !index.html
+
+# The LED effect harness is a host binary (arm64 macOS), not a firmware image:
+# rebuild it with `cd led_effects && bash build.sh` instead of committing it.
+led_effects/harness
+led_effects/*.dSYM/
+__pycache__/
