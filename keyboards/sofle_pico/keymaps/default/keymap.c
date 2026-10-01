@@ -20,8 +20,47 @@ enum custom_keycodes {
     KC_NXTWD,
     KC_LSTRT,
     KC_LEND,
-    KC_DLINE
+    KC_DLINE,
+#ifdef RGB_MATRIX_ENABLE
+    /* 灯效直达：按一下就把灯效换成指定的一种，不用拿 RM_NEXT 一圈圈翻。
+     * 第一个是出厂默认的「纯白常亮」（keyboard.json 里 default.animation =
+     * solid_color、sat = 0），其余 8 种就是 build_soflepico/ 里做了演示动画的那 8 种。 */
+    FX_WHITE,
+    FX_CYCLE_OUT_IN,
+    FX_HUE_WAVE,
+    FX_RAINBOW_BEACON,
+    FX_PIXEL_FLOW,
+    FX_JELLYBEAN,
+    FX_DIGITAL_RAIN,
+    FX_REACTIVE_NEXUS,
+    FX_TYPING_HEATMAP,
+#endif
 };
+
+/* 没有编进 RGB 的构建（比如排查用的 probe keymap 抄了这份键位）：
+ * 把灯效键退化成空键，键位表本身不用改。 */
+#ifndef RGB_MATRIX_ENABLE
+#    define RM_TOGG  XXXXXXX
+#    define RM_NEXT  XXXXXXX
+#    define RM_PREV  XXXXXXX
+#    define RM_VALU  XXXXXXX
+#    define RM_VALD  XXXXXXX
+#    define RM_HUEU  XXXXXXX
+#    define RM_HUED  XXXXXXX
+#    define RM_SATU  XXXXXXX
+#    define RM_SATD  XXXXXXX
+#    define RM_SPDU  XXXXXXX
+#    define RM_SPDD  XXXXXXX
+#    define FX_WHITE          XXXXXXX
+#    define FX_CYCLE_OUT_IN    XXXXXXX
+#    define FX_HUE_WAVE        XXXXXXX
+#    define FX_RAINBOW_BEACON  XXXXXXX
+#    define FX_PIXEL_FLOW      XXXXXXX
+#    define FX_JELLYBEAN       XXXXXXX
+#    define FX_DIGITAL_RAIN    XXXXXXX
+#    define FX_REACTIVE_NEXUS  XXXXXXX
+#    define FX_TYPING_HEATMAP  XXXXXXX
+#endif
 
 #ifdef OLED_ENABLE
 // The animation library: SOFLE_ANIM_COUNT loops of SOFLE_ANIM_FRAMES frames.
@@ -129,25 +168,45 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______,KC_UNDO, KC_CUT, KC_COPY, KC_PASTE, XXXXXXX,  _______,       _______,  XXXXXXX, KC_LSTRT, XXXXXXX, KC_LEND,   XXXXXXX, _______,
                          _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______
 ),
-/* ADJUST
+/* ADJUST —— 系统键 + 灯光控制
+ *
+ * 灯光调整分成左右两组，各自成对（- 在前、+ 在后）：
+ *   左手 row0：开关 / 切灯效 / 亮度
+ *   右手 row0：色相 / 饱和 / 速度
+ * 另外两个旋钮在这一层临时改成调灯：左旋钮=亮度、右旋钮=速度
+ * （旋钮按压键也借来用：左=灯光开关、右=下一个灯效）。
+ * 原来放在这一层的媒体键（上一首/播放/下一首）挪到右边 row2 col5-6 与
+ * row3 col5，位置变了但都还在。
+ *
+ * 灯效直达键在 row3 最左边 4~5 列（左手 5 个、右手 4 个）：
+ *   FX_WHITE          纯白常亮（出厂默认）
+ *   FX_CYCLE_OUT_IN   单色光波从中心扩散
+ *   FX_HUE_WAVE       彩虹波浪横扫
+ *   FX_RAINBOW_BEACON 彩虹双信标旋转
+ *   FX_PIXEL_FLOW     像素流
+ *   FX_JELLYBEAN      随机彩色雨滴
+ *   FX_DIGITAL_RAIN   数字雨
+ *   FX_REACTIVE_NEXUS 按键涟漪（从按键向四周扩散）
+ *   FX_TYPING_HEATMAP 打字热图（按过的地方亮起来再慢慢冷掉）
+ *
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |RM_TOGG|RM_NEXT|RM_PREV|RM_VALU|RM_VALD|      |               |RM_HUEU|RM_HUED|RM_SATU|RM_SATD|RM_SPDU|RM_SPDD|
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | QK_BOOT|      |      |OLED |MACWIN|EE_CLR|                    |      |      |      |OLED |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |MACWIN|      |      |      |-------.    ,-------|      | VOLDO| MUTE | VOLUP|      |      |
- * |------+------+------+------+------+------|  MUTE |    |       |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------|    |-------|      | PREV | PLAY | NEXT |      |      |
+ * |      |      |MACWIN|      |      |      |-------.    ,-------|      | VOLDO| MUTE | VOLUP| PREV | NEXT |
+ * |------+------+------+------+------+------| RM_TOG |    |RM_NEXT|------+------+------+------+------+------|
+ * |纯白  |波扩散|彩虹波|信标  |像素流|      |-------|    |-------|彩点  |数字雨|涟漪  |热图  | PLAY |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            | LGUI | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt | RGUI |
  *            |      |      |      |      |/       /         \      \ |      |      |      |      |
  *            `----------------------------------'           '------''---------------------------'
  */
   [_ADJUST] = LAYOUT(
-  XXXXXXX , XXXXXXX,  XXXXXXX ,  XXXXXXX , XXXXXXX, XXXXXXX,                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  RM_TOGG  , RM_NEXT,  RM_PREV,  RM_VALU,  RM_VALD, XXXXXXX,                     RM_HUEU, RM_HUED, RM_SATU, RM_SATD, RM_SPDU, RM_SPDD,
   QK_BOOT  , XXXXXXX, XXXXXXX,OLED_NEXT,CG_TOGG, EE_CLR,                     XXXXXXX, XXXXXXX, XXXXXXX,OLED_NEXT,XXXXXXX, XXXXXXX,
-  XXXXXXX , XXXXXXX,CG_TOGG, XXXXXXX,    XXXXXXX,  XXXXXXX,                     XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, XXXXXXX, XXXXXXX,
-  XXXXXXX , XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX,  XXXXXXX, XXXXXXX,     XXXXXXX, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
+  XXXXXXX  , XXXXXXX,CG_TOGG, XXXXXXX,    XXXXXXX,  XXXXXXX,                     XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, KC_MPRV, KC_MNXT,
+  FX_WHITE, FX_CYCLE_OUT_IN, FX_HUE_WAVE, FX_RAINBOW_BEACON, FX_PIXEL_FLOW, XXXXXXX, RM_TOGG, RM_NEXT, FX_JELLYBEAN, FX_DIGITAL_RAIN, FX_REACTIVE_NEXUS, FX_TYPING_HEATMAP, KC_MPLY, XXXXXXX,
                    _______, _______, _______, _______, _______,     _______, _______, _______, _______, _______
   )
 };
@@ -640,9 +699,14 @@ bool oled_task_user(void) {
 // the firmware the first time, so without this check a reflash keeps the old
 // layout and the layer keys end up switching the wrong layers. Each half
 // checks its own EEPROM.
-#define SOFLE_EEPROM_VERSION 2
+//
+// 4：ADJUST 层加了灯光键（v3）之后又加了「纯白常亮」直达键，并把默认灯效
+//    改成 solid_color / sat=0；版本一变顺手把 rgb_matrix 的 EEPROM 也刷回默认，
+//    不然老机器上还亮着以前的 cycle_out_in。
+#define SOFLE_EEPROM_VERSION 4
 
-// Out of the box: status on the left, the first animation on the right.
+// Out of the box: pure white on both halves; the left OLED shows the status
+// screen, the right one the first animation.
 void keyboard_post_init_user(void) {
     oled_screen    = is_keyboard_left() ? OLED_SCREEN_STATUS : OLED_SCREEN_ANIM;
     oled_boot_time = timer_read32();
@@ -650,6 +714,11 @@ void keyboard_post_init_user(void) {
 #if defined(VIA_ENABLE)
     if (eeconfig_read_user() != SOFLE_EEPROM_VERSION) {
         dynamic_keymap_reset(); // re-seed the keymap and encoder map from the firmware
+#ifdef RGB_MATRIX_ENABLE
+        // 灯光设置（灯效/颜色/亮度）另外存在 rgb_matrix 那块 EEPROM 里，
+        // 键位重置不会碰它，所以这里单独刷一次默认值：纯白常亮。
+        eeconfig_update_rgb_matrix_default();
+#endif
         eeconfig_update_user(SOFLE_EEPROM_VERSION);
     }
 #endif
@@ -732,6 +801,16 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
+#ifdef RGB_MATRIX_ENABLE
+/* 灯效直达键的公共部分：切到指定灯效，并顺手把灯打开——关了灯再按预设键
+ * 却什么都不亮，会让人以为是键坏了。两个都是 noeeprom 版本，只动 RAM：
+ * 重启后仍回到 EEPROM 里的灯效，也不会把 VIA Lighting 页的设置顶掉。 */
+static void fx_select(uint8_t mode) {
+    rgb_matrix_enable_noeeprom();
+    rgb_matrix_mode_noeeprom(mode);
+}
+#endif
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case OLED_NEXT:
@@ -739,6 +818,61 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             // need to switch, so housekeeping_task_user() picks this up on the
             // half the key actually sits on. Swallow it so nothing else sees it.
             return false;
+#ifdef RGB_MATRIX_ENABLE
+        /* 灯效直达（ADJUST 层 row3 左边 4~5 列 × 左右两半）。每个灯效外面套一层
+         * ENABLE_ 宏：#ifdef 关掉某个灯效时这里跟着失效，而不是编译报错。 */
+        case FX_WHITE:
+            /* 纯白常亮（出厂默认）：把饱和度归零就是白，色相随它去；亮度也回到出厂值
+             * （RGB_MATRIX_DEFAULT_VAL = 127），这样一个键就是「恢复出厂灯效」，
+             * 不会出现「之前把亮度拧到 0，按了纯白却什么都没亮」。
+             * solid_color 这个灯效没有 ENABLE_ 开关，永远编在固件里，所以不用 #ifdef。 */
+            if (record->event.pressed) {
+                rgb_matrix_enable_noeeprom(); // 必须在 sethsv 之前：关着灯时 sethsv 是空操作
+                rgb_matrix_sethsv_noeeprom(0, 0, RGB_MATRIX_DEFAULT_VAL);
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+            }
+            return false;
+        case FX_CYCLE_OUT_IN:
+#    if defined(ENABLE_RGB_MATRIX_CYCLE_OUT_IN)
+            if (record->event.pressed) fx_select(RGB_MATRIX_CYCLE_OUT_IN);
+#    endif
+            return false;
+        case FX_HUE_WAVE:
+#    if defined(ENABLE_RGB_MATRIX_HUE_WAVE)
+            if (record->event.pressed) fx_select(RGB_MATRIX_HUE_WAVE);
+#    endif
+            return false;
+        case FX_RAINBOW_BEACON:
+#    if defined(ENABLE_RGB_MATRIX_RAINBOW_BEACON)
+            if (record->event.pressed) fx_select(RGB_MATRIX_RAINBOW_BEACON);
+#    endif
+            return false;
+        case FX_PIXEL_FLOW:
+#    if defined(ENABLE_RGB_MATRIX_PIXEL_FLOW)
+            if (record->event.pressed) fx_select(RGB_MATRIX_PIXEL_FLOW);
+#    endif
+            return false;
+        case FX_JELLYBEAN:
+#    if defined(ENABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS)
+            if (record->event.pressed) fx_select(RGB_MATRIX_JELLYBEAN_RAINDROPS);
+#    endif
+            return false;
+        case FX_DIGITAL_RAIN:
+#    if defined(ENABLE_RGB_MATRIX_DIGITAL_RAIN)
+            if (record->event.pressed) fx_select(RGB_MATRIX_DIGITAL_RAIN);
+#    endif
+            return false;
+        case FX_REACTIVE_NEXUS:
+#    if defined(ENABLE_RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS)
+            if (record->event.pressed) fx_select(RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS);
+#    endif
+            return false;
+        case FX_TYPING_HEATMAP:
+#    if defined(ENABLE_RGB_MATRIX_TYPING_HEATMAP)
+            if (record->event.pressed) fx_select(RGB_MATRIX_TYPING_HEATMAP);
+#    endif
+            return false;
+#endif // RGB_MATRIX_ENABLE
         case KC_PRVWD:
             if (record->event.pressed) {
                 if (keymap_config.swap_lctl_lgui) {
@@ -877,6 +1011,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
  * KC_MPLY. Only the base entries are written; the layers above are KC_TRNS so
  * the knob keeps working everywhere and falls through to them.
  *
+ * 例外是 ADJUST(3)：旋钮在这一层临时变成调灯——左旋钮亮度、右旋钮灯效速度
+ * （和 ADJUST 层 row0 上那几个 RM_* 键是同一组功能）。
+ *
  * If a knob turns the wrong way, swap the two keycodes in its pair.
  * ------------------------------------------------------------------------ */
 
@@ -886,7 +1023,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
        [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),   ENCODER_CCW_CW(KC_MPRV, KC_MNXT) },
        [1] = { ENCODER_CCW_CW(_______, _______),  ENCODER_CCW_CW(_______, _______) },
        [2] = { ENCODER_CCW_CW(_______, _______),  ENCODER_CCW_CW(_______, _______) },
-       [3] = { ENCODER_CCW_CW(_______, _______),  ENCODER_CCW_CW(_______, _______) },
+       [3] = { ENCODER_CCW_CW(RM_VALD, RM_VALU),   ENCODER_CCW_CW(RM_SPDD, RM_SPDU) },
       };
 #endif
 
