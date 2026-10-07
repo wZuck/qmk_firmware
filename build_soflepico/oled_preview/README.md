@@ -9,14 +9,14 @@
 |---|---|
 | 6x8 正文字体 | `drivers/oled/glcdfont.c`（驱动真正使用的字体表） |
 | 12x16 大字（层名） | `keyboards/sofle_pico/keymaps/default/oled_bigfont.h` |
-| 动画帧 | `keyboards/sofle_pico/keymaps/default/oled_anim.h` |
-| 静态图 | `keyboards/sofle_pico/keymaps/default/oled_image.h` |
-| 画法/坐标/进度条 | `keymap.c` 的 `render_status()` / `render_wpm()` / `render_rule()` / `render_logo()` |
+| 动画帧（正色/反色） | `keyboards/sofle_pico/keymaps/default/oled_anim.h` / `oled_anim_inv.h` |
+| 雪人两帧（正色/反色） | `keyboards/sofle_pico/keymaps/default/oled_snow.h` |
+| 画法/坐标/进度条 | `keymap.c` 的 `render_status()` / `render_wpm()` / `render_rule()` |
 | 显存布局 | `drivers/oled/oled_driver.c`：`buffer[page * 64 + x]`，bit `y % 8`，LSB 最上一行 |
 
-## 一、三种画面，各自切换
+## 一、14 个画面，用 OLED 键循环
 
-左右两半**各自独立**决定自己显示什么，每一种都在 `ADJUST` 层有一个自己的按键：
+左右两半**各自独立**决定自己显示什么，都用 `ADJUST` 层**自己那一侧**的 `OLED` 键循环翻页：
 
 | 画面 | 内容 | 默认 |
 |---|---|---|
@@ -28,13 +28,17 @@
 | `anim 1` wave | 站着挥手打招呼 | — |
 | `anim 2` walk | 原地踏步，手臂反向摆 | — |
 | `anim 3` sleep | 闭眼呼吸，飘 z | — |
-| `logo` | Sofle Pico 静态图（`oled_image.h`，64x96） | — |
+| `anim inv 0-3` | 上面四组的**反色版**（每个像素翻转，亮底黑画，白天模式） | — |
+| `snow` | 雪人：两个滑雪小人两帧，正色 | — |
+| `snow inv` | 雪人的反色版 | — |
 
 四组动画都是 8 帧、8 fps 的 64x128 循环，一共 32 KB。
 
 - 切换键：`ADJUST` 层上**左右各一个 `OLED` 键**（左半在 `E` 键位置，右半在镜像的 `O` 键位置）。
-  按一下切换**本侧**画面：status → stats → graph → layers → anim 0 → … → anim 3 → logo → status。
-- **按住不放**会每 400 ms 自动往下翻（`SOFLE_OLED_HOLD_MS`），所以 10 个画面不用点十几次。
+  按一下切换**本侧**画面，顺序是
+  `status → stats → graph → layers → anim 0-3（小怪物正色）→ anim inv 0-3（反色）
+  → snow（雪人正色）→ snow inv（反色）→ 回到 status`，一共 14 屏。
+- **按住不放**会每 400 ms 自动往下翻（`SOFLE_OLED_HOLD_MS`），所以 14 个画面不用点十几次。
 - 两边互不影响：左半可以放动画、右半可以放状态屏。
 - 选择只存在 RAM，重启回到默认（左 status / 右 anim）。
 - **开机动画**：上电后两半都先播约 1.8 秒动画（`SOFLE_BOOT_MS`），然后才切到各自选的画面。
@@ -56,11 +60,15 @@ oled_preview/
 │   ├── anim_wave_00..07.png
 │   ├── anim_walk_00..07.png
 │   ├── anim_sleep_00..07.png
-│   └── screen_logo.png                           logo 静态图
-├── 4x/                        ← 同样 54 张，256 x 512 放大版，方便看
-├── anim_bounce.gif            ← 每组动画一个循环 GIF（共 5 个）
-├── anim_wave.gif  anim_walk.gif  anim_sleep.gif
-├── oled_overview.png          ← 一图看全：状态屏 + 四组动画的全部帧 + logo
+│   ├── anim_inv_*_00..07.png                      反色动画 4 组，每组 8 帧
+│   ├── snow_00..01.png                            雪人正色两帧
+│   └── snow_inv_00..01.png                        雪人反色两帧
+├── 4x/                        ← 同样 98 张，256 x 512 放大版，方便看
+├── anim_*.gif                 ← 正色四组各一个循环 GIF（共 4 个）
+├── anim_inv_*.gif             ← 反色四组各一个（共 4 个）
+├── snow_pair.gif  snow_pair_inv.gif              雪人正/反两帧循环
+├── snow_polarities.png  mascot_polarities.png    正/反对照图
+├── oled_overview.png          ← 一图看全：状态屏 + 动画全部帧 + 正反对照
 ├── reference.png              ← 参考原图（角色的出处）
 ├── fit_reference.py           ← 把参考图矢量化，算出角色参数
 └── gen_oled_preview.py        ← 生成器
@@ -143,27 +151,35 @@ python3 gen_oled_preview.py
   高度按 100 WPM 占满算）。WPM 本身通过 split 同步，所以两半的曲线一致。
 - **layers**：`BASE`/`LOWER`/`RAISE`/`ADJ` 四行 `ON`/`OFF`，按住 LOWER+RAISE 时能看到 `ADJ` 变 `ON`。
 
-## 六、logo 画面
+## 六、反色（白天）版与雪人
 
-`oled_image.h` 是一张 64x96 的 1 bit 图（12 个 page、768 字节），画在画布最上面，
-下面 32 px 留空。由 `img2c.py` 从 PNG 生成。
+- **反色**：同一个画面的每个像素翻转。正色是"亮线条 + 黑底"（暗环境、也省电），
+  反色是"亮底 + 黑画"（亮环境更清楚）。`make_animations.py` 一次生成 `oled_anim.h`
+  和 `oled_anim_inv.h` 两张表，后者就是前者逐字节取反——缓冲区一个 bit 一个像素，
+  翻字节等于翻画面。
+- **雪人**：`oled_snow1/2.pdf` 里抽出的两个滑雪小人，`oled_snow.h` 存正色和反色两组表。
+  注意该头文件里 **1 = 点亮**，和 `oled_anim.h` 一致；`img2c.py` 单独用会把白底当点亮，
+  所以 `make_snow_header.py` 会翻一次极性。
 
 ## 七、换成自己的图
 
-三个脚本都写在 `keyboards/sofle_pico/keymaps/default/` 里，都是纯标准库：
+脚本都写在 `keyboards/sofle_pico/keymaps/default/` 里，读 PDF 与打包只用标准库，
+图像处理需要 Pillow：
 
 | 目的 | 脚本 | 产物 |
 |---|---|---|
-| 改/加动画（角色与动作） | `make_animations.py` | `oled_anim.h`（四组动画都在里面） |
+| 改/加动画（角色与动作），含反色版 | `make_animations.py` | `oled_anim.h` + `oled_anim_inv.h` |
+| 从 PDF 抽雪人两帧（含反色） | `make_snow.py` | `snow_*.png` / `snow_*_inv.png` |
+| 把雪人四张打包成屏幕表 | `make_snow_header.py` | `oled_snow.h` |
 | 层名大字用的 2x 字体 | `make_bigfont.py` | `oled_bigfont.h` |
 | 画布模板（64x128 的图画纸） | `make_template.py` | `oled_template*.png` |
-| 把自己的 PNG 转成屏幕图 | `img2c.py` | 任意头文件，如 `oled_image.h` |
+| 把自己的 PNG 转成屏幕图 | `img2c.py` | 任意头文件 |
 
 ```sh
 cd keyboards/sofle_pico/keymaps/default
-python3 make_animations.py            # 重新生成四组动画
-python3 make_bigfont.py               # 需要用到大字时
-python3 img2c.py my_picture.png --height 96 --helper-color ff00ff -o my_logo.h
+python3 make_animations.py            # 正色 + 反色两套动画
+python3 make_snow.py && python3 make_snow_header.py   # 雪人正/反两套
+python3 img2c.py my_picture.png --height 128 --helper-color ff00ff -o my_picture.h
 ```
 
 改完记得：重新编译烧录 → 回到本目录跑 `gen_oled_preview.py` 刷新预览。

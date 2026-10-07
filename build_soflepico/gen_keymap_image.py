@@ -392,7 +392,7 @@ def write_md(layout, layers):
     parts.append("              两个一起按住 = 第3层 ADJUST（三键组合，不会误触）")
     parts.append("```\n")
     parts.append("其它切换类按键（都在 ADJUST 层）：\n")
-    parts.append("- `OLED`（`OLED_NEXT`，左右各一个）：切换**本侧** OLED 的画面（status / anim / logo）。")
+    parts.append("- `OLED`（`OLED_NEXT`，左右各一个）：切换**本侧** OLED 的画面（status → stats → graph → layers → anim 0-3 小怪物（正色）→ anim inv 0-3（反色）→ snow 雪人（正色）→ snow inv（反色））。")
     parts.append("- `EE_CLR`：清空 EEPROM。因为 VIA 把键位存在 EEPROM 里，改了 keymap 之后需要清一次才会生效。")
     parts.append("- `Mac/Win`（`CG_TOGG`）：切换 Mac 与 Win/Linux 模式，"
                  "影响修饰键顺序以及 RAISE 层的行首/行尾/词移动等快捷键，选择同样存 EEPROM。")
@@ -422,7 +422,7 @@ def write_md(layout, layers):
     parts.append("| 键位显示 | 键码 | 作用 |")
     parts.append("|---|---|---|")
     parts.append("| `LOWER` / `RAISE` | `MO(_LOWER)` / `MO(_RAISE)` | 按住临时切层 |")
-    parts.append("| `OLED` | `OLED_NEXT` | 切换本侧 OLED 的画面（status → anim → logo → status） |")
+    parts.append("| `OLED` | `OLED_NEXT` | 切换本侧 OLED 的画面（status → stats → graph → layers → anim 0-3 正色 → anim inv 0-3 反色 → snow 雪人正色 → snow inv 反色） |")
     parts.append("| `EE_CLR` | `EE_CLR` | 清空 EEPROM（VIA 键位存 EEPROM，改键后需要清） |")
     parts.append("| `Mac/Win` | `CG_TOGG` | 切换 Mac / Win 模式 |")
     parts.append("| `词←` / `词→` | `KC_PRVWD` / `KC_NXTWD` | 按模式发送 Ctrl+←/→ 或 Alt+←/→（按词移动） |")

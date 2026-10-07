@@ -27,6 +27,8 @@ ROOT = os.path.dirname(os.path.dirname(HERE))
 KM_DIR = os.path.join(ROOT, "keyboards/sofle_pico/keymaps/default")
 GLCDFONT = os.path.join(ROOT, "drivers/oled/glcdfont.c")
 ANIM_H = os.path.join(KM_DIR, "oled_anim.h")
+SNOW_H = os.path.join(KM_DIR, "oled_snow.h")
+ANIM_INV_H = os.path.join(KM_DIR, "oled_anim_inv.h")
 BIGFONT_H = os.path.join(KM_DIR, "oled_bigfont.h")
 KEYMAP_C = os.path.join(KM_DIR, "keymap.c")
 
@@ -73,13 +75,14 @@ def parse_bigfont(path):
     return index, glyphs
 
 
-def parse_anims(path):
-    """oled_anim.h：SOFLE_ANIM_COUNT 组动画，每组 N 帧、每帧 1024 字节。
+def parse_anims(path, array="oled_anim"):
+    """oled_anim.h / oled_anim_inv.h：SOFLE_ANIM_COUNT 组动画，每组 N 帧、每帧 1024 字节。
 
     返回 [(名字, [帧...]), ...]，名字取自生成器写在每组前面的 "// name"。
+    `array` 用来选正色（oled_anim）还是反色（oled_anim_inv）那张表。
     """
     src = open(path).read()
-    body = src[src.index("oled_anim[") :]
+    body = src[src.index(array + "[") :]
     anims = []
     for name, block in re.findall(r"\{\s*//\s*([a-z_]+)\s*\n(.*?)\n    \},", body, flags=re.S):
         frames = []
@@ -89,6 +92,23 @@ def parse_anims(path):
                 frames.append(vals)
         anims.append((name, frames))
     return anims
+
+
+def parse_snow(path, array="oled_snow"):
+    """oled_snow.h 里的一个表：SOFLE_SNOW_FRAMES 帧、每帧 1024 字节。
+
+    和 oled_anim.h 同一个格式，只是没有"每组"这一层——它是单独的一个画面
+    （OLED 键循环里的 snow / snow 反色）。`array` 选正色还是反色那张表。
+    """
+    src = open(path).read()
+    body = src[src.index(array + "[") :]
+    body = body[: body.index("};")]
+    frames = []
+    for grp in re.findall(r"\{\s*//\s*frame \d+\s*(.*?)\n\s*\},", body, flags=re.S):
+        vals = [int(v, 16) for v in re.findall(r"0x([0-9A-Fa-f]{2})", grp)]
+        if vals:
+            frames.append(vals)
+    return frames
 
 
 # --------------------------------------------------------------------------
@@ -190,9 +210,6 @@ LEFT_STATES = [
     ("status_05_layer_raise_wpm12", "按住 RAISE · 按住 Ctrl · WPM 12", ("RAISE", "MODE WIN ", "C...", 66, 12, False)),
     ("status_06_adjust_mac_wpm88_caps", "ADJUST · 四个修饰键全按 · Caps Lock 打开", ("ADJ", "MODE MAC ", "CSAG", 88, 88, True)),
 ]
-
-logo_name = "screen_logo"
-
 
 # --------------------------------------------------------------------------
 # 复刻 keymap.c 的 render_stats() / render_graph() / render_layers()
@@ -305,16 +322,6 @@ LAYER_STATES = [
 ]
 
 
-def logo_screen():
-    """oled_image.h：64x96 的图（12 个 page），下半屏留空。"""
-    src = open(os.path.join(KM_DIR, "oled_image.h")).read()
-    body = re.findall(r"0x([0-9A-Fa-f]{2})", src[src.index("{"):])
-    vals = [int(v, 16) for v in body][: 12 * W]
-    c = Canvas()
-    c.raw(0, 0, vals)
-    return c
-
-
 def load_font(size):
     return ImageFont.truetype(FONT_PATH, size)
 
@@ -339,7 +346,9 @@ def main():
     anims = parse_anims(ANIM_H)
     titles = dict(parse_anim_titles(ANIM_H))
     nframes = len(anims[0][1])
-    print(f"字体 {len(font)} 字符；大字 {len(bigfont[1])} 字形；动画 {len(anims)} 组 x {nframes} 帧 x {len(anims[0][1][0])} 字节")
+    snow = parse_snow(SNOW_H)
+    print(f"字体 {len(font)} 字符；大字 {len(bigfont[1])} 字形；动画 {len(anims)} 组 x {nframes} 帧 x {len(anims[0][1][0])} 字节"
+          f"；雪人 {len(snow)} 帧 x {len(snow[0])} 字节")
 
     for d in ("1x", "4x"):
         os.makedirs(os.path.join(HERE, d), exist_ok=True)
@@ -391,27 +400,77 @@ def main():
                      append_images=imgs[1:], duration=125, loop=0, optimize=False)
         anim_rows.append((aname, titles.get(aname, ""), [im.resize((W * 2, H * 2), Image.NEAREST) for im in imgs]))
 
-    # ④ logo
-    logo = logo_screen()
-    logo.to_image(1).save(png(1, "1x", logo_name))
-    logo_img = logo.to_image(4)
-    logo_img.save(png(4, "4x", logo_name))
+    # ④ 雪人（oled_snow.h）：两帧 + 一个 GIF。它不是按键切出来的，而是 OLED 键循环里的
+    #    一个画面（排在四组反色动画之后），所以单独一栏展示，也单独出一张两帧对比图。
+    snow_imgs = []
+    for i, frame in enumerate(snow):
+        c = Canvas()
+        c.buf[:] = bytes(frame)
+        c.to_image(1).save(png(1, "1x", f"snow_{i:02d}"))
+        img = c.to_image(4)
+        img.save(png(4, "4x", f"snow_{i:02d}"))
+        snow_imgs.append(img)
+    snow_imgs[0].save(os.path.join(HERE, "snow_pair.gif"), save_all=True,
+                      append_images=snow_imgs[1:], duration=250, loop=0, optimize=False)
+    pair = Image.new("RGB", (W * 4 * len(snow_imgs) + 20 * (len(snow_imgs) - 1), H * 4), "#f2f4f7")
+    for i, img in enumerate(snow_imgs):
+        pair.paste(img, (i * (W * 4 + 20), 0))
+    pair.save(os.path.join(HERE, "snow_pair.png"))
 
-    # 总览图：一行 status（4x），下面动画按两列排（2x），最后一格放 logo
+    # ⑤ 反色（白天）版本：雪人的反色两帧，下面那一行拼一张正/反对照图
+    snow_inv = parse_snow(SNOW_H, "oled_snow_inv")
+    snow_inv_imgs = []
+    for i, frame in enumerate(snow_inv):
+        c = Canvas()
+        c.buf[:] = bytes(frame)
+        c.to_image(1).save(png(1, "1x", f"snow_inv_{i:02d}"))
+        img = c.to_image(4)
+        img.save(png(4, "4x", f"snow_inv_{i:02d}"))
+        snow_inv_imgs.append(img)
+    snow_inv_imgs[0].save(os.path.join(HERE, "snow_pair_inv.gif"), save_all=True,
+                          append_images=snow_inv_imgs[1:], duration=250, loop=0, optimize=False)
+    both = Image.new("RGB", (W * 4 * 4 + 20 * 3, H * 4), "#f2f4f7")
+    for i, img in enumerate(snow_imgs + snow_inv_imgs):
+        both.paste(img, (i * (W * 4 + 20), 0))
+    both.save(os.path.join(HERE, "snow_polarities.png"))
+
+    # 吉祥物的正/反对照（反色那套的四组动画，各取第一帧）
+    anim_inv = parse_anims(ANIM_INV_H, "oled_anim_inv")
+    mascot_both = Image.new("RGB", (W * 2 * 4 + 12 * 3, H * 2 * 2 + 12), "#f2f4f7")
+    for k, (name, frames) in enumerate(anims):
+        c = Canvas(); c.buf[:] = bytes(frames[0])
+        mascot_both.paste(c.to_image(2), (k * (W * 2 + 12), 0))
+    for k, (name, frames) in enumerate(anim_inv):
+        c = Canvas(); c.buf[:] = bytes(frames[0])
+        mascot_both.paste(c.to_image(2), (k * (W * 2 + 12), H * 2 + 12))
+    mascot_both.save(os.path.join(HERE, "mascot_polarities.png"))
+
+    # 总览图：一行 status（4x），下面动画按两列排（2x），最后一行是正/反两套对照
     pad, gap = 26, 22
     sc_w, sc_h = W * 4, H * 4            # 状态屏 4x
     af_w, af_h = W * 2, H * 2            # 动画帧 2x
+    # 正/反两套各取第一帧拼一列，下面第 ⑤ 节要贴：上行正色（夜晚）、下行反色（白天）
+    imgs_normal_pol = [Image.open(png(4, "4x", f"anim_{n}_{0:02d}")).resize((af_w, af_h), Image.NEAREST)
+                       for n, _ in anims] + \
+                      [Image.open(png(4, "4x", f"snow_{i:02d}")).resize((af_w, af_h), Image.NEAREST)
+                       for i in range(len(snow))]
+    imgs_inverted_pol = [Image.open(png(4, "4x", f"anim_{n}_{0:02d}")).resize((af_w, af_h), Image.NEAREST)
+                         for n, _ in anim_inv] + \
+                        [Image.open(png(4, "4x", f"snow_inv_{i:02d}")).resize((af_w, af_h), Image.NEAREST)
+                         for i in range(len(snow_inv))]
     row_w = 8 * (af_w + 4) + 24          # 一组动画的宽度
     grid_w = 2 * (row_w + gap) - gap
-    sheet_w = pad * 2 + max(6 * (sc_w + gap) - gap, grid_w)
+    sheet_w = pad * 2 + max(6 * (sc_w + gap) - gap, grid_w, W * 4 * 2 + 20)
     row_h = 34 + af_h + 26
     info_cols = 4
     info_rows = (len(info) + info_cols - 1) // info_cols
-    sheet_h = 128 + (sc_h + 52) + 34 + info_rows * (sc_h + 52) + 30 + 3 * (row_h + 20) + 60
+    cells_count = len(anim_rows) + (1 if snow else 0)  # 四组动画 + 雪人
+    anim_grid_rows = (cells_count + 1) // 2
+    sheet_h = 128 + (sc_h + 52) + 34 + info_rows * (sc_h + 52) + 30 + anim_grid_rows * (row_h + 20) + 60 + 2 * (af_h + 26) + 60
     sheet = Image.new("RGB", (sheet_w, sheet_h), "#f2f4f7")
     d = ImageDraw.Draw(sheet)
     d.text((pad, 20), "Sofle Pico OLED 显示内容预览", font=load_font(30), fill="#1f2933")
-    d.text((pad, 60), "每一半都能在 ADJUST 层用自己那侧的 OLED 键在 status / stats / graph / layers / 4 组动画 / logo 之间循环",
+    d.text((pad, 60), "每一半都能在 ADJUST 层用自己那侧的 OLED 键在 status / stats / graph / layers / 4 组动画(正+反) / 雪人(正+反) 之间循环",
            font=load_font(17), fill="#52606d")
 
     y = 122
@@ -437,25 +496,42 @@ def main():
             d.text((x, yy + sc_h + 8 + n * 18), line, font=load_font(14), fill="#52606d")
 
     y = y + info_rows * (sc_h + 52) + 34
-    d.text((pad, y - 26), "③ 动画（默认：右手第一组）—— 每组 8 帧、8 fps，另有独立的 GIF",
+    d.text((pad, y - 26), "③ 动画（默认：右手第一组）—— 每组 8 帧、8 fps，另有独立的 GIF；"
+                          "④ 雪人（oled_snow.h，正/反各 2 帧）排在四组反色动画之后",
            font=load_font(19), fill="#a85a06")
-    cells = [(n, desc, imgs) for n, desc, imgs in anim_rows] + [(logo_name, "oled_image.h（64x96 静态图）", None)]
+    snow_desc = "oled_snow.h（oled_snow1/2.pdf，2 帧）—— OLED 键循环里的 snow 画面"
+    cells = ([(n, desc, imgs) for n, desc, imgs in anim_rows]
+             + ([("snow_pair", snow_desc, [im.resize((W * 2, H * 2), Image.NEAREST) for im in snow_imgs])] if snow else [])
+             )
     for k, (aname, desc, imgs) in enumerate(cells):
         col, row = k % 2, k // 2
         x = pad + col * (row_w + gap)
         yy = y + row * (row_h + 20)
-        label = f"anim {k + 1}/{len(anim_rows)}：{aname}" if imgs else f"④ {aname}"
+        if aname == "snow_pair":
+            label = f"④ 雪人：{aname}"
+        else:
+            label = f"anim {k + 1}/{len(anim_rows)}：{aname}"
         d.text((x, yy), label, font=load_font(16), fill="#1f2933")
         d.text((x + 150, yy + 2), desc, font=load_font(13), fill="#66727f")
         if imgs:
             for i, im in enumerate(imgs):
                 sheet.paste(im, (x + i * (af_w + 4), yy + 26))
-        else:
-            sheet.paste(logo_img.resize((sc_w, sc_h), Image.NEAREST), (x, yy + 26))
+
+    # 最后一栏：正/反两套对照（上面小怪物四组、下面雪人两帧），一眼看出白天/夜晚两版
+    y_pol = y + anim_grid_rows * (row_h + 20) + 10
+    d.text((pad, y_pol - 26), "⑤ 反色版（白天模式）—— 上面一行正色（夜晚），下面一行反色；"
+                             "两栏都是 OLED 键循环里的画面",
+           font=load_font(19), fill="#7a3bb8")
+    for k, im in enumerate(imgs_normal_pol):
+        sheet.paste(im, (pad + k * (af_w + 4), y_pol))
+        d.text((pad + k * (af_w + 4), y_pol + af_h + 2), "正色", font=load_font(13), fill="#52606d")
+    for k, im in enumerate(imgs_inverted_pol):
+        sheet.paste(im, (pad + k * (af_w + 4), y_pol + af_h + 22))
+        d.text((pad + k * (af_w + 4), y_pol + 2 * af_h + 24), "反色", font=load_font(13), fill="#52606d")
 
     sheet.save(os.path.join(HERE, "oled_overview.png"))
     print("已生成:", os.path.join(HERE, "oled_overview.png"))
-    print(f"状态屏 {len(made)} 张，信息屏 {len(info)} 张，动画 {len(anim_rows)} 组 x {nframes} 帧，logo 1 张，GIF {len(anim_rows)} 个")
+    print(f"状态屏 {len(made)} 张，信息屏 {len(info)} 张，动画 {len(anim_rows)} 组 x {nframes} 帧 + 雪人 {len(snow)} 帧(正/反)，GIF {len(anim_rows)} 个")
 
 
 def wrap(d, text, font, max_w):

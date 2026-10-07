@@ -92,6 +92,7 @@ def main():
         for name, desc in info_screens
     )
     anims = preview.parse_anims(os.path.join(preview.KM_DIR, "oled_anim.h"))
+    anims_inv = preview.parse_anims(os.path.join(preview.KM_DIR, "oled_anim_inv.h"), "oled_anim_inv")
     anim_titles = dict(preview.parse_anim_titles(os.path.join(preview.KM_DIR, "oled_anim.h")))
 
     def anim_section(idx, name, frames):
@@ -107,9 +108,49 @@ def main():
                 + gif + "\n" + strip + "\n  </div>")
 
     anim_sections = "\n".join(anim_section(i + 1, n, f) for i, (n, f) in enumerate(anims))
-    logo_card = card(
-        "oled_preview/4x/screen_logo.png", "logo",
-        "oled_image.h（64x96 静态图）", link="oled_preview/1x/screen_logo.png",
+
+    # 反色（白天）版：同一批 loop，每个像素翻过来
+    def anim_inv_section(idx, name, frames):
+        gif = card(f"oled_preview/anim_inv_{name}.gif", f"{name} 反色（GIF）", "8 帧 / 8 fps",
+                   link=f"oled_preview/anim_inv_{name}.gif")
+        strip = "\n".join(
+            card(f"oled_preview/4x/anim_inv_{name}_{i:02d}.png", f"帧 {i + 1}",
+                 link=f"oled_preview/1x/anim_inv_{name}_{i:02d}.png")
+            for i in range(len(frames))
+        )
+        return (f'  <h4>anim inv {idx}/{len(anims_inv)} · {name} 反色 <span class="dim">— '
+                f'{html.escape(anim_titles.get(name, ""))}，每个像素翻转（白天模式）</span></h4>\n  <div class="grid">\n'
+                + gif + "\n" + strip + "\n  </div>")
+
+    anim_inv_sections = "\n".join(anim_inv_section(i + 1, n, f) for i, (n, f) in enumerate(anims_inv))
+
+    # 雪人（oled_snow.h）：OLED 键循环里的 snow 画面，排在四组反色动画之后
+    snow_frames = preview.parse_snow(os.path.join(preview.KM_DIR, "oled_snow.h"))
+    snow_section = ""
+    if snow_frames:
+        snow_gif = card("oled_preview/snow_pair.gif", "雪人两帧循环（GIF）", "2 帧",
+                        link="oled_preview/snow_pair.gif")
+        snow_inv_frames = preview.parse_snow(os.path.join(preview.KM_DIR, "oled_snow.h"), "oled_snow_inv")
+        snow_strip = "\n".join(
+            card(f"oled_preview/4x/snow_{i:02d}.png", f"帧 {i + 1}（正色）",
+                 link=f"oled_preview/1x/snow_{i:02d}.png")
+            for i in range(len(snow_frames))
+        ) + "\n" + card("oled_preview/snow_pair_inv.gif", "雪人反色两帧循环（GIF）", "2 帧 · 白天模式",
+                         link="oled_preview/snow_pair_inv.gif") + "\n" + "\n".join(
+            card(f"oled_preview/4x/snow_inv_{i:02d}.png", f"帧 {i + 1}（反色）",
+                 link=f"oled_preview/1x/snow_inv_{i:02d}.png")
+            for i in range(len(snow_inv_frames))
+        ) + "\n" + card("oled_preview/snow_polarities.png", "正色 / 反色对照",
+                         "左二正色、右二反色", link="oled_preview/snow_polarities.png")
+        snow_section = (
+            f'  <h4>雪人 · snow_pair <span class="dim">— '
+            f'oled_snow.h（oled_snow1/2.pdf 抽出的 {len(snow_frames)} 帧）；'
+            f'OLED 键循环里的 snow 画面（四组反色动画之后）</span></h4>\n  <div class="grid">\n'
+            + snow_gif + "\n" + snow_strip + "\n  </div>")
+
+    card_mascot_polarities = card(
+        "oled_preview/mascot_polarities.png", "小怪物：上行正色 / 下行反色",
+        "四组动画各取第 1 帧", link="oled_preview/mascot_polarities.png",
     )
 
     doc = f"""<!doctype html>
@@ -227,7 +268,8 @@ def main():
 
   <h2>OLED 画面</h2>
   <p class="lead">每一半都能用自己那侧的 <code>OLED</code> 键循环切换：
-     status → stats → graph → layers → 4 组动画 → logo。按住不放会自动往下翻（每 400 ms 一张），
+     status → stats → graph → layers → 4 组小怪物动画（正色）→ 4 组反色 → 雪人（正色）→ 雪人（反色）。
+     按住不放会自动往下翻（每 400 ms 一张），
      不用点十几次。默认左边 status、右边第一组动画；选择只存 RAM，重启回到默认。
      开机时两半都会先播 ~1.8 秒动画。</p>
 
@@ -245,10 +287,13 @@ def main():
      每组都有 GIF，下面按组列出全部帧。</p>
 {anim_sections}
 
-  <h3>③ logo 静态图</h3>
-  <div class="grid">
-{logo_card}
-  </div>
+  <h3>③ 雪人那组（另一套动画图）</h3>
+  <p class="lead">从 <code>oled_snow1.pdf</code> / <code>oled_snow2.pdf</code> 里抽出来的两个滑雪小人，
+     缩到 64 px 宽后就是 <code>oled_snow.h</code> 的两帧。右半的动画屏由 ADJUST 层的
+     就是<b>原来那个 <code>OLED</code> 键</b>循环里的画面——四组小怪物动画之后，正色一屏、反色一屏，
+     不用另按别的键。</p>
+{snow_section}
+
 
   <h2>烧录</h2>
   <div class="cols">
@@ -299,7 +344,8 @@ def main():
         fh.write(doc)
     print("已生成:", OUT)
     print(f"固件 {size} 字节, sha256 {sha[:16]}…, QMK {tag} @ {commit}")
-    print(f"图片: 键位图 1 + 信息屏 {len(info_screens)} + anim {sum(len(f) for _, f in anims)} + logo 1")
+    print(f"图片: 键位图 1 + 信息屏 {len(info_screens)} + anim {sum(len(f) for _, f in anims)}"
+          f" + anim反色 {sum(len(f) for _, f in anims_inv)} + 雪人 {len(snow_frames) * 2}")
     print(f"灯效: {len(fx_files) - len(fx_missing)} 个 GIF"
           + (f"（缺 {'、'.join(fx_missing)}：先跑 led_effects/ 里的采集器再跑 gen_led_effects.py）"
              if fx_missing else "")

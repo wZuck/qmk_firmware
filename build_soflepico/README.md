@@ -10,7 +10,7 @@
 | 键盘 | `sofle_pico`（RP2040 / Raspberry Pi Pico，分体，左右各一个 EC11） |
 | keymap | `default` |
 | 编译命令 | `qmk compile -kb sofle_pico -km default` |
-| QMK 版本 | tag `0.34.5-16-gef8f9327cc`，commit `ef8f9327cc`，分支 `master` |
+| QMK 版本 | tag `0.34.5-19-g59053807a4`，commit `59053807a4`，分支 `master` |
 | 构建时间 | 2026-10-01 |
 | 源文件 | `keyboards/sofle_pico/`（工作区修改，尚未提交） |
 
@@ -37,7 +37,8 @@
 | `gen_keymap_image.py` | 由 `keymap.c` + `keyboard.json` 重新生成键位图（PNG + SVG）与 `keymap.md` |
 | `oled_preview/fit_reference.py` | 把参考图矢量化（Hough 找圆、最小二乘拟合椭圆），算出角色各图元的参数 |
 | `oled_preview/reference.png` | 参考原图（角色的出处） |
-| `oled_preview/` | **OLED 显示内容预览**：信息屏 13 种 + 四组动画共 32 帧 + logo，含 `1x`/`4x`/4 个 GIF/总览图 |
+| `oled_preview/` | **OLED 显示内容预览**：信息屏 13 种 + 小怪物动画 32 帧 + 反色 32 帧 + 雪人正/反 4 帧，含 `1x`/`4x`/6 个 GIF/总览图 |
+| `oled_snow1.pdf` / `oled_snow2.pdf` | 雪人那组图的原始素材（两个滑雪小人，两帧只差一只手） |
 | `index.html` | **一页看全**：固件信息 + 键位图 + LED 灯效（互动播放器 + 8 段 GIF）+ OLED 三种画面（打开即可，图片/数据走相对路径，不用起服务器） |
 | `gen_index.py` | 重新生成 `index.html`（自动带上 uf2 的 SHA-256、QMK 版本、图片清单） |
 | `led_effects/` | **灯效逐帧采集器**：`harness.c` 在电脑上编译真实灯效源码 → `led_frames.json`（详见 `led_effects/README.md`） |
@@ -52,9 +53,9 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-830ae560aa142f5e217eae930b78fbaae856ce79266d107d001c47518b29f2ef  sofle_pico_default.uf2
-bdec258118759d2b5c6f6a87b63375c2d60852d08ff47156949b283b54ea47a6  sofle_pico_default_split-left.uf2
-f7c7fd1148767ccc9e53e6a9f6f1b84ef5fa0aa5517a81f420609c6df07cdd0d  sofle_pico_default_split-right.uf2
+e43f25fde7cb681e5201c7914567e69727b7f9b5612745651c685eeb55ac9150  sofle_pico_default.uf2
+b7361aeadc6d98bf645f8335fade9d9052144de4331276a766a8b9723b972710  sofle_pico_default_split-left.uf2
+d7118ea1253c048e3925b8c6ba8945cef9d9eaa328a8d508c50d2091e4e89add  sofle_pico_default_split-right.uf2
 ```
 
 （`split-left` / `split-right` 不是 `qmk compile` 能直接出的目标：按
@@ -124,7 +125,8 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 
 - 层：`QWERTY`(0) / `LOWER`(1) / `RAISE`(2) / `ADJUST`(3)（Colemak 层已删除），`LOWER`+`RAISE` 三键组合出 `ADJUST`。
 - Mac/Win 模式在 `ADJUST` 层切换，选择存 EEPROM；`QK_BOOT`、`EE_CLR` 也在该层。
-- OLED：每一半都能在 10 个画面之间切换（见 4.3），切换键是 `ADJUST` 层左右各一个 `OLED` 键（按住可快速翻页）。
+- OLED：每一半都能在 14 个画面之间切换（见 4.3），切换键是 `ADJUST` 层左右各一个 `OLED` 键（按住可快速翻页）；
+  另外有**屏保**：任意一半一分钟没被按过，两块屏一起显示睡觉的 zzz 动画，按任意键立刻都回到原来那屏。
 - VIA 已启用（层数用核心默认的 4 层），可用 VIA 网页版改键。
 - 灯光：**逐键 RGB**，左右各 29 颗（共 58 颗）WS2812 兼容灯珠，各自一条灯带、数据脚都是 `GP0`；
   默认开机就亮，**出厂是纯白常亮**（`solid_color`、饱和 0、亮度上限 127、速度 16），**控制键全在 ADJUST 层**（见 4.6），
@@ -145,10 +147,15 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 | `anim 1` | wave：站着挥手打招呼 | — |
 | `anim 2` | walk：原地踏步，手臂反向摆 | — |
 | `anim 3` | sleep：闭眼呼吸，飘 z | — |
-| `logo` | `oled_image.h` 的 Sofle Pico 静态图（64x96） | — |
+| `anim inv 0..3` | 上面四组动画的**反色版**：每个像素翻转，小怪物变成亮底黑画（白天模式） | — |
+| `snow` | 雪人：两个滑雪小人两帧，正色 | — |
+| `snow inv` | 雪人的反色版（白天模式） | — |
 
-四组动画都是 8 帧、8 fps 的 64x128 循环，一共 32 KB（`SOFLE_ANIM_COUNT` / `SOFLE_ANIM_FRAMES`）。
-一共 10 个画面，所以**按住 OLED 键不放会每 400 ms 自动翻一张**，不用点十几次。
+四组动画都是 8 帧、8 fps 的 64x128 循环，正色反色各 32 KB；雪人正反各 2 帧、4 KB。
+**一共 14 个画面**，所以**按住 OLED 键不放会每 400 ms 自动翻一张**，不用点十几次。
+顺序是：status → stats → graph → layers → anim 0-3（小怪物，正色）→ anim inv 0-3（小怪物，反色）
+→ snow（雪人，正色）→ snow inv（雪人，反色）→ 回到 status。
+从右半默认的 `anim 0` 出发，**按 8 下**到正色雪人，**按 9 下**到反色雪人。
 `stats` 的按键数是**本半边**扫到的次数（两半各自计数）；`graph` 的 WPM 通过 split 同步，两半画出来一样。
 加一组动画只要在 `make_animations.py` 的 `ANIMATIONS` 里加一项，重跑脚本并重新编译——
 `oled_screen` 枚举里的动画区间会自动跟着 `SOFLE_ANIM_COUNT` 变。
@@ -161,7 +168,62 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 - 切换瞬间会先清屏，不会留下上一屏的残影。
 - 实现上两个半边各自扫自己那半边的矩阵（`housekeeping_task_user()`），
   因为 `process_record_user()` 只在主机侧运行，从机收不到键码。
-- 预览图：`oled_preview/`（`status_*.png` / `anim_*.png` / `screen_logo.png`，含 1x / 4x / GIF / 总览）。
+- 预览图：`oled_preview/`（`status_*.png` / `anim_*.png` / `anim_inv_*.png` / `snow_*.png` /
+  `snow_inv_*.png`，含 1x / 4x / GIF / 总览；另有 `snow_polarities.png` 与 `mascot_polarities.png`
+  两张正反对照图）。
+- 网页：`index.html` 的 OLED 一节把以上画面全部列出来（含雪人那组两帧）。
+
+#### 雪人画面（不用另按别的键，就是 OLED 键循环里的下一个画面）
+
+- `oled_snow1.pdf` / `oled_snow2.pdf` 里各是一张两个滑雪小人的画，两帧只差左边那位的手臂
+  （一个放下、一个比耶）。抽出来缩到 64 px 宽，就是 `oled_snow.h` 的两帧，来回播 = 慢慢挥手。
+- **怎么翻到它**：它就是**原来那个 `OLED` 键**循环里的画面，排在四组反色动画之后，正色一屏、反色一屏。
+  两半各自的 OLED 键都按这个顺序走：
+  `status → stats → graph → layers → anim 0..3（小怪物正色）→ anim inv 0..3（反色）→ snow（雪人正色）→ snow inv（反色）→ status`。
+  从默认状态（左半 status、右半 anim 0）出发，右半按 **5 下**到雪人；也可以**按住不放**
+  每 400 ms 自动翻一张，翻过头会绕一圈回来（一共 11 屏）。
+- **正色 / 反色各一屏**（第 13、14 屏）：正色是"亮线条 + 黑底"（夜晚看），反色把每个像素翻过来，
+  变成"亮底 + 黑画"（白天看）。两屏位置相邻，OLED 键按一下就能来回对比。
+- 雪人是**横幅画**、屏幕是竖幅：裁到 64 px 宽后按原比例约 62 px 高，**居中**放，上下留白。
+  没有纵向拉伸——拉满 128 行会把人和雪板拉长、线条发虚。
+- 两帧交替的速度是 `SOFLE_ANIM_FPS / 2`（帧计数器固定按小怪物的 8 帧走，雪人用 2 帧去取模，
+  所以每帧占 4 个 tick），比小怪物慢一半，挥手看起来才像挥手。
+- 屏保那张睡觉的图**始终是小怪物**：雪人这套图里没有睡觉的动作，硬套过去会变成"两个人在睡觉"的误导。
+- 重新生成分两步（都在 `keyboards/sofle_pico/keymaps/default/`）：
+  `python3 make_snow.py` 读 PDF 并写 `snow_1.png` / `snow_2.png` 和它们的 `_inv` 反色版
+  （读 PDF 只用标准库，图像处理要 Pillow）；再 `python3 make_snow_header.py` 把四张打包成
+  `oled_snow.h`（正色表 `oled_snow` + 反色表 `oled_snow_inv`）。
+  注意 `oled_snow.h` 里 **1 = 点亮**，和 `oled_anim.h` 一致；`img2c.py` 单独用会把白底当点亮，
+  所以 `make_snow_header.py` 会翻一次，这一步不能省。
+- 画面选择**只存在 RAM**：重启回到默认（左 status / 右 anim 0）。
+
+#### 屏保（一分钟不动 → 两块屏一起睡觉 zzz）
+
+- **触发**：**任意一半**超过 `SOFLE_SLEEP_MS`（**60 秒**，在 `keymap.c` 顶部）没被按过，
+  **两半的 OLED 一起**切成睡觉的吉祥物——也就是 `oled_anim.h` 里的 `sleep` 那组 8 帧循环
+  （闭眼呼吸 + 飘 z），预览见 `oled_preview/anim_sleep.gif`。
+- **恢复**：按下**任意**键（不用是特定键，也不用管是哪一半）**两边立刻都醒**，各自回到自己原来那屏。
+  唤醒用的那个按键本身照常生效，不会被屏保吃掉——第一下按下去只是让屏幕醒过来，该输入的字符一样会输入。
+- **睡觉是两边商量好的，醒来是各自立刻做的**：
+  - *醒来*：每个半边自己数自己矩阵上的按键（就在 `housekeeping_task_user()` 里，和 `OLED` 切换键是同一段代码），
+    所以按下去当场就醒，**不用等 split 通信**。
+  - *睡觉*：光看自己那半不够，否则会「一边睡了、另一边你还在打字」。所以主机侧每隔
+    `SOFLE_SLEEP_SYNC_MS`（250 ms）通过一个 split 事务问从机「这一段时间你那边有人按键吗」，
+    两边都确认"没人打字"满一分钟才一起睡。这个事务就是 `SOFLE_SCREENSAVER_SYNC`
+    （在 `config.h` 里用 QMK 官方的 `SPLIT_TRANSACTION_IDS_USER` 注册，双向各带 1 字节）。
+  - QMK 自带的 `last_input_activity_elapsed()` 两个用途都不合适：它只在主机侧刷新，
+    从机那半会在你打字时一直睡着。
+  - 两边进入睡眠的时刻最多差一个同步周期（250 ms），肉眼看不出；离开睡眠是同时的。
+- **屏保不算一个「画面」**：睡着期间每一半记住自己原来是哪一屏（`oled_screen` 不变），醒来直接回到那一屏，
+  不会把你选的画面弄丢；`OLED` 键在睡着时按下去也是先唤醒、再照常翻页。
+- **优先级**：屏保的优先级高于开机动画，所以开机后一直没人碰的键盘会在 1 分钟时睡过去，
+  而不是播完开机动画停在状态屏。
+- 动画帧计数器（`oled_frame`）放在渲染函数外面、每个 OLED 帧都推进，所以睡觉时吉祥物的呼吸节奏
+  仍然是 `SOFLE_ANIM_FPS`（8 fps），醒来后接着原来的帧往下走。
+- 想改时长就改 `keymap.c` 里的 `SOFLE_SLEEP_MS`；同步频率是 `SOFLE_SLEEP_SYNC_MS`；
+  想换睡觉那个动画就改 `SOFLE_ANIM_SLEEP` 的索引。
+- **左右必须都烧这一版**：这一版给 split 加了一个用户事务，两半固件不一致时同步会拿不到应答，
+  表现为"两边各睡各的"（不会死机，其他功能也不受影响）。
 
 ### 4.5 按键不正常时的排查
 
@@ -301,6 +363,26 @@ GIF 的体积是调过的：整段动画共用一张 32 色调色板（每帧各
 - 从 ELF 中核对按键：`keymaps[0][4][5] = 0x00a8`（`KC_MUTE`）、`keymaps[0][9][5] = 0x00ae`（`KC_MPLY`）。
 - 从 ELF 中核对 `oled_anim` = `0x8000` = 32768 字节 = 4 组 × 8 帧 × 1024 字节，
   且每一帧与 `oled_anim.h` 逐字节一致（预览就是面板上会显示的内容）。
+- **屏保**：`keymap.c` 里的 `SOFLE_ANIM_SLEEP = 3` 对着 `oled_anim.h` 的头部注释核过，
+  第 4 组（索引 3）就是 `sleep`；同一份 ELF 里 4 组 32 帧、共 32768 字节全部与 `oled_anim.h`
+  逐字节一致（`build_soflepico/sofle_pico_default.elf`，符号 `oled_anim` 大小 `0x8000`），
+  所以屏保画的确实就是 `oled_preview/anim_sleep.gif` 那段 zzz。
+  计时、唤醒和两半同步的路径都是纯 C 的状态判断（`SOFLE_SLEEP_MS` / `oled_sleeping` /
+  `last_activity` / `saw_activity` / `peer_activity`），编译无 warning；`SOFLE_SLEEP_MS` 默认 60000 ms、
+  `SOFLE_SLEEP_SYNC_MS` 默认 250 ms。
+- **屏保的 split 事务**：`SOFLE_SCREENSAVER_SYNC` 是用户级事务 id（`config.h` 里的
+  `SPLIT_TRANSACTION_IDS_USER`），QMK 只接受大于核心最后一个 RPC id 的值，所以 `keymap.c` 里加了一条
+  `STATIC_ASSERT(SOFLE_SCREENSAVER_SYNC > GET_RPC_RESP_DATA, ...)` 把这条约束钉在编译期
+  ——写错 id 会直接编译失败，而不是静默地两边各睡各的。从 ELF 的 `split_transaction_table`
+  （`.data`，符号 `split_transaction_table`）里也核过：该条目的 m2s/s2m 缓冲长度都是 1、
+  回调指针非空，和 `transaction_register_rpc()` 写进去的内容一致。
+- **雪人正/反两屏**：ELF 里 `oled_snow` 与 `oled_snow_inv` 各 2048 字节 = 2 帧 × 1024。
+  还原成位图后核对：`oled_snow` 里**点亮的像素恰好就是 `snow_1/2.png` 的小人**（1036 / 1017 个），
+  而 `oled_snow_inv` 里**暗的像素恰好就是小人**（点亮 7156 / 7175 = 背景）——也就是说
+  "正色 = 亮线条 + 黑底"、"反色 = 亮底 + 黑画"，和预期方向一致。
+- **小怪物反色**：`oled_anim_inv` = 32768 字节 = 4 组 × 8 帧，逐帧校验过**每一帧都等于 `oled_anim`
+  对应帧按位取反**（`make_animations.py` 一次生成两张表，第二张就是第一张翻过来的）。
+  屏幕上共 **14 个画面**（`housekeeping_task_user` 里翻页用的是 `% 14`）。
 - 灯效演示：`led_effects/harness.c` 跑的 8 个灯效，每一帧 58 颗灯都有非零值、
   且相邻帧确实在变（见 4.7 与 `led_effects/README.md` 里的验证输出）——
   也就是说 GIF 里看到的颜色就是同一份源码在真机上算出来的颜色。
@@ -338,6 +420,9 @@ VIA 的改键、宏、灯光等功能不受影响，只是测试器会重新变�
 4. 更换旋钮分辨率等编码器硬件配置后，**带旋钮的那一半必须重新烧录**。
 5. **ADJUST 层新增的灯光键是要写进 EEPROM 的键位表**：只烧一半固件时，如果手性/EEPROM 版本
    不一致，可能出现一半的 ADJUST 层还是旧键位。稳妥做法是两半都烧 `split-left` / `split-right`。
+   这一版也动过 ADJUST 层（曾经加过一个 `SNOW_TOGG`，后来撤掉了），所以 `SOFLE_EEPROM_VERSION`
+   提到了 **6**：烧完第一次启动会自动用固件里的键位重写 EEPROM，把那个遗留的键清掉。
+   雪人现在是 OLED 循环里的一屏，不占任何按键。
 
 ## 7. 相关源文件
 
@@ -345,9 +430,16 @@ VIA 的改键、宏、灯光等功能不受影响，只是测试器会重新变�
 - `keyboards/sofle_pico/config.h`：分体/串口/OLED/鼠标/编码器等宏
 - `keyboards/sofle_pico/rules.mk`：串口驱动 `SERIAL_DRIVER = vendor`
 - `keyboards/sofle_pico/post_config.h`：右手 bootmagic 引脚
-- `keyboards/sofle_pico/keymaps/default/keymap.c`：键位、旋钮映射、OLED、自定义键码
-- `keyboards/sofle_pico/keymaps/default/config.h`：`SPLIT_LAYER_STATE/LED_STATE/WPM_ENABLE`
+- `keyboards/sofle_pico/keymaps/default/keymap.c`：键位、旋钮映射、OLED（含两套图、屏保与两半同步）、自定义键码
+- `keyboards/sofle_pico/keymaps/default/oled_snow.h`：雪人正色 + 反色各两帧（64x128 x 2 x 2，由 `make_snow_header.py` 生成）
+- `keyboards/sofle_pico/keymaps/default/oled_anim_inv.h`：四组小怪物动画的反色版（由 `make_animations.py` 一并生成）
+- `keyboards/sofle_pico/keymaps/default/make_snow.py`：从 `oled_snow1/2.pdf` 抽图 → `snow_*.png` 与 `snow_*_inv.png`
+- `keyboards/sofle_pico/keymaps/default/make_snow_header.py`：把四张 PNG 打包成 `oled_snow.h`（并翻正极性）
+- `keyboards/sofle_pico/keymaps/default/config.h`：`SPLIT_LAYER_STATE/LED_STATE/WPM_ENABLE`，
+  以及屏保同步用的 `SPLIT_TRANSACTION_IDS_USER SOFLE_SCREENSAVER_SYNC`
 - `keyboards/sofle_pico/keymaps/default/rules.mk`：`ENCODER_MAP_ENABLE` / `VIA_ENABLE` / `WPM_ENABLE`
+- `quantum/split_common/transaction_id_define.h` / `transactions.h`：用户级 split 事务的 id 分配与
+  `transaction_register_rpc()` / `transaction_rpc_exec()`（屏保同步走的就是这套官方接口，没有改内核）
 - `keyboards/sofle_pico/keyboard.json` 的 `rgb_matrix.animations`：这一版启用了 41 种灯效
   （没列进去的会编译掉，`RM_NEXT` 也只在这个列表里循环）
 - `quantum/rgb_matrix/animations/*.h`：灯效本体；`animations/runners/*.h`：几个通用 effect runner
