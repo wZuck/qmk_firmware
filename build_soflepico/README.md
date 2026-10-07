@@ -39,7 +39,7 @@
 | `oled_preview/reference.png` | 参考原图（角色的出处） |
 | `oled_preview/` | **OLED 显示内容预览**：信息屏 13 种 + 小怪物动画 32 帧 + 反色 32 帧 + 雪人正/反 4 帧，含 `1x`/`4x`/6 个 GIF/总览图 |
 | `oled_snow1.pdf` / `oled_snow2.pdf` | 雪人那组图的原始素材（两个滑雪小人，两帧只差一只手） |
-| `index.html` | **一页看全**：固件信息 + 键位图 + LED 灯效（互动播放器 + 8 段 GIF）+ OLED 三种画面（打开即可，图片/数据走相对路径，不用起服务器） |
+| `index.html` | **一页看全**：固件信息 + 键位图 + LED 灯效（互动播放器 + 8 段 GIF）+ OLED 的 14 个画面（含正/反两套图，打开即可，图片/数据走相对路径，不用起服务器） |
 | `gen_index.py` | 重新生成 `index.html`（自动带上 uf2 的 SHA-256、QMK 版本、图片清单） |
 | `led_effects/` | **灯效逐帧采集器**：`harness.c` 在电脑上编译真实灯效源码 → `led_frames.json`（详见 `led_effects/README.md`） |
 | `gen_led_effects.py` | 把 `led_frames.json` 画成 `led_effects/fx_*.gif`，并生成网页播放器要的 `led_effects.js` |
@@ -48,6 +48,9 @@
 | `sync_to_keymap.py` | 把 `keymap.md` 和预览图同步到 `keyboards/sofle_pico/keymaps/default/` |
 
 > `.uf2` 与 `.hex`/`.bin` 内容等价，选一个用即可。
+> `.hex` / `.bin` / `.elf` / `.map` 是同一份构建的派生物（`objcopy` 出来的，或调试用），
+> 按本目录 `.gitignore` 的约定**不提交**，只留在本地磁盘上；干净的仓库里只有 `.uf2`，
+> 需要这几个文件时从同一个 `.elf` 再导一次即可。
 > 改了 `keymap.c` 之后，`python3 gen_keymap_image.py` 可以刷新键位图与说明。
 
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
