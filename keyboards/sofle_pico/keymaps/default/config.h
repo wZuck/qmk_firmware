@@ -18,6 +18,20 @@
 #define SPLIT_WPM_ENABLE
 
 /* ------------------------------------------------------------------------
+ * The OLED screensaver has to be agreed on by both halves - they go to sleep
+ * together and wake together - and the split has no built-in transaction for
+ * that. The one user slot QMK reserves for exactly this is enough: keymap.c
+ * uses it to ask the slave half "did you see a key this epoch?" (see
+ * SOFLE_SCREENSAVER_SYNC there).
+ *
+ * This is a user-level define rather than a keyboard-level one on purpose:
+ * only this keymap's OLED cares, and the probe/pintest/debug keymaps should
+ * not pay for the extra transaction.
+ * ------------------------------------------------------------------------ */
+
+#define SPLIT_TRANSACTION_IDS_USER SOFLE_SCREENSAVER_SYNC
+
+/* ------------------------------------------------------------------------
  * VIA's "Key Tester" is driven by the live matrix state over raw HID, and QMK
  * answers that request with zeroes unless VIA_INSECURE is defined - that is
  * why the tester shows nothing while the keyboard types perfectly well.

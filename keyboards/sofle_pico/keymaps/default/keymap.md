@@ -29,7 +29,14 @@
 
 其它切换类按键（都在 ADJUST 层）：
 
-- `OLED`（`OLED_NEXT`，左右各一个）：切换**本侧** OLED 的画面（status / anim / logo）。
+- `OLED`（`OLED_NEXT`，左右各一个）：切换**本侧** OLED 的画面（status → stats → graph → layers → anim 0-3 小怪物（正色）→ anim inv 0-3（反色）→ snow 雪人（正色）→ snow inv（反色））。
+
+> **屏保**：两边同时进入、同时唤醒——**任意一半**超过一分钟没按键，两块 OLED 就一起切到睡觉的
+> zzz 动画（`oled_anim.h` 里的 `sleep` 那组）；之后按任意键，两边立刻各自回到原来那屏
+> （按键本身照常生效）。"有没有人打字"是两半通过 split 事务 `SOFLE_SCREENSAVER_SYNC` 对过的，
+> 所以不会出现"一边睡一边还在打字"；唤醒则是本地判断，按下去就醒，不用等通信。
+> 时长是 `keymap.c` 里的 `SOFLE_SLEEP_MS`。
+
 - `EE_CLR`：清空 EEPROM。因为 VIA 把键位存在 EEPROM 里，改了 keymap 之后需要清一次才会生效。
 - `Mac/Win`（`CG_TOGG`）：切换 Mac 与 Win/Linux 模式，影响修饰键顺序以及 RAISE 层的行首/行尾/词移动等快捷键，选择同样存 EEPROM。
 - `Boot`（`QK_BOOT`）：进入 bootloader 准备烧录；按住 Pico 的 BOOT 键插 USB 也可以。
@@ -152,7 +159,7 @@
 | 键位显示 | 键码 | 作用 |
 |---|---|---|
 | `LOWER` / `RAISE` | `MO(_LOWER)` / `MO(_RAISE)` | 按住临时切层 |
-| `OLED` | `OLED_NEXT` | 切换本侧 OLED 的画面（status → anim → logo → status） |
+| `OLED` | `OLED_NEXT` | 切换本侧 OLED 的画面（status → stats → graph → layers → anim 0-3 正色 → anim inv 0-3 反色 → snow 雪人正色 → snow inv 反色） |
 | `EE_CLR` | `EE_CLR` | 清空 EEPROM（VIA 键位存 EEPROM，改键后需要清） |
 | `Mac/Win` | `CG_TOGG` | 切换 Mac / Win 模式 |
 | `词←` / `词→` | `KC_PRVWD` / `KC_NXTWD` | 按模式发送 Ctrl+←/→ 或 Alt+←/→（按词移动） |

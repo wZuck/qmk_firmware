@@ -2,7 +2,13 @@
 # not build output, so keep them.
 !oled_template*.png
 
+# The snow art: make_snow.py's output is the input make_snow_header.py packs
+# into oled_snow.h, so these PNGs are source too - and they are what lets the
+# article claim the panel matches the drawing.
+!snow_*.png
+
 # Generated previews (build_soflepico/sync_to_keymap.py) - keep those too, so
 # the keymap folder carries its own pictures.
 !preview/**/*.png
 !preview/**/*.gif
+!preview/**/*.svg

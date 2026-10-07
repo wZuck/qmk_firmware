@@ -4,6 +4,13 @@
 #include QMK_KEYBOARD_H
 // Not pulled in by quantum.h, needed for keycode_at_keymap_location_raw()
 #include "keymap_introspection.h"
+#ifdef SPLIT_KEYBOARD
+// Also not pulled in by quantum.h: transaction_register_rpc() and
+// transaction_rpc_exec(), the split transport's user transaction API the OLED
+// screensaver syncs its "did you see a key?" token over. See
+// SOFLE_SCREENSAVER_SYNC and SPLIT_TRANSACTION_IDS_USER in config.h.
+#    include "transactions.h"
+#endif
 
 enum sofle_layers {
     _QWERTY,
@@ -65,24 +72,67 @@ enum custom_keycodes {
 #ifdef OLED_ENABLE
 // The animation library: SOFLE_ANIM_COUNT loops of SOFLE_ANIM_FRAMES frames.
 #    include "oled_anim.h"
+// The same loops with every pixel flipped, for the inverted screens.
+#    include "oled_anim_inv.h"
+// The snowboarding pair, in both polarities (oled_snow.h).
+#    include "oled_snow.h"
+
+// The snow set is two drawings and has no loops to pick between, so it gets one
+// screen per polarity that alternates them.
+#    define SOFLE_SNOW_COUNT 1
 
 /* What each half draws. Every animation counts as its own screen, so the OLED
- * key walks status -> stats -> graph -> layers -> animation 0..N-1 -> logo ->
- * status, and holding it down auto-advances. The choice is per half and lives
- * in RAM only, so a power cycle goes back to the defaults set in
- * keyboard_post_init_user(). */
+ * key walks status -> stats -> graph -> layers -> 4 mascot loops -> 4 inverted
+ * mascot loops -> snow -> inverted snow -> status, and holding it down
+ * auto-advances. The choice is per half and lives in RAM only, so a power cycle
+ * goes back to the defaults set in keyboard_post_init_user(). */
 enum oled_screen {
     OLED_SCREEN_STATUS,
     OLED_SCREEN_STATS,
     OLED_SCREEN_GRAPH,
     OLED_SCREEN_LAYERS,
-    OLED_SCREEN_ANIM,                                  // first animation
-    OLED_SCREEN_LOGO = OLED_SCREEN_ANIM + SOFLE_ANIM_COUNT,
+    OLED_SCREEN_ANIM,                                           // mascot, lit on dark
+    OLED_SCREEN_ANIM_INV = OLED_SCREEN_ANIM + SOFLE_ANIM_COUNT,  // mascot, dark on lit
+    OLED_SCREEN_SNOW     = OLED_SCREEN_ANIM_INV + SOFLE_ANIM_INV_COUNT,
+    OLED_SCREEN_SNOW_INV = OLED_SCREEN_SNOW + SOFLE_SNOW_COUNT,
     OLED_SCREEN_COUNT
 };
 
+// Which animation loop is the sleeping mascot (the zzz one, see oled_anim.h).
+#    define SOFLE_ANIM_SLEEP 3
+
 // Not a screen that can be selected - the animation shown while booting.
 #    define SOFLE_SCREEN_BOOT 0xFF
+
+// Nor this one: the "screensaver" the half drops into when nothing has been
+// typed on it for SOFLE_SLEEP_MS, and the screen it comes back to as soon as
+// a key goes down.
+#    define SOFLE_SCREEN_SLEEP 0xFE
+
+/* How long the *keyboard* has to go without a key press before both halves
+ * fall asleep together.
+ *
+ * Each half times its own keys (see housekeeping_task_user()), which alone
+ * would let one half sleep while you type on the other, so the master also
+ * asks the slave whether it saw a key - that is what SOFLE_SCREENSAVER_SYNC
+ * is, and why this is a shared "nobody typed anywhere" clock rather than a
+ * per-half one. */
+#    define SOFLE_SLEEP_MS 60000
+
+/* How often the master asks the slave "did you see a key?". This bounds how
+ * stale the other half's answer can be, so it is also the margin the two
+ * halves can differ by when falling asleep - they can never wake apart, since
+ * each half always wakes on its own local key press. 250 ms keeps that
+ * margin invisible without putting a transaction on the wire every scan. */
+#    define SOFLE_SLEEP_SYNC_MS 250
+
+/* The transaction that carries the activity token between the halves (see
+ * SPLIT_TRANSACTION_IDS_USER in config.h). It is an enum constant, not a
+ * macro: the serial_transaction_id enum in transaction_id_define.h already
+ * gives it a value, and QMK assigns those in order precisely so a keymap only
+ * has to name it. */
+STATIC_ASSERT(SOFLE_SCREENSAVER_SYNC > GET_RPC_RESP_DATA,
+              "SOFLE_SCREENSAVER_SYNC must be a user-level transaction id, not a core one");
 
 // Holding the OLED key this long starts auto-advancing, so walking through a
 // dozen screens is one press and a wait instead of a dozen taps.
@@ -93,6 +143,34 @@ enum oled_screen {
 
 static uint8_t  oled_screen = OLED_SCREEN_STATUS;
 static uint32_t oled_boot_time;
+
+/* Screensaver state, one set per half:
+ *   oled_sleeping  - this half is showing the sleeping mascot right now
+ *   last_activity  - when a key last went down on *either* half (each half
+ *                    starts it on its own presses; the split exchange below
+ *                    feeds in the other one's)
+ *   saw_activity   - a key of this half went down since the last exchange; the
+ *                    token that travels over SOFLE_SCREENSAVER_SYNC
+ *   peer_activity  - the other half's token, as last reported
+ * The animation clock lives up here rather than inside render_animation() so
+ * the mascot keeps breathing at SOFLE_ANIM_FPS whatever screen is up, and so
+ * waking from the screensaver resumes the loop where it left off. */
+static bool     oled_sleeping;
+static uint32_t last_activity;
+static bool     saw_activity;  // a key of this half went down since the last exchange
+static bool     peer_activity; // the other half reported a key at the last exchange
+static uint32_t oled_frame_time;
+static uint8_t  oled_frame;
+
+// What the screensaver asks the other half, and what it answers with: the two
+// fields are the same on both sides, only the direction differs.
+typedef struct __attribute__((packed)) {
+    uint8_t saw_activity; // 1 if a key went down on this half since the last exchange
+} sofle_activity_sync_t;
+
+// Defined with the rest of the screensaver code further down; registered here
+// because keyboard_post_init_user() is where the transport wants it.
+static void screensaver_sync_slave_handler(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data);
 
 // Counted per half: each half only ever sees its own matrix presses (plus the
 // other half's, if it happens to be the master), so this is "keys scanned by
@@ -189,6 +267,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *   FX_REACTIVE_NEXUS 按键涟漪（从按键向四周扩散）
  *   FX_TYPING_HEATMAP 打字热图（按过的地方亮起来再慢慢冷掉）
  *
+ * 雪人那套图不占按键：它是 OLED 循环里的画面（正色一屏、反色一屏，排在四组动画之后），
+ * 用原来那个 OLED 键就能翻到，见 oled_snow.h。
+ *
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |RM_TOGG|RM_NEXT|RM_PREV|RM_VALU|RM_VALD|      |               |RM_HUEU|RM_HUED|RM_SATU|RM_SATD|RM_SPDU|RM_SPDD|
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -223,9 +304,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * on the ADJUST layer (see housekeeping_task_user()):
  *
  *   status        layer as a 2x banner, mods mode, WPM with a bar, caps lock
+ *   stats         keys / WPM / layer / uptime
+ *   graph         current WPM in 2x with a 21 second bar chart
+ *   layers        which of the four layers are on
  *   anim 0..N-1   one of the SOFLE_ANIM_COUNT loops in oled_anim.h
  *                 (bounce / wave / walk / sleep)
- *   logo          the image in oled_image.h
+ *   anim inv      the same loops out of oled_anim_inv.h, every pixel flipped
+ *   snow          the snowboarding pair in oled_snow.h, and its inverted twin
  *
  * Out of the box the left half starts on status and the right on anim 0.
  *
@@ -253,6 +338,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * The animation also plays for SOFLE_BOOT_MS after power-up, on both halves,
  * before settling on the screen each half has selected.
  *
+ * On top of that sits the screensaver: SOFLE_SLEEP_MS (a minute) with no key
+ * pressed on *either* half and both halves drop into the sleeping mascot - the
+ * zzz loop from oled_anim.h - and the first key anywhere brings both back to
+ * whatever screen each half was on. Sleeping is agreed between the two halves
+ * over the split; waking is each half's own business. See the screensaver note
+ * further down.
+ *
  * If a half comes out upside down once the board is built, swap
  * SOFLE_OLED_ROTATION between 90 and 270 (they differ by 180 degrees).
  * ------------------------------------------------------------------------ */
@@ -271,12 +363,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #    define SOFLE_BOOT_MS 1800
 
 #    include "oled_bigfont.h"
-#    include "oled_image.h"
 
 STATIC_ASSERT(SOFLE_OLED_ROTATION == OLED_ROTATION_90 || SOFLE_OLED_ROTATION == OLED_ROTATION_270,
               "SOFLE_OLED_WIDTH/HEIGHT assume the panel sits a quarter turn over");
 STATIC_ASSERT(OLED_BIGFONT_H == 2 * OLED_FONT_HEIGHT, "the banner is blitted as two text lines");
 STATIC_ASSERT(sizeof(oled_anim[0][0]) == OLED_MATRIX_SIZE, "an animation frame must fill the buffer");
+STATIC_ASSERT(sizeof(oled_anim_inv[0][0]) == OLED_MATRIX_SIZE, "an inverted frame must fill the buffer too");
+STATIC_ASSERT(sizeof(oled_snow[0]) == OLED_MATRIX_SIZE, "a snow frame must fill the buffer too");
+STATIC_ASSERT(sizeof(oled_snow_inv[0]) == OLED_MATRIX_SIZE, "an inverted snow frame must fill the buffer too");
+STATIC_ASSERT(SOFLE_ANIM_INV_COUNT == SOFLE_ANIM_COUNT, "the inverted set mirrors the normal one loop for loop");
+STATIC_ASSERT(SOFLE_SNOW_FRAMES >= 2, "the snow set is a two-drawing loop; one frame would be a still");
 
 // Where each part of the status screen goes, in text lines. The banner takes
 // two, so the rules that bracket it sit on its neighbours' inner edges.
@@ -614,34 +710,56 @@ static void render_layers(void) {
 }
 
 /* ------------------------------------------------------------------------
- * Logo screen
- * ------------------------------------------------------------------------ */
-
-// oled_image.h is 64 x 96 px of page format, so it covers lines 0-11 and the
-// bottom of the canvas stays blank.
-static void render_logo(void) {
-    oled_set_cursor(0, 0);
-    oled_write_raw_P(oled_image, sizeof(oled_image));
-}
-
-/* ------------------------------------------------------------------------
  * Animation screen
  * ------------------------------------------------------------------------ */
 
-// One of the SOFLE_ANIM_COUNT loops in oled_anim.h. The frame counter is
-// shared, so switching animation picks up wherever the old one was, which is
-// fine - every loop is the same length.
-static void render_animation(uint8_t which) {
-    static uint32_t next_frame;
-    static uint8_t  frame;
-
-    if (timer_elapsed32(next_frame) >= 1000 / SOFLE_ANIM_FPS) {
-        next_frame = timer_read32();
-        frame      = (frame + 1) % SOFLE_ANIM_FRAMES;
+// The shared frame clock behind every animation: called once per OLED frame
+// from oled_task_user(), whatever is on screen. It always counts the mascot's
+// frames, even while the snow art is selected; the two art sets wrap it to
+// their own length, so the snow pair alternates at SOFLE_ANIM_FPS / 2 rather
+// than four times a second.
+static void anim_advance_frame(void) {
+    if (timer_elapsed32(oled_frame_time) >= 1000 / SOFLE_ANIM_FPS) {
+        oled_frame_time = timer_read32();
+        oled_frame      = (oled_frame + 1) % SOFLE_ANIM_FRAMES;
     }
+}
 
+// One of the SOFLE_ANIM_COUNT animation loops in oled_anim.h.
+static void render_animation(uint8_t which) {
     oled_set_cursor(0, 0);
-    oled_write_raw_P(oled_anim[which][frame], sizeof(oled_anim[0][0]));
+    oled_write_raw_P(oled_anim[which][oled_frame], sizeof(oled_anim[0][0]));
+}
+
+// The same loop out of oled_anim_inv.h, i.e. the day version of it.
+static void render_animation_inv(uint8_t which) {
+    oled_set_cursor(0, 0);
+    oled_write_raw_P(oled_anim_inv[which][oled_frame], sizeof(oled_anim_inv[0][0]));
+}
+
+// The snow screen: the two drawings from oled_snow.h, alternating. It wraps the
+// shared frame counter, which always counts the mascot's 8 frames, so each
+// drawing gets 4 ticks - the wave runs at half the mascot's rate, which is what
+// makes it read as a wave rather than a twitch. `inverted` picks the day table.
+static void render_snow(bool inverted) {
+    oled_set_cursor(0, 0);
+    if (inverted) {
+        oled_write_raw_P(oled_snow_inv[oled_frame % SOFLE_SNOW_FRAMES], sizeof(oled_snow_inv[0]));
+    } else {
+        oled_write_raw_P(oled_snow[oled_frame % SOFLE_SNOW_FRAMES], sizeof(oled_snow[0]));
+    }
+}
+
+// The screensaver itself: the sleeping mascot, on this half, over and over.
+//
+// Always the mascot, whatever screen you left it on: the snow pair has no
+// sleeping drawing, and showing two awake snowboarders as a screensaver would
+// be nonsense. It is the normal (lit-on-dark) polarity, not whatever inversion
+// the display was left in, for the same reason a screensaver should look the
+// same every time.
+static void render_sleep(void) {
+    oled_set_cursor(0, 0);
+    oled_write_raw_P(oled_anim[SOFLE_ANIM_SLEEP][oled_frame], sizeof(oled_anim[0][0]));
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
@@ -660,27 +778,42 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
  * ------------------------------------------------------------------------ */
 
 bool oled_task_user(void) {
+    anim_advance_frame();
     wpm_history_sample();
 
-    // The animation plays for a moment after power-up on both halves, then
-    // each half settles on whatever screen it has selected.
-    uint8_t want = timer_elapsed32(oled_boot_time) < SOFLE_BOOT_MS ? SOFLE_SCREEN_BOOT : oled_screen;
+    // The screensaver outranks everything else: it covers the boot animation
+    // too, so a half that is left alone straight after power-up just goes to
+    // sleep instead of hopping once and then freezing on a status screen.
+    uint8_t want;
+    if (oled_sleeping) {
+        want = SOFLE_SCREEN_SLEEP;
+    } else if (timer_elapsed32(oled_boot_time) < SOFLE_BOOT_MS) {
+        want = SOFLE_SCREEN_BOOT;
+    } else {
+        want = oled_screen;
+    }
 
     // Switching screens leaves the previous one's pixels behind - the status
-    // screen only paints some of the rows and the logo only the top 96 - so
-    // blank the buffer whenever the screen changes.
+    // screen only paints some of the rows, and the info screens fewer still
+    // than the animations - so blank the buffer whenever the screen changes.
     static uint8_t drawn = 0xFF;
     if (drawn != want) {
         oled_clear();
         drawn = want;
     }
 
-    if (want == SOFLE_SCREEN_BOOT) {
+    if (want == SOFLE_SCREEN_SLEEP) {
+        render_sleep();
+    } else if (want == SOFLE_SCREEN_BOOT) {
         render_animation(0); // the hop is the "hello" one
-    } else if (want >= OLED_SCREEN_ANIM && want < OLED_SCREEN_LOGO) {
+    } else if (want == OLED_SCREEN_SNOW) {
+        render_snow(false);
+    } else if (want == OLED_SCREEN_SNOW_INV) {
+        render_snow(true);
+    } else if (want >= OLED_SCREEN_ANIM && want < OLED_SCREEN_ANIM_INV) {
         render_animation(want - OLED_SCREEN_ANIM);
-    } else if (want == OLED_SCREEN_LOGO) {
-        render_logo();
+    } else if (want >= OLED_SCREEN_ANIM_INV && want < OLED_SCREEN_SNOW) {
+        render_animation_inv(want - OLED_SCREEN_ANIM_INV);
     } else if (want == OLED_SCREEN_STATS) {
         render_stats();
     } else if (want == OLED_SCREEN_GRAPH) {
@@ -703,13 +836,22 @@ bool oled_task_user(void) {
 // 4：ADJUST 层加了灯光键（v3）之后又加了「纯白常亮」直达键，并把默认灯效
 //    改成 solid_color / sat=0；版本一变顺手把 rgb_matrix 的 EEPROM 也刷回默认，
 //    不然老机器上还亮着以前的 cycle_out_in。
-#define SOFLE_EEPROM_VERSION 4
+// 5：ADJUST 层一度多过一个 SNOW_TOGG 键（切换动画图那套）。后来发现"用 OLED 键翻页"
+//    才是顺手的用法，雪人改成 OLED 循环里的一个画面（见 oled_snow.h），那个键撤了——
+//    所以 6 又刷一次，把两半 EEPROM 里遗留的那个键清掉。
+#define SOFLE_EEPROM_VERSION 6
 
 // Out of the box: pure white on both halves; the left OLED shows the status
 // screen, the right one the first animation.
 void keyboard_post_init_user(void) {
     oled_screen    = is_keyboard_left() ? OLED_SCREEN_STATUS : OLED_SCREEN_ANIM;
     oled_boot_time = timer_read32();
+    // Start the screensaver's idle clock at power-up, so a keyboard nobody
+    // touches still falls asleep SOFLE_SLEEP_MS in.
+    last_activity  = oled_boot_time;
+
+    // Both halves register: the slave's copy is the one the master calls.
+    transaction_register_rpc(SOFLE_SCREENSAVER_SYNC, screensaver_sync_slave_handler);
 
 #if defined(VIA_ENABLE)
     if (eeconfig_read_user() != SOFLE_EEPROM_VERSION) {
@@ -757,16 +899,96 @@ static bool oled_switch_key(uint8_t row, uint8_t col) {
     return false;
 }
 
+/* ------------------------------------------------------------------------
+ * OLED screensaver ("sleeping zzz")
+ *
+ * The clock is last_activity; a local key press resets it and sets
+ * saw_activity, the token that travels the split link. The master asks the
+ * slave for its token every SOFLE_SLEEP_SYNC_MS and adds the answer to the same
+ * clock, so it really measures "nobody typed on either half" - the two halves
+ * therefore go to sleep on the same signal and cannot disagree about it.
+ * Waking is the other way round and purely local: any key brings *that*
+ * display back within a scan, with no round trip to wait for.
+ *
+ * The screensaver is a display state, not a selected screen: while it is up
+ * the half keeps the screen it was on in oled_screen and goes straight back
+ * to it, so falling asleep never costs you your chosen screen.
+ * ------------------------------------------------------------------------ */
+
+static bool oled_idle_expired(void) {
+    return !saw_activity && !peer_activity && timer_elapsed32(last_activity) >= SOFLE_SLEEP_MS;
+}
+
+// Slave side of SOFLE_SCREENSAVER_SYNC: answer with whether this half has seen
+// a key since the last time it was asked.
+static void screensaver_sync_slave_handler(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data) {
+    const sofle_activity_sync_t *m2s = (const sofle_activity_sync_t *)in_data;
+    sofle_activity_sync_t       *s2m = (sofle_activity_sync_t *)out_data;
+
+    // Consume our token and answer with it.
+    bool mine    = saw_activity;
+    saw_activity = false;
+
+    if (m2s == NULL || s2m == NULL || in_buflen < sizeof(*m2s) || out_buflen < sizeof(*s2m)) {
+        saw_activity = mine; // malformed exchange: put the token back and be asked again
+        return;
+    }
+
+    s2m->saw_activity = mine;
+
+    // The master's own token arrives in the same call, so the slave can judge
+    // "did anyone type?" exactly like the master does.
+    peer_activity = m2s->saw_activity;
+    if (peer_activity) {
+        last_activity = timer_read32();
+    }
+}
+
+// Master side: only the master talks to the slave, and only every
+// SOFLE_SLEEP_SYNC_MS, so the wire is not carrying this on every scan.
+static void screensaver_sync_master(void) {
+    static uint32_t last_sync;
+
+    uint32_t now_ms = timer_read32();
+    if (timer_elapsed32(last_sync) < SOFLE_SLEEP_SYNC_MS) {
+        return;
+    }
+
+    sofle_activity_sync_t m2s = {.saw_activity = saw_activity ? 1 : 0};
+    sofle_activity_sync_t s2m = {0};
+
+    if (!transaction_rpc_exec(SOFLE_SCREENSAVER_SYNC, sizeof(m2s), &m2s, sizeof(s2m), &s2m)) {
+        // Torn exchange: the token is simply answered again next period, which
+        // errs towards keeping both displays awake rather than sleeping apart.
+        return;
+    }
+
+    saw_activity = false;
+    last_sync    = now_ms;
+
+    peer_activity = s2m.saw_activity;
+    if (peer_activity) {
+        last_activity = now_ms; // the other half typed, so this half stays up too
+    }
+}
+
 void housekeeping_task_user(void) {
     static matrix_row_t last[MATRIX_ROWS_PER_HAND];
     static uint8_t      held_row = 0xFF, held_col;
     static uint32_t     last_advance;
+
+    bool     active = false;
+    uint32_t now_ms = timer_read32();
 
     for (uint8_t i = 0; i < MATRIX_ROWS_PER_HAND; i++) {
         uint8_t      row = is_keyboard_left() ? i : i + MATRIX_ROWS_PER_HAND;
         matrix_row_t now = matrix_get_row(row);
         matrix_row_t hit = now & ~last[i];
         last[i]          = now;
+
+        if (hit) {
+            active = true; // any key of this half: typing or not, it counts
+        }
 
         while (hit) {
             uint8_t col = __builtin_ctz(hit);
@@ -776,11 +998,29 @@ void housekeeping_task_user(void) {
                 oled_screen  = (oled_screen + 1) % OLED_SCREEN_COUNT;
                 held_row     = row;
                 held_col     = col;
-                last_advance = timer_read32();
+                last_advance = now_ms;
             } else {
                 key_count++; // the display key is not typing
             }
         }
+    }
+
+    // A key went down: this half is awake again, and so is the other one once
+    // the token reaches it. The screensaver does not swallow the key - it does
+    // whatever it normally does, the display just comes back to its screen.
+    if (active) {
+        last_activity = now_ms;
+        saw_activity  = true;
+        oled_sleeping = false;
+    } else if (!oled_sleeping && oled_idle_expired()) {
+        oled_sleeping = true;
+    }
+
+    // The split exchange, before the screen is drawn so this scan's answer is
+    // already accounted for. Only the master runs it; the slave is the one
+    // being asked.
+    if (is_keyboard_master()) {
+        screensaver_sync_master();
     }
 
     // Keep advancing while the key is held, so walking through a dozen screens
@@ -790,7 +1030,7 @@ void housekeeping_task_user(void) {
             held_row = 0xFF;
         } else if (timer_elapsed32(last_advance) >= SOFLE_OLED_HOLD_MS) {
             oled_screen  = (oled_screen + 1) % OLED_SCREEN_COUNT;
-            last_advance = timer_read32();
+            last_advance = now_ms;
         }
     }
 }

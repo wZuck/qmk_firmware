@@ -12,9 +12,13 @@ Features:
 
 - Symmetric modifiers (CMD/Super, Alt/Opt, Ctrl, Shift)
 - Modes for Mac vs Linux/Win support -> different order of modifiers and different action shortcuts on the "UPPER" layer (the red one in the image). Designed to simplify transtions when switching between operating systems often.
-- Each half's OLED can show any of eleven screens - status, stats, a WPM graph, the layer states,
-  one of four mascot animations, or a logo - and cycles through them with its own `OLED` key on the
-  adjust layer (hold it to auto-advance). Status on the left and `bounce` on the right by default.
+- Each half's OLED can show any of fourteen screens - status, stats, a WPM graph, the layer states,
+  four mascot animations and their four inverted twins, and the snowboarding pair in both polarities
+  (normal and inverted, i.e. night and day) - all cycled with the same `OLED` key on the adjust layer
+  (hold it to auto-advance). Status on the left and `bounce` on the right by default.
+- Screensaver: a minute with no key pressed on either half and *both* OLEDs show the sleeping mascot
+  (the `sleep` loop, the one with the drifting z's); the first key press brings both back to their own
+  screens. See the OLED section below.
 - Left encoder: volume down/up, press mutes. Right encoder: previous/next track, press play/pause.
 - `VIA_INSECURE` in this keymap's `config.h` lets VIA's Key Tester read the live matrix over raw
   HID; without it QMK answers that request with zeroes and the tester looks dead. It does mean any
@@ -31,20 +35,54 @@ Each half runs the OLED task on its own, so nothing has to cross the split
 link to draw a screen - but that also means each half decides what it shows.
 Every half can cycle through the screens with its own `OLED` key on the adjust
 layer (`OLED_NEXT` in `keymap.c`), in this order - holding the key down
-auto-advances every 400 ms, so eleven screens are not eleven taps:
+auto-advances every 400 ms, so fourteen screens are not fourteen taps:
 
-- **status** - the current layer as a 2x banner, the mods mode, the live
-  modifiers, the peak and current typing speed with a bar, and caps lock.
-  Default on the left half.
-- **stats** - keys counted by this half, current and peak WPM, the top active
-  layer and how long the keyboard has been up.
-- **graph** - the current WPM in 2x digits, with the last 21 seconds as a
-  scrolling bar chart (WPM is mirrored over the split, so both halves match).
-- **layers** - which of the four layers are on, which also shows the tri-layer
-  bringing ADJUST up when LOWER and RAISE are held together.
-- **anim 0..N-1** - the loops in `oled_anim.h`: `bounce`, `wave`, `walk` and
-  `sleep`, eight frames each at 8 fps. Default on the right half (`anim 0`).
-- **logo** - the static picture in `oled_image.h`.
+| # | screen | what it is |
+|---|---|---|
+| 1 | **status** | layer banner, mode, live modifiers, peak and current WPM with a bar, caps lock. Default on the left half. |
+| 2 | **stats** | keys counted by this half, current and peak WPM, top active layer, uptime. |
+| 3 | **graph** | current WPM in 2x digits plus the last 21 seconds as a bar chart (WPM is mirrored over the split, so both halves match). |
+| 4 | **layers** | which of the four layers are on, which also shows the tri-layer bringing ADJUST up. |
+| 5-8 | **anim 0..3** | the mascot loops in `oled_anim.h`: `bounce`, `wave`, `walk`, `sleep`. Eight frames each at 8 fps. Default on the right half (`anim 0`). |
+| 9-12 | **anim inv 0..3** | the same four loops, every pixel flipped: dark mascot on a lit panel. The day counterpart of 5-8. |
+| 13 | **snow** | the snowboarding pair, see below. |
+| 14 | **snow inv** | the same pair, every pixel flipped. |
+
+"Normal" and "inverted" are the same drawing at both polarities, for a dark
+room and a bright one: normal draws lit strokes on a dark panel (the default
+look), inverted flips every pixel so the panel is lit and the drawing is dark.
+Nothing else differs - same frame clock, same speed.
+
+### The snowboarding pair
+
+Screens 13 and 14 show the two drawings from `oled_snow1.pdf` /
+`oled_snow2.pdf`, downsized into `oled_snow.h` and alternating as a slow wave -
+normal on 13, inverted on 14. There is no separate key for any of this: they
+are simply the screens after the two mascot blocks in the `OLED` key's cycle.
+
+The two drawings differ only in the left snowboarder's arm - down in one, up in
+a peace sign in the other - which is what makes the pair an animation. They are
+landscape drawings on a portrait panel: the crop is 64 px wide and keeps its
+aspect (~62 px tall), centred on the canvas with blank bands above and below.
+The frame clock always counts the mascot's 8 frames and the snow set wraps it,
+so its two drawings get four ticks each and the wave runs at half the mascot's
+rate.
+
+`make_snow.py` regenerates `snow_1.png` / `snow_2.png` and their `_inv` twins
+from the PDFs (standard library for reading them, Pillow for the image work);
+`make_snow_header.py` then packs all four into `oled_snow.h`. Note that the
+header stores a set bit for a *lit* pixel, matching `oled_anim.h` - `img2c.py`
+alone would have packed the white background as lit, which is the opposite of
+what these screens mean, so that step flips it.
+
+The inverted mascot loops are generated too: `make_animations.py` writes
+`oled_anim.h` and `oled_anim_inv.h` in one run, the second being the first with
+every byte flipped - which is exactly flipping the pixels, since the buffer is
+one bit per pixel either way.
+
+The sleeping zzz screensaver stays the normal mascot whatever screen you left
+up: the snow pair has no sleeping drawing, and a screensaver that inherited an
+inversion would not look the same twice.
 
 Because `process_record_user()` only runs on the master, a keycode cannot just
 set a shared variable: the slave would never hear about it. Instead each half
@@ -73,6 +111,42 @@ x 128 px tall canvas: 16 text lines of 8 px.
 
 The animation also runs for `SOFLE_BOOT_MS` after power-up, on both halves,
 before each half settles on the screen it has selected.
+
+### Screensaver
+
+Left alone, the keyboard falls asleep - both halves together: after
+`SOFLE_SLEEP_MS` (a minute) with no key pressed on *either* half, the two OLEDs
+show the sleeping mascot (`oled_anim.h`'s `sleep` loop, the one with the slowly
+drifting z's), and the first key you press anywhere brings both back to
+whatever screen each half was on. No key is swallowed on the way out: the press
+that wakes the displays is the press you meant to make.
+
+- **Sleeping is agreed, waking is local.** Each half counts hits on its own
+  matrix rows in `housekeeping_task_user()`, the same place the `OLED` key is
+  picked up, which is enough to *wake* instantly - any key on a half brings
+  that half's display back within a scan, with no round trip to wait for. But
+  it would also let one display sleep while you typed on the other, so falling
+  asleep also needs the other half's answer: the master asks the slave "did you
+  see a key this epoch?" over a split transaction (`SOFLE_SCREENSAVER_SYNC`,
+  registered through `SPLIT_TRANSACTION_IDS_USER` in `config.h`) every
+  `SOFLE_SLEEP_SYNC_MS` (250 ms), and a half only sleeps once neither half has
+  seen anything for the full minute. Note the built-in
+  `last_input_activity_elapsed()` would not do for either job: it is only
+  touched on the master, so a slave half would sit asleep while you typed on it.
+- **It is not a screen.** While asleep each half keeps the screen it was on in
+  `oled_screen`, so falling asleep never costs you your chosen screen, and the
+  `OLED` key still steps through the list underneath (its press wakes the
+  display first).
+- **It outranks the boot animation.** A keyboard left alone from power-up goes
+  to sleep a minute in rather than hopping once and then freezing on a status
+  screen.
+- The animation clock (`oled_frame`) lives outside the renderer and runs on
+  every OLED frame whatever is on screen, so the mascot breathes at
+  `SOFLE_ANIM_FPS` while asleep and resumes the loop where it left off when
+  you wake it.
+- Timing is `SOFLE_SLEEP_MS`, the exchange period is `SOFLE_SLEEP_SYNC_MS` and
+  the loop is `SOFLE_ANIM_SLEEP` - all near the top of the `OLED_ENABLE` block
+  in `keymap.c`. Change the length there if a minute is not what you want.
 
 `is_keyboard_left()` decides which half is which, and that comes from the
 handedness in EEPROM - not from whichever half the USB cable is in. So the
