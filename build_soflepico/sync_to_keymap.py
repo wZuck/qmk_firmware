@@ -68,9 +68,10 @@ def main():
 
     # 键位表：图片路径改写成 preview/ 下
     src = open(os.path.join(HERE, "keymap.md")).read()
-    # png 在 build 侧是裸路径（同目录），同步过去要指到 preview/；svg 生成时
-    # 就已经写成 preview/ 了，所以只改 png，改两遍会变成 preview/preview/。
-    src = src.replace("](keymap_layers.png)", "](preview/keymap_layers.png)")
+    # build 侧两个文件都跟 keymap.md 同目录，所以文档里是裸路径；同步过去两份图
+    # 都落在 preview/ 下，链接跟着改。
+    for name in ("keymap_layers.png", "keymap_layers.svg"):
+        src = src.replace("](%s)" % name, "](preview/%s)" % name)
     open(os.path.join(DST, "keymap.md"), "w").write(src)
 
     for name in ("keymap_layers.png", "keymap_layers.svg"):
