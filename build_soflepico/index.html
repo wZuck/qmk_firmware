@@ -58,7 +58,7 @@
       <tr><th>键盘 / keymap</th><td><code>sofle_pico</code> / <code>default</code>（RP2040，分体，左右各一个 EC11）</td></tr>
       <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 277,504 字节 · 构建于 2026-10-08 00:06</td></tr>
       <tr><th>SHA-256</th><td class="hash">e43f25fde7cb681e5201c7914567e69727b7f9b5612745651c685eeb55ac9150</td></tr>
-      <tr><th>QMK</th><td>tag <code>0.34.5-19-g59053807a4</code> · commit <code>59053807a4</code>（2026-10-01）</td></tr>
+      <tr><th>QMK</th><td>tag <code>0.34.5-23-g22e26f00d7</code> · commit <code>22e26f00d7</code>（2026-10-08）</td></tr>
       <tr><th>硬件排查</th><td><code>matrix_map_left.svg</code>（左手矩阵图）· <code>pico_pinout.svg</code>（Pico 引脚图）· <code>hardware_check.md</code>（排查流程）</td></tr>
       <tr><th>键位图</th><td><code>keymap_layers.svg</code>（矢量）· <code>keymap_layers.png</code>（2 倍光栅）</td></tr>
       <tr><th>灯光</th><td><code>led_map.svg</code>（矢量）· <code>led_map.png</code>（2 倍光栅）——58 颗逐键 RGB 的索引、矩阵位置和灯带走向；ADJUST 层上有开关/切换/色相/饱和/亮度/速度键和 9 个灯效直达键（含默认的纯白常亮，见下面「LED 灯效」）</td></tr>
@@ -453,7 +453,10 @@
     <li><a href="README.md">README.md</a> —— 构建信息、功能要点、验证记录、注意事项</li>
     <li><a href="keymap.md">keymap.md</a> —— 四层键位表、换层方式、旋钮、自定义键</li>
     <li><a href="oled_preview/README.md">oled_preview/README.md</a> —— OLED 三种画面、切换机制、换图方法</li>
-    <li><a href="sofle_pico_default.uf2">sofle_pico_default.uf2</a> · <a href="sofle_pico_default.hex">.hex</a> · <a href="sofle_pico_default.elf">.elf</a> · <a href="sofle_pico_default.map">.map</a></li>
+    <li><a href="sofle_pico_default.uf2">sofle_pico_default.uf2</a> ← 烧录用这一份；
+      <code>.hex</code> / <code>.elf</code> / <code>.map</code> 是同一份构建的派生物
+      （<code>objcopy</code> 出来的），按本目录 <code>.gitignore</code> 的约定<b>不提交</b>，
+      所以这里的链接只在本地磁盘上有效 —— 仓库里没有它们，上面的 <code>.uf2</code> 才是随仓库发布的那份。</li>
     <li><code>gen_index.py</code> / <code>gen_keymap_image.py</code> / <code>gen_matrix_image.py</code> / <code>gen_pico_pinout.py</code> / <code>gen_led_map.py</code> / <code>oled_preview/gen_oled_preview.py</code> —— 本页图片的生成脚本</li>
     <li><a href="verify_keymap.py">verify_keymap.py</a> —— 从编译好的 ELF 里读回 <code>keymaps</code> / <code>encoder_map</code> 并按层打印键码名字（改完 keymap.c 用它确认真的编进去了）</li>
     <li><a href="led_effects/README.md">led_effects/README.md</a> · <a href="led_effects/harness.c">harness.c</a> —— 灯效逐帧采集器：在电脑上编译真实的 QMK 灯效源码，导出每一帧的 58 颗灯颜色</li>

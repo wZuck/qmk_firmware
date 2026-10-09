@@ -325,7 +325,10 @@ def main():
     <li><a href="README.md">README.md</a> —— 构建信息、功能要点、验证记录、注意事项</li>
     <li><a href="keymap.md">keymap.md</a> —— 四层键位表、换层方式、旋钮、自定义键</li>
     <li><a href="oled_preview/README.md">oled_preview/README.md</a> —— OLED 三种画面、切换机制、换图方法</li>
-    <li><a href="sofle_pico_default.uf2">sofle_pico_default.uf2</a> · <a href="sofle_pico_default.hex">.hex</a> · <a href="sofle_pico_default.elf">.elf</a> · <a href="sofle_pico_default.map">.map</a></li>
+    <li><a href="sofle_pico_default.uf2">sofle_pico_default.uf2</a> ← 烧录用这一份；
+      <code>.hex</code> / <code>.elf</code> / <code>.map</code> 是同一份构建的派生物
+      （<code>objcopy</code> 出来的），按本目录 <code>.gitignore</code> 的约定<b>不提交</b>，
+      所以这里的链接只在本地磁盘上有效 —— 仓库里没有它们，上面的 <code>.uf2</code> 才是随仓库发布的那份。</li>
     <li><code>gen_index.py</code> / <code>gen_keymap_image.py</code> / <code>gen_matrix_image.py</code> / <code>gen_pico_pinout.py</code> / <code>gen_led_map.py</code> / <code>oled_preview/gen_oled_preview.py</code> —— 本页图片的生成脚本</li>
     <li><a href="verify_keymap.py">verify_keymap.py</a> —— 从编译好的 ELF 里读回 <code>keymaps</code> / <code>encoder_map</code> 并按层打印键码名字（改完 keymap.c 用它确认真的编进去了）</li>
     <li><a href="led_effects/README.md">led_effects/README.md</a> · <a href="led_effects/harness.c">harness.c</a> —— 灯效逐帧采集器：在电脑上编译真实的 QMK 灯效源码，导出每一帧的 58 颗灯颜色</li>

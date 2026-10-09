@@ -1,0 +1,392 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="904" height="918" viewBox="0 0 904 918">
+<rect width="904" height="918" fill="#eef1f5"/>
+<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Helvetica,Arial,sans-serif;}</style>
+<text x="36.0" y="24.0" font-size="26" fill="#1f2933" dominant-baseline="hanging">Sofle Pico · 逐键 RGB 灯位图（default / split-left / split-right 固件）</text>
+<text x="36.0" y="56.0" font-size="15" fill="#52606d" dominant-baseline="hanging">方块 = 一个按键；格子里大数字 = 固件里的 LED 全局索引；左上角 L/R＋数字 = 本半灯带的第几颗；左下角 [行,列] =</text>
+<text x="36.0" y="77.0" font-size="15" fill="#52606d" dominant-baseline="hanging">矩阵位置</text>
+<rect x="25.0" y="109.0" width="431.0" height="309.0" rx="14" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
+<text x="240.5" y="124.0" font-size="18" fill="#1f2933" text-anchor="middle" dominant-baseline="central">左手 · 29 颗 · LED 索引 0–28（灯带第 0–28 颗）</text>
+<rect x="478.0" y="109.0" width="401.0" height="309.0" rx="14" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
+<text x="678.5" y="124.0" font-size="16" fill="#1f2933" text-anchor="middle" dominant-baseline="central">右手 · 29 颗 · LED 索引 29–57（灯带第 0–28 颗）</text>
+<rect x="467.0" y="133.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="155.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="177.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="199.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="221.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="243.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="265.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="287.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="309.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="331.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="353.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<rect x="467.0" y="375.0" width="2.0" height="12.0" rx="1" fill="#c9ced6"/>
+<line x1="353.0" y1="185.0" x2="353.0" y2="227.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="353.0" y1="227.0" x2="353.0" y2="272.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="353.0" y1="272.0" x2="353.0" y2="314.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="353.0" y1="314.0" x2="413.0" y2="356.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="413.0" y1="356.0" x2="353.0" y2="356.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="353.0" y1="356.0" x2="296.0" y2="350.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="296.0" y1="350.0" x2="296.0" y2="308.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="296.0" y1="308.0" x2="296.0" y2="263.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="296.0" y1="263.0" x2="296.0" y2="221.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="296.0" y1="221.0" x2="296.0" y2="179.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="296.0" y1="179.0" x2="239.0" y2="173.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="239.0" y1="173.0" x2="239.0" y2="215.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="239.0" y1="215.0" x2="239.0" y2="257.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="239.0" y1="257.0" x2="239.0" y2="302.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="239.0" y1="302.0" x2="239.0" y2="350.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="239.0" y1="350.0" x2="182.0" y2="356.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="182.0" y1="356.0" x2="182.0" y2="308.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="182.0" y1="308.0" x2="182.0" y2="263.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="182.0" y1="263.0" x2="182.0" y2="221.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="182.0" y1="221.0" x2="182.0" y2="179.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="182.0" y1="179.0" x2="125.0" y2="185.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="125.0" y1="185.0" x2="125.0" y2="227.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="125.0" y1="227.0" x2="125.0" y2="272.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="125.0" y1="272.0" x2="125.0" y2="314.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="125.0" y1="314.0" x2="68.0" y2="314.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="68.0" y1="314.0" x2="68.0" y2="272.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="68.0" y1="272.0" x2="68.0" y2="227.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="68.0" y1="227.0" x2="68.0" y2="185.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="551.0" y1="185.0" x2="551.0" y2="227.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="551.0" y1="227.0" x2="551.0" y2="272.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="551.0" y1="272.0" x2="551.0" y2="314.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="551.0" y1="314.0" x2="521.0" y2="356.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="521.0" y1="356.0" x2="551.0" y2="356.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="551.0" y1="356.0" x2="608.0" y2="350.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="608.0" y1="350.0" x2="608.0" y2="308.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="608.0" y1="308.0" x2="608.0" y2="263.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="608.0" y1="263.0" x2="608.0" y2="221.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="608.0" y1="221.0" x2="608.0" y2="179.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="608.0" y1="179.0" x2="665.0" y2="173.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="665.0" y1="173.0" x2="665.0" y2="215.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="665.0" y1="215.0" x2="665.0" y2="257.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="665.0" y1="257.0" x2="665.0" y2="302.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="665.0" y1="302.0" x2="665.0" y2="350.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="665.0" y1="350.0" x2="722.0" y2="356.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="722.0" y1="356.0" x2="722.0" y2="308.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="722.0" y1="308.0" x2="722.0" y2="263.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="722.0" y1="263.0" x2="722.0" y2="221.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="722.0" y1="221.0" x2="722.0" y2="179.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="722.0" y1="179.0" x2="791.0" y2="185.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="791.0" y1="185.0" x2="791.0" y2="227.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="791.0" y1="227.0" x2="791.0" y2="272.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="791.0" y1="272.0" x2="791.0" y2="314.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="791.0" y1="314.0" x2="836.0" y2="314.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="836.0" y1="314.0" x2="836.0" y2="272.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="836.0" y1="272.0" x2="836.0" y2="227.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<line x1="836.0" y1="227.0" x2="836.0" y2="185.0" stroke="#f5cba7" stroke-width="5" stroke-linecap="round"/>
+<rect x="328.0" y="167.0" width="50.0" height="36.0" rx="8" fill="#cce6ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="353.0" y="181.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">0</text>
+<text x="333.0" y="171.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L0</text>
+<text x="333.0" y="188.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[0,5]</text>
+<rect x="325.0" y="164.0" width="56.0" height="42.0" rx="10" fill="none" stroke="#a04000" stroke-width="2"/>
+<rect x="328.0" y="209.0" width="50.0" height="36.0" rx="8" fill="#c6e0ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="353.0" y="223.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">1</text>
+<text x="333.0" y="213.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L1</text>
+<text x="333.0" y="230.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[1,5]</text>
+<rect x="328.0" y="254.0" width="50.0" height="36.0" rx="8" fill="#c1d8ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="353.0" y="268.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">2</text>
+<text x="333.0" y="258.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L2</text>
+<text x="333.0" y="275.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[2,5]</text>
+<rect x="328.0" y="296.0" width="50.0" height="36.0" rx="8" fill="#bcd0ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="353.0" y="310.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">3</text>
+<text x="333.0" y="300.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L3</text>
+<text x="333.0" y="317.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[3,5]</text>
+<rect x="388.0" y="338.0" width="50.0" height="54.0" rx="8" fill="#b7c8ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="413.0" y="361.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">4</text>
+<text x="393.0" y="342.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L4</text>
+<text x="393.0" y="377.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[4,4]</text>
+<rect x="328.0" y="338.0" width="50.0" height="54.0" rx="8" fill="#b2beff" stroke="#8a94a6" stroke-width="1"/>
+<text x="353.0" y="361.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">5</text>
+<text x="333.0" y="342.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L5</text>
+<text x="333.0" y="377.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[4,3]</text>
+<rect x="271.0" y="332.0" width="50.0" height="36.0" rx="8" fill="#adb4ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="296.0" y="346.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">6</text>
+<text x="276.0" y="336.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L6</text>
+<text x="276.0" y="353.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[4,2]</text>
+<rect x="271.0" y="290.0" width="50.0" height="36.0" rx="8" fill="#a8a9ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="296.0" y="304.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">7</text>
+<text x="276.0" y="294.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L7</text>
+<text x="276.0" y="311.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[3,4]</text>
+<rect x="271.0" y="245.0" width="50.0" height="36.0" rx="8" fill="#a9a3ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="296.0" y="259.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">8</text>
+<text x="276.0" y="249.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L8</text>
+<text x="276.0" y="266.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[2,4]</text>
+<rect x="271.0" y="203.0" width="50.0" height="36.0" rx="8" fill="#ab9eff" stroke="#8a94a6" stroke-width="1"/>
+<text x="296.0" y="217.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">9</text>
+<text x="276.0" y="207.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L9</text>
+<text x="276.0" y="224.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[1,4]</text>
+<rect x="271.0" y="161.0" width="50.0" height="36.0" rx="8" fill="#ae99ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="296.0" y="175.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">10</text>
+<text x="276.0" y="165.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L10</text>
+<text x="276.0" y="182.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[0,4]</text>
+<rect x="214.0" y="155.0" width="50.0" height="36.0" rx="8" fill="#b294ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="239.0" y="169.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">11</text>
+<text x="219.0" y="159.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L11</text>
+<text x="219.0" y="176.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[0,3]</text>
+<rect x="214.0" y="197.0" width="50.0" height="36.0" rx="8" fill="#b78fff" stroke="#8a94a6" stroke-width="1"/>
+<text x="239.0" y="211.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">12</text>
+<text x="219.0" y="201.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L12</text>
+<text x="219.0" y="218.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[1,3]</text>
+<rect x="214.0" y="239.0" width="50.0" height="36.0" rx="8" fill="#bc8aff" stroke="#8a94a6" stroke-width="1"/>
+<text x="239.0" y="253.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">13</text>
+<text x="219.0" y="243.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L13</text>
+<text x="219.0" y="260.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[2,3]</text>
+<rect x="214.0" y="284.0" width="50.0" height="36.0" rx="8" fill="#c285ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="239.0" y="298.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">14</text>
+<text x="219.0" y="288.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L14</text>
+<text x="219.0" y="305.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[3,3]</text>
+<rect x="214.0" y="332.0" width="50.0" height="36.0" rx="8" fill="#c980ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="239.0" y="346.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">15</text>
+<text x="219.0" y="336.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L15</text>
+<text x="219.0" y="353.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[4,1]</text>
+<rect x="157.0" y="338.0" width="50.0" height="36.0" rx="8" fill="#d07bff" stroke="#8a94a6" stroke-width="1"/>
+<text x="182.0" y="352.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">16</text>
+<text x="162.0" y="342.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L16</text>
+<text x="162.0" y="359.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[4,0]</text>
+<rect x="157.0" y="290.0" width="50.0" height="36.0" rx="8" fill="#d876ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="182.0" y="304.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">17</text>
+<text x="162.0" y="294.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L17</text>
+<text x="162.0" y="311.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[3,2]</text>
+<rect x="157.0" y="245.0" width="50.0" height="36.0" rx="8" fill="#e171ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="182.0" y="259.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">18</text>
+<text x="162.0" y="249.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L18</text>
+<text x="162.0" y="266.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[2,2]</text>
+<rect x="157.0" y="203.0" width="50.0" height="36.0" rx="8" fill="#eb6cff" stroke="#8a94a6" stroke-width="1"/>
+<text x="182.0" y="217.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">19</text>
+<text x="162.0" y="207.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L19</text>
+<text x="162.0" y="224.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[1,2]</text>
+<rect x="157.0" y="161.0" width="50.0" height="36.0" rx="8" fill="#f567ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="182.0" y="175.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">20</text>
+<text x="162.0" y="165.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L20</text>
+<text x="162.0" y="182.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[0,2]</text>
+<rect x="100.0" y="167.0" width="50.0" height="36.0" rx="8" fill="#ff62fd" stroke="#8a94a6" stroke-width="1"/>
+<text x="125.0" y="181.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">21</text>
+<text x="105.0" y="171.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L21</text>
+<text x="105.0" y="188.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[0,1]</text>
+<rect x="100.0" y="209.0" width="50.0" height="36.0" rx="8" fill="#ff5df1" stroke="#8a94a6" stroke-width="1"/>
+<text x="125.0" y="223.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">22</text>
+<text x="105.0" y="213.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L22</text>
+<text x="105.0" y="230.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[1,1]</text>
+<rect x="100.0" y="254.0" width="50.0" height="36.0" rx="8" fill="#ff58e5" stroke="#8a94a6" stroke-width="1"/>
+<text x="125.0" y="268.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">23</text>
+<text x="105.0" y="258.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L23</text>
+<text x="105.0" y="275.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[2,1]</text>
+<rect x="100.0" y="296.0" width="50.0" height="36.0" rx="8" fill="#ff53d7" stroke="#8a94a6" stroke-width="1"/>
+<text x="125.0" y="310.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">24</text>
+<text x="105.0" y="300.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L24</text>
+<text x="105.0" y="317.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[3,1]</text>
+<rect x="43.0" y="296.0" width="50.0" height="36.0" rx="8" fill="#ff4ec9" stroke="#8a94a6" stroke-width="1"/>
+<text x="68.0" y="310.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">25</text>
+<text x="48.0" y="300.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L25</text>
+<text x="48.0" y="317.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[3,0]</text>
+<rect x="43.0" y="254.0" width="50.0" height="36.0" rx="8" fill="#ff49bb" stroke="#8a94a6" stroke-width="1"/>
+<text x="68.0" y="268.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">26</text>
+<text x="48.0" y="258.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L26</text>
+<text x="48.0" y="275.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[2,0]</text>
+<rect x="43.0" y="209.0" width="50.0" height="36.0" rx="8" fill="#ff44ab" stroke="#8a94a6" stroke-width="1"/>
+<text x="68.0" y="223.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">27</text>
+<text x="48.0" y="213.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L27</text>
+<text x="48.0" y="230.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[1,0]</text>
+<rect x="43.0" y="167.0" width="50.0" height="36.0" rx="8" fill="#ff3f9b" stroke="#8a94a6" stroke-width="1"/>
+<text x="68.0" y="181.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">28</text>
+<text x="48.0" y="171.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">L28</text>
+<text x="48.0" y="188.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[0,0]</text>
+<rect x="40.0" y="164.0" width="56.0" height="42.0" rx="10" fill="none" stroke="#34495e" stroke-width="2"/>
+<rect x="526.0" y="167.0" width="50.0" height="36.0" rx="8" fill="#cce6ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="551.0" y="181.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">29</text>
+<text x="531.0" y="171.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R0</text>
+<text x="531.0" y="188.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[5,5]</text>
+<rect x="523.0" y="164.0" width="56.0" height="42.0" rx="10" fill="none" stroke="#a04000" stroke-width="2"/>
+<rect x="526.0" y="209.0" width="50.0" height="36.0" rx="8" fill="#c6e0ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="551.0" y="223.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">30</text>
+<text x="531.0" y="213.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R1</text>
+<text x="531.0" y="230.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[6,5]</text>
+<rect x="526.0" y="254.0" width="50.0" height="36.0" rx="8" fill="#c1d8ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="551.0" y="268.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">31</text>
+<text x="531.0" y="258.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R2</text>
+<text x="531.0" y="275.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[7,5]</text>
+<rect x="526.0" y="296.0" width="50.0" height="36.0" rx="8" fill="#bcd0ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="551.0" y="310.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">32</text>
+<text x="531.0" y="300.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R3</text>
+<text x="531.0" y="317.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[8,5]</text>
+<rect x="496.0" y="338.0" width="50.0" height="54.0" rx="8" fill="#b7c8ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="521.0" y="361.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">33</text>
+<text x="501.0" y="342.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R4</text>
+<text x="501.0" y="377.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[9,4]</text>
+<rect x="526.0" y="338.0" width="50.0" height="54.0" rx="8" fill="#b2beff" stroke="#8a94a6" stroke-width="1"/>
+<text x="551.0" y="361.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">34</text>
+<text x="531.0" y="342.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R5</text>
+<text x="531.0" y="377.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[9,3]</text>
+<rect x="583.0" y="332.0" width="50.0" height="36.0" rx="8" fill="#adb4ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="608.0" y="346.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">35</text>
+<text x="588.0" y="336.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R6</text>
+<text x="588.0" y="353.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[9,2]</text>
+<rect x="583.0" y="290.0" width="50.0" height="36.0" rx="8" fill="#a8a9ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="608.0" y="304.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">36</text>
+<text x="588.0" y="294.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R7</text>
+<text x="588.0" y="311.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[8,4]</text>
+<rect x="583.0" y="245.0" width="50.0" height="36.0" rx="8" fill="#a9a3ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="608.0" y="259.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">37</text>
+<text x="588.0" y="249.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R8</text>
+<text x="588.0" y="266.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[7,4]</text>
+<rect x="583.0" y="203.0" width="50.0" height="36.0" rx="8" fill="#ab9eff" stroke="#8a94a6" stroke-width="1"/>
+<text x="608.0" y="217.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">38</text>
+<text x="588.0" y="207.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R9</text>
+<text x="588.0" y="224.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[6,4]</text>
+<rect x="583.0" y="161.0" width="50.0" height="36.0" rx="8" fill="#ae99ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="608.0" y="175.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">39</text>
+<text x="588.0" y="165.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R10</text>
+<text x="588.0" y="182.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[5,4]</text>
+<rect x="640.0" y="155.0" width="50.0" height="36.0" rx="8" fill="#b294ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="665.0" y="169.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">40</text>
+<text x="645.0" y="159.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R11</text>
+<text x="645.0" y="176.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[5,3]</text>
+<rect x="640.0" y="197.0" width="50.0" height="36.0" rx="8" fill="#b78fff" stroke="#8a94a6" stroke-width="1"/>
+<text x="665.0" y="211.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">41</text>
+<text x="645.0" y="201.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R12</text>
+<text x="645.0" y="218.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[6,3]</text>
+<rect x="640.0" y="239.0" width="50.0" height="36.0" rx="8" fill="#bc8aff" stroke="#8a94a6" stroke-width="1"/>
+<text x="665.0" y="253.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">42</text>
+<text x="645.0" y="243.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R13</text>
+<text x="645.0" y="260.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[7,3]</text>
+<rect x="640.0" y="284.0" width="50.0" height="36.0" rx="8" fill="#c285ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="665.0" y="298.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">43</text>
+<text x="645.0" y="288.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R14</text>
+<text x="645.0" y="305.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[8,3]</text>
+<rect x="640.0" y="332.0" width="50.0" height="36.0" rx="8" fill="#c980ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="665.0" y="346.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">44</text>
+<text x="645.0" y="336.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R15</text>
+<text x="645.0" y="353.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[9,1]</text>
+<rect x="697.0" y="338.0" width="50.0" height="36.0" rx="8" fill="#d07bff" stroke="#8a94a6" stroke-width="1"/>
+<text x="722.0" y="352.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">45</text>
+<text x="702.0" y="342.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R16</text>
+<text x="702.0" y="359.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[9,0]</text>
+<rect x="697.0" y="290.0" width="50.0" height="36.0" rx="8" fill="#d876ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="722.0" y="304.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">46</text>
+<text x="702.0" y="294.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R17</text>
+<text x="702.0" y="311.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[8,2]</text>
+<rect x="697.0" y="245.0" width="50.0" height="36.0" rx="8" fill="#e171ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="722.0" y="259.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">47</text>
+<text x="702.0" y="249.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R18</text>
+<text x="702.0" y="266.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[7,2]</text>
+<rect x="697.0" y="203.0" width="50.0" height="36.0" rx="8" fill="#eb6cff" stroke="#8a94a6" stroke-width="1"/>
+<text x="722.0" y="217.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">48</text>
+<text x="702.0" y="207.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R19</text>
+<text x="702.0" y="224.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[6,2]</text>
+<rect x="697.0" y="161.0" width="50.0" height="36.0" rx="8" fill="#f567ff" stroke="#8a94a6" stroke-width="1"/>
+<text x="722.0" y="175.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">49</text>
+<text x="702.0" y="165.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R20</text>
+<text x="702.0" y="182.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[5,2]</text>
+<rect x="766.0" y="167.0" width="50.0" height="36.0" rx="8" fill="#ff62fd" stroke="#8a94a6" stroke-width="1"/>
+<text x="791.0" y="181.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">50</text>
+<text x="771.0" y="171.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R21</text>
+<text x="771.0" y="188.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[5,1]</text>
+<rect x="766.0" y="209.0" width="50.0" height="36.0" rx="8" fill="#ff5df1" stroke="#8a94a6" stroke-width="1"/>
+<text x="791.0" y="223.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">51</text>
+<text x="771.0" y="213.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R22</text>
+<text x="771.0" y="230.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[6,1]</text>
+<rect x="766.0" y="254.0" width="50.0" height="36.0" rx="8" fill="#ff58e5" stroke="#8a94a6" stroke-width="1"/>
+<text x="791.0" y="268.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">52</text>
+<text x="771.0" y="258.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R23</text>
+<text x="771.0" y="275.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[7,1]</text>
+<rect x="766.0" y="296.0" width="50.0" height="36.0" rx="8" fill="#ff53d7" stroke="#8a94a6" stroke-width="1"/>
+<text x="791.0" y="310.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">53</text>
+<text x="771.0" y="300.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R24</text>
+<text x="771.0" y="317.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[8,1]</text>
+<rect x="811.0" y="296.0" width="50.0" height="36.0" rx="8" fill="#ff4ec9" stroke="#8a94a6" stroke-width="1"/>
+<text x="836.0" y="310.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">54</text>
+<text x="816.0" y="300.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R25</text>
+<text x="816.0" y="317.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[8,0]</text>
+<rect x="811.0" y="254.0" width="50.0" height="36.0" rx="8" fill="#ff49bb" stroke="#8a94a6" stroke-width="1"/>
+<text x="836.0" y="268.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">55</text>
+<text x="816.0" y="258.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R26</text>
+<text x="816.0" y="275.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[7,0]</text>
+<rect x="811.0" y="209.0" width="50.0" height="36.0" rx="8" fill="#ff44ab" stroke="#8a94a6" stroke-width="1"/>
+<text x="836.0" y="223.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">56</text>
+<text x="816.0" y="213.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R27</text>
+<text x="816.0" y="230.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[6,0]</text>
+<rect x="811.0" y="167.0" width="50.0" height="36.0" rx="8" fill="#ff3f9b" stroke="#8a94a6" stroke-width="1"/>
+<text x="836.0" y="181.0" font-size="19" fill="#1f2933" text-anchor="middle" dominant-baseline="central">57</text>
+<text x="816.0" y="171.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">R28</text>
+<text x="816.0" y="188.0" font-size="10" fill="#5b6470" dominant-baseline="hanging">[5,0]</text>
+<rect x="808.0" y="164.0" width="56.0" height="42.0" rx="10" fill="none" stroke="#34495e" stroke-width="2"/>
+<polygon points="353.0,213.0 348.0,202.0 358.0,202.0" fill="#d35400"/>
+<polygon points="353.0,256.5 348.0,245.5 358.0,245.5" fill="#d35400"/>
+<polygon points="353.0,300.0 348.0,289.0 358.0,289.0" fill="#d35400"/>
+<polygon points="388.7,339.0 376.9,336.8 382.6,328.6" fill="#d35400"/>
+<polygon points="376.0,356.0 387.0,351.0 387.0,361.0" fill="#d35400"/>
+<polygon points="317.5,352.3 329.0,348.4 328.0,358.4" fill="#d35400"/>
+<polygon points="296.0,322.0 301.0,333.0 291.0,333.0" fill="#d35400"/>
+<polygon points="296.0,278.5 301.0,289.5 291.0,289.5" fill="#d35400"/>
+<polygon points="296.0,235.0 301.0,246.0 291.0,246.0" fill="#d35400"/>
+<polygon points="296.0,193.0 301.0,204.0 291.0,204.0" fill="#d35400"/>
+<polygon points="260.5,175.3 272.0,171.4 271.0,181.4" fill="#d35400"/>
+<polygon points="239.0,201.0 234.0,190.0 244.0,190.0" fill="#d35400"/>
+<polygon points="239.0,243.0 234.0,232.0 244.0,232.0" fill="#d35400"/>
+<polygon points="239.0,286.5 234.0,275.5 244.0,275.5" fill="#d35400"/>
+<polygon points="239.0,333.0 234.0,322.0 244.0,322.0" fill="#d35400"/>
+<polygon points="203.5,353.7 214.0,347.6 215.0,357.6" fill="#d35400"/>
+<polygon points="182.0,325.0 187.0,336.0 177.0,336.0" fill="#d35400"/>
+<polygon points="182.0,278.5 187.0,289.5 177.0,289.5" fill="#d35400"/>
+<polygon points="182.0,235.0 187.0,246.0 177.0,246.0" fill="#d35400"/>
+<polygon points="182.0,193.0 187.0,204.0 177.0,204.0" fill="#d35400"/>
+<polygon points="146.5,182.7 157.0,176.6 158.0,186.6" fill="#d35400"/>
+<polygon points="125.0,213.0 120.0,202.0 130.0,202.0" fill="#d35400"/>
+<polygon points="125.0,256.5 120.0,245.5 130.0,245.5" fill="#d35400"/>
+<polygon points="125.0,300.0 120.0,289.0 130.0,289.0" fill="#d35400"/>
+<polygon points="89.5,314.0 100.5,309.0 100.5,319.0" fill="#d35400"/>
+<polygon points="68.0,286.0 73.0,297.0 63.0,297.0" fill="#d35400"/>
+<polygon points="68.0,242.5 73.0,253.5 63.0,253.5" fill="#d35400"/>
+<polygon points="68.0,199.0 73.0,210.0 63.0,210.0" fill="#d35400"/>
+<polygon points="551.0,213.0 546.0,202.0 556.0,202.0" fill="#d35400"/>
+<polygon points="551.0,256.5 546.0,245.5 556.0,245.5" fill="#d35400"/>
+<polygon points="551.0,300.0 546.0,289.0 556.0,289.0" fill="#d35400"/>
+<polygon points="531.9,340.7 534.3,328.8 542.4,334.7" fill="#d35400"/>
+<polygon points="543.0,356.0 532.0,361.0 532.0,351.0" fill="#d35400"/>
+<polygon points="586.5,352.3 576.0,358.4 575.0,348.4" fill="#d35400"/>
+<polygon points="608.0,322.0 613.0,333.0 603.0,333.0" fill="#d35400"/>
+<polygon points="608.0,278.5 613.0,289.5 603.0,289.5" fill="#d35400"/>
+<polygon points="608.0,235.0 613.0,246.0 603.0,246.0" fill="#d35400"/>
+<polygon points="608.0,193.0 613.0,204.0 603.0,204.0" fill="#d35400"/>
+<polygon points="643.5,175.3 633.0,181.4 632.0,171.4" fill="#d35400"/>
+<polygon points="665.0,201.0 660.0,190.0 670.0,190.0" fill="#d35400"/>
+<polygon points="665.0,243.0 660.0,232.0 670.0,232.0" fill="#d35400"/>
+<polygon points="665.0,286.5 660.0,275.5 670.0,275.5" fill="#d35400"/>
+<polygon points="665.0,333.0 660.0,322.0 670.0,322.0" fill="#d35400"/>
+<polygon points="700.5,353.7 689.0,357.6 690.0,347.6" fill="#d35400"/>
+<polygon points="722.0,325.0 727.0,336.0 717.0,336.0" fill="#d35400"/>
+<polygon points="722.0,278.5 727.0,289.5 717.0,289.5" fill="#d35400"/>
+<polygon points="722.0,235.0 727.0,246.0 717.0,246.0" fill="#d35400"/>
+<polygon points="722.0,193.0 727.0,204.0 717.0,204.0" fill="#d35400"/>
+<polygon points="763.5,182.6 752.1,186.6 752.9,176.7" fill="#d35400"/>
+<polygon points="791.0,213.0 786.0,202.0 796.0,202.0" fill="#d35400"/>
+<polygon points="791.0,256.5 786.0,245.5 796.0,245.5" fill="#d35400"/>
+<polygon points="791.0,300.0 786.0,289.0 796.0,289.0" fill="#d35400"/>
+<polygon points="820.5,314.0 809.5,319.0 809.5,309.0" fill="#d35400"/>
+<polygon points="836.0,286.0 841.0,297.0 831.0,297.0" fill="#d35400"/>
+<polygon points="836.0,242.5 841.0,253.5 831.0,253.5" fill="#d35400"/>
+<polygon points="836.0,199.0 841.0,210.0 831.0,210.0" fill="#d35400"/>
+<text x="36.0" y="438.0" font-size="14" fill="#8a94a6" dominant-baseline="hanging">两条虚线之间是 TRRS 串口：它只同步按键、层和灯效设置（模式/颜色/亮度/开关）；两半的灯带各自独立，各 29</text>
+<text x="36.0" y="458.0" font-size="14" fill="#8a94a6" dominant-baseline="hanging">颗，各自由自己那半的 GP0 驱动。</text>
+<rect x="24.0" y="486.0" width="856.0" height="382.0" rx="12" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
+<text x="36.0" y="504.0" font-size="18" fill="#1f2933" dominant-baseline="hanging">这版固件里的灯，到底是什么</text>
+<text x="36.0" y="538.0" font-size="14" fill="#52606d" dominant-baseline="hanging">数量：一共 58 颗，左右各 29 颗；每颗都是「按键灯」（flags = 0x04 KEYLIGHT），没有底灯、没有指示灯。</text>
+<text x="36.0" y="558.0" font-size="14" fill="#52606d" dominant-baseline="hanging">类型：WS2812 兼容的可寻址 RGB（WS2812 / SK6812 都是这一族，具体型号看你买的物料）。构建时带</text>
+<text x="36.0" y="578.0" font-size="14" fill="#52606d" dominant-baseline="hanging">-DRGB_MATRIX_ENABLE -DRGB_MATRIX_WS2812 -DWS2812_VENDOR。</text>
+<text x="36.0" y="598.0" font-size="14" fill="#52606d" dominant-baseline="hanging">接法：每一半一条独立灯带，数据脚都是 GP0。橙色粗框 = 灯带第 1 颗（GP0 从这里进），深色粗框 = 灯带末端；箭头 =</text>
+<text x="36.0" y="618.0" font-size="14" fill="#52606d" dominant-baseline="hanging">数据走向。</text>
+<text x="36.0" y="638.0" font-size="14" fill="#52606d" dominant-baseline="hanging">渲染：两半各画自己那 29 颗；模式/颜色/亮度/开关由 master 经 TRRS 同步过去（quantum/split_common/transactions.c</text>
+<text x="36.0" y="658.0" font-size="14" fill="#52606d" dominant-baseline="hanging">PUT_RGB_MATRIX）。</text>
+<text x="36.0" y="678.0" font-size="14" fill="#52606d" dominant-baseline="hanging">默认：开机就亮（RGB_MATRIX_DEFAULT_ON）——纯白常亮（灯效 solid_color、色相 0、饱和 0、亮度上限 127/255、速度</text>
+<text x="36.0" y="698.0" font-size="14" fill="#52606d" dominant-baseline="hanging">16），共启用 41 种效果；只有 EEPROM 里存过 VIA 的关灯状态（或按过 RM_TOGG）才会不亮。</text>
+<text x="36.0" y="718.0" font-size="14" fill="#52606d" dominant-baseline="hanging">控制：全在 ADJUST 层——左手上排 = 灯开关/切灯效/亮度±，右手上排 = 色相±/饱和±/速度±，下排最左 4~5 列 = 9</text>
+<text x="36.0" y="738.0" font-size="14" fill="#52606d" dominant-baseline="hanging">个灯效直达键（第一个是纯白常亮）；这一层两个旋钮也改成调灯（左=亮度、右=速度），按压键 = 灯开关 /</text>
+<text x="36.0" y="758.0" font-size="14" fill="#52606d" dominant-baseline="hanging">下一个灯效。其它层旋钮照旧是音量/切歌；USB 挂起时自动熄灯（RGB_DISABLE_WHEN_USB_SUSPENDED）。</text>
+<text x="36.0" y="778.0" font-size="14" fill="#52606d" dominant-baseline="hanging">两个旋钮按压键 [4,5] / [9,5] 在固件里是 NO_LED —— 那两个位置没有灯珠。</text>
+<text x="36.0" y="798.0" font-size="14" fill="#52606d" dominant-baseline="hanging">注：右手 [9,4] / [9,3]（R33 / R34）的坐标在上游 keyboard.json 里只差 10，其它相邻键差 19，所以图上这两个方块是叠着的。</text>
+<rect x="36.0" y="824.0" width="52.0" height="26.0" rx="6" fill="#f1f3f5" stroke="#c9ced6" stroke-width="1"/>
+<text x="62.0" y="837.0" font-size="12" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">无灯</text>
+<text x="102.0" y="830.0" font-size="14" fill="#52606d" dominant-baseline="hanging">= 矩阵里有按键、但没有灯珠的位置（两颗旋钮的按压键）</text>
+</svg>

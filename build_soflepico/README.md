@@ -10,7 +10,7 @@
 | 键盘 | `sofle_pico`（RP2040 / Raspberry Pi Pico，分体，左右各一个 EC11） |
 | keymap | `default` |
 | 编译命令 | `qmk compile -kb sofle_pico -km default` |
-| QMK 版本 | tag `0.34.5-19-g59053807a4`，commit `59053807a4`，分支 `master` |
+| QMK 版本 | tag `0.34.5-23-g22e26f00d7`，commit `22e26f00d7`，分支 `master` |
 | 构建时间 | 2026-10-01 |
 | 源文件 | `keyboards/sofle_pico/`（工作区修改，尚未提交） |
 

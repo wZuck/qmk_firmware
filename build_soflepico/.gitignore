@@ -10,6 +10,21 @@
 !*.uf2
 !index.html
 
+# The vector versions of those pictures, and it is the *vector* ones the docs
+# link to ("widen it and nothing blurs"): keymap.md, hardware_check.md and
+# index.html all point at a .svg next to the .png. The root .gitignore drops
+# *.svg, so without these the links are dead on GitHub even though the PNGs
+# right beside them are fine.
+!keymap_layers.svg
+!led_map.svg
+!matrix_map_left.svg
+!pico_pinout.svg
+
+# The two drawings the snow art was extracted from - make_snow.py reads these
+# files, so they are source for oled_snow.h, not decoration.
+!oled_snow1.pdf
+!oled_snow2.pdf
+
 # The LED effect harness is a host binary (arm64 macOS), not a firmware image:
 # rebuild it with `cd led_effects && bash build.sh` instead of committing it.
 led_effects/harness

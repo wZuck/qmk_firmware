@@ -370,7 +370,7 @@ def write_md(layout, layers):
     parts = []
     parts.append("# sofle_pico `default` 键位图与分层说明\n")
     parts.append("![四层键位图](keymap_layers.png)\n")
-    parts.append("> 放大看不糊的矢量版：[keymap_layers.svg](keymap_layers.svg)\n")
+    parts.append("> 放大看不糊的矢量版：[preview/keymap_layers.svg](preview/keymap_layers.svg)\n")
     parts.append("> 图片由 `gen_keymap_image.py` 从 `keymap.c` + `keyboard.json` 自动生成，"
                  "改键后重跑该脚本即可刷新。\n")
 

@@ -1,0 +1,509 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="734" height="1710" viewBox="0 0 734 1710">
+<rect width="734" height="1710" fill="#eef1f5"/>
+<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Helvetica,Arial,sans-serif;}</style>
+<text x="22.0" y="20.0" font-size="26" fill="#1f2933" dominant-baseline="hanging">Sofle Pico · default keymap 键位图</text>
+<text x="22.0" y="54.0" font-size="15" fill="#52606d" dominant-baseline="hanging">每个面板：左边 = 左手，右边 = 右手。▽ = 穿透到下一层（用下层的键）　✗ = 无功能</text>
+<rect x="6.0" y="96.0" width="722.0" height="354.0" rx="10" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
+<text x="22.0" y="104.0" font-size="18" fill="#37474f" dominant-baseline="hanging">第 0 层  QWERTY   ·   基础层 · QWERTY</text>
+<rect x="23.5" y="157.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="45.0" y="179.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">`</text>
+<rect x="69.5" y="157.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="91.0" y="179.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">1</text>
+<rect x="115.5" y="139.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="137.0" y="160.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">2</text>
+<rect x="161.5" y="125.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="183.0" y="147.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">3</text>
+<rect x="207.5" y="139.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="229.0" y="160.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">4</text>
+<rect x="253.5" y="146.2" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="275.0" y="167.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">5</text>
+<rect x="437.5" y="146.2" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="459.0" y="167.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">6</text>
+<rect x="483.5" y="139.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="505.0" y="160.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">7</text>
+<rect x="529.5" y="125.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="551.0" y="147.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">8</text>
+<rect x="575.5" y="139.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="597.0" y="160.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">9</text>
+<rect x="621.5" y="157.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="643.0" y="179.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">0</text>
+<rect x="667.5" y="157.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="689.0" y="179.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">`</text>
+<rect x="23.5" y="203.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="45.0" y="225.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Esc</text>
+<rect x="69.5" y="203.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="91.0" y="225.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Q</text>
+<rect x="115.5" y="185.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="137.0" y="206.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">W</text>
+<rect x="161.5" y="171.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="183.0" y="193.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">E</text>
+<rect x="207.5" y="185.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="229.0" y="206.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">R</text>
+<rect x="253.5" y="192.2" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="275.0" y="213.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">T</text>
+<rect x="437.5" y="192.2" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="459.0" y="213.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Y</text>
+<rect x="483.5" y="185.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="505.0" y="206.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">U</text>
+<rect x="529.5" y="171.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="551.0" y="193.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">I</text>
+<rect x="575.5" y="185.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="597.0" y="206.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">O</text>
+<rect x="621.5" y="203.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="643.0" y="225.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">P</text>
+<rect x="667.5" y="203.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="689.0" y="225.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Bspc</text>
+<rect x="23.5" y="249.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="45.0" y="271.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Tab</text>
+<rect x="69.5" y="249.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="91.0" y="271.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">A</text>
+<rect x="115.5" y="231.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="137.0" y="252.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">S</text>
+<rect x="161.5" y="217.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="183.0" y="239.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">D</text>
+<rect x="207.5" y="231.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="229.0" y="252.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F</text>
+<rect x="253.5" y="238.2" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="275.0" y="259.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">G</text>
+<rect x="437.5" y="238.2" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="459.0" y="259.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">H</text>
+<rect x="483.5" y="231.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="505.0" y="252.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">J</text>
+<rect x="529.5" y="217.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="551.0" y="239.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">K</text>
+<rect x="575.5" y="231.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="597.0" y="252.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">L</text>
+<rect x="621.5" y="249.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="643.0" y="271.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">;</text>
+<rect x="667.5" y="249.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="689.0" y="271.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">&#x27;</text>
+<rect x="23.5" y="295.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="45.0" y="317.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Shift</text>
+<rect x="69.5" y="295.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="91.0" y="317.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Z</text>
+<rect x="115.5" y="277.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="137.0" y="298.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">X</text>
+<rect x="161.5" y="263.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="183.0" y="285.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">C</text>
+<rect x="207.5" y="277.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="229.0" y="298.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">V</text>
+<rect x="253.5" y="284.2" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="275.0" y="305.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">B</text>
+<rect x="308.7" y="284.2" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="330.2" y="305.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Mute</text>
+<rect x="382.3" y="284.2" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="403.8" y="305.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Play</text>
+<rect x="437.5" y="284.2" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="459.0" y="305.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">N</text>
+<rect x="483.5" y="277.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="505.0" y="298.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">M</text>
+<rect x="529.5" y="263.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="551.0" y="285.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">,</text>
+<rect x="575.5" y="277.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="597.0" y="298.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">.</text>
+<rect x="621.5" y="295.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="643.0" y="317.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">/</text>
+<rect x="667.5" y="295.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="689.0" y="317.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Shift</text>
+<rect x="115.5" y="323.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="137.0" y="344.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">GUI</text>
+<rect x="161.5" y="309.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="183.0" y="331.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Alt</text>
+<rect x="207.5" y="323.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="229.0" y="344.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Ctrl</text>
+<rect x="258.1" y="332.5" width="43.0" height="66.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="3"/>
+<text x="279.6" y="365.5" font-size="9" fill="#202124" text-anchor="middle" dominant-baseline="central">LOWER</text>
+<rect x="304.1" y="332.5" width="43.0" height="66.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="325.6" y="365.5" font-size="15" fill="#202124" text-anchor="middle" dominant-baseline="central">Enter</text>
+<rect x="386.9" y="332.5" width="43.0" height="66.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="408.4" y="365.5" font-size="13" fill="#202124" text-anchor="middle" dominant-baseline="central">Space</text>
+<rect x="432.9" y="332.5" width="43.0" height="66.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="3"/>
+<text x="454.4" y="365.5" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">RAISE</text>
+<rect x="483.5" y="323.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="505.0" y="344.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Ctrl</text>
+<rect x="529.5" y="309.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="551.0" y="331.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Alt</text>
+<rect x="575.5" y="323.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
+<text x="597.0" y="344.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">GUI</text>
+<text x="22.0" y="404.0" font-size="14" fill="#52606d" dominant-baseline="hanging">基础层 0：平时就是这个。按住左拇指 LOWER → 第 1 层；按住右拇指 RAISE → 第 2 层；两个同时按住 → 第 3</text>
+<text x="22.0" y="424.0" font-size="14" fill="#52606d" dominant-baseline="hanging">层 ADJUST</text>
+<rect x="6.0" y="468.0" width="722.0" height="334.0" rx="10" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
+<text x="22.0" y="476.0" font-size="18" fill="#1a56b8" dominant-baseline="hanging">第 1 层  LOWER   ·   符号层</text>
+<rect x="23.5" y="529.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="45.0" y="551.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="69.5" y="529.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="91.0" y="551.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F1</text>
+<rect x="115.5" y="511.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="137.0" y="532.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F2</text>
+<rect x="161.5" y="497.5" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="183.0" y="519.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F3</text>
+<rect x="207.5" y="511.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="229.0" y="532.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F4</text>
+<rect x="253.5" y="518.2" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="275.0" y="539.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F5</text>
+<rect x="437.5" y="518.2" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="459.0" y="539.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F6</text>
+<rect x="483.5" y="511.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="505.0" y="532.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F7</text>
+<rect x="529.5" y="497.5" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="551.0" y="519.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F8</text>
+<rect x="575.5" y="511.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="597.0" y="532.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F9</text>
+<rect x="621.5" y="529.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="643.0" y="551.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F10</text>
+<rect x="667.5" y="529.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="689.0" y="551.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F11</text>
+<rect x="23.5" y="575.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="45.0" y="597.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">`</text>
+<rect x="69.5" y="575.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="91.0" y="597.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">1</text>
+<rect x="115.5" y="557.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="137.0" y="578.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">2</text>
+<rect x="161.5" y="543.5" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="183.0" y="565.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">3</text>
+<rect x="207.5" y="557.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="229.0" y="578.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">4</text>
+<rect x="253.5" y="564.2" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="275.0" y="585.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">5</text>
+<rect x="437.5" y="564.2" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="459.0" y="585.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">6</text>
+<rect x="483.5" y="557.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="505.0" y="578.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">7</text>
+<rect x="529.5" y="543.5" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="551.0" y="565.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">8</text>
+<rect x="575.5" y="557.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="597.0" y="578.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">9</text>
+<rect x="621.5" y="575.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="643.0" y="597.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">0</text>
+<rect x="667.5" y="575.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="689.0" y="597.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F12</text>
+<rect x="23.5" y="621.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="45.0" y="643.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="69.5" y="621.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="91.0" y="643.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">!</text>
+<rect x="115.5" y="603.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="137.0" y="624.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">@</text>
+<rect x="161.5" y="589.5" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="183.0" y="611.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">#</text>
+<rect x="207.5" y="603.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="229.0" y="624.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">$</text>
+<rect x="253.5" y="610.2" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="275.0" y="631.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">%</text>
+<rect x="437.5" y="610.2" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="459.0" y="631.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">^</text>
+<rect x="483.5" y="603.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="505.0" y="624.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">&amp;</text>
+<rect x="529.5" y="589.5" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="551.0" y="611.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">*</text>
+<rect x="575.5" y="603.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="597.0" y="624.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">(</text>
+<rect x="621.5" y="621.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="643.0" y="643.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">)</text>
+<rect x="667.5" y="621.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="689.0" y="643.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">|</text>
+<rect x="23.5" y="667.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="45.0" y="689.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="69.5" y="667.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="91.0" y="689.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">=</text>
+<rect x="115.5" y="649.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="137.0" y="670.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">-</text>
+<rect x="161.5" y="635.5" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="183.0" y="657.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">+</text>
+<rect x="207.5" y="649.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="229.0" y="670.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">{</text>
+<rect x="253.5" y="656.2" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="275.0" y="677.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">}</text>
+<rect x="308.7" y="656.2" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="330.2" y="677.7" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="382.3" y="656.2" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="403.8" y="677.7" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="437.5" y="656.2" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="459.0" y="677.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">[</text>
+<rect x="483.5" y="649.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="505.0" y="670.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">]</text>
+<rect x="529.5" y="635.5" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="551.0" y="657.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">;</text>
+<rect x="575.5" y="649.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="597.0" y="670.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">:</text>
+<rect x="621.5" y="667.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
+<text x="643.0" y="689.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">\</text>
+<rect x="667.5" y="667.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="689.0" y="689.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="115.5" y="695.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="137.0" y="716.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="161.5" y="681.5" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="183.0" y="703.0" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="207.5" y="695.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="229.0" y="716.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="258.1" y="704.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="279.6" y="737.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="304.1" y="704.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="325.6" y="737.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="386.9" y="704.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="408.4" y="737.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="432.9" y="704.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="454.4" y="737.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="483.5" y="695.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="505.0" y="716.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="529.5" y="681.5" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="551.0" y="703.0" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="575.5" y="695.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="597.0" y="716.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<text x="22.0" y="776.0" font-size="14" fill="#52606d" dominant-baseline="hanging">第 1 层：按住左手 LOWER 键时生效，松开即回到基础层。拇指区 ▽ 表示该键沿用基础层</text>
+<rect x="6.0" y="820.0" width="722.0" height="354.0" rx="10" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
+<text x="22.0" y="828.0" font-size="18" fill="#a85a06" dominant-baseline="hanging">第 2 层  RAISE   ·   导航/编辑层</text>
+<rect x="23.5" y="881.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="45.0" y="903.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="69.5" y="881.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="91.0" y="903.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="115.5" y="863.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="137.0" y="884.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="161.5" y="849.5" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="183.0" y="871.0" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="207.5" y="863.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="229.0" y="884.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="253.5" y="870.2" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="275.0" y="891.7" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="437.5" y="870.2" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="459.0" y="891.7" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="483.5" y="863.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="505.0" y="884.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="529.5" y="849.5" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="551.0" y="871.0" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="575.5" y="863.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="597.0" y="884.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="621.5" y="881.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="643.0" y="903.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="667.5" y="881.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="689.0" y="903.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="23.5" y="927.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="45.0" y="949.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="69.5" y="927.7" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="91.0" y="949.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Ins</text>
+<rect x="115.5" y="909.3" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="137.0" y="930.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Pscr</text>
+<rect x="161.5" y="895.5" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="183.0" y="917.0" font-size="15" fill="#202124" text-anchor="middle" dominant-baseline="central">Menu</text>
+<rect x="207.5" y="909.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="229.0" y="930.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="253.5" y="916.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="275.0" y="937.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="437.5" y="916.2" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="459.0" y="937.7" font-size="15" fill="#202124" text-anchor="middle" dominant-baseline="central">PgUp</text>
+<rect x="483.5" y="909.3" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="505.0" y="930.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">词←</text>
+<rect x="529.5" y="895.5" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="551.0" y="917.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">↑</text>
+<rect x="575.5" y="909.3" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="597.0" y="930.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">词→</text>
+<rect x="621.5" y="927.7" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="643.0" y="949.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">删行</text>
+<rect x="667.5" y="927.7" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="689.0" y="949.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Bspc</text>
+<rect x="23.5" y="973.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="45.0" y="995.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="69.5" y="973.7" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="91.0" y="995.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Alt</text>
+<rect x="115.5" y="955.3" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="137.0" y="976.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Ctrl</text>
+<rect x="161.5" y="941.5" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="183.0" y="963.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Shift</text>
+<rect x="207.5" y="955.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="229.0" y="976.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="253.5" y="962.2" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="275.0" y="983.7" font-size="15" fill="#202124" text-anchor="middle" dominant-baseline="central">Caps</text>
+<rect x="437.5" y="962.2" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="459.0" y="983.7" font-size="15" fill="#202124" text-anchor="middle" dominant-baseline="central">PgDn</text>
+<rect x="483.5" y="955.3" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="505.0" y="976.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">←</text>
+<rect x="529.5" y="941.5" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="551.0" y="963.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">↓</text>
+<rect x="575.5" y="955.3" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="597.0" y="976.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">→</text>
+<rect x="621.5" y="973.7" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="643.0" y="995.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Del</text>
+<rect x="667.5" y="973.7" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="689.0" y="995.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Bspc</text>
+<rect x="23.5" y="1019.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="45.0" y="1041.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="69.5" y="1019.7" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="91.0" y="1041.2" font-size="15" fill="#202124" text-anchor="middle" dominant-baseline="central">Undo</text>
+<rect x="115.5" y="1001.3" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="137.0" y="1022.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Cut</text>
+<rect x="161.5" y="987.5" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="183.0" y="1009.0" font-size="15" fill="#202124" text-anchor="middle" dominant-baseline="central">Copy</text>
+<rect x="207.5" y="1001.3" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="229.0" y="1022.8" font-size="14" fill="#202124" text-anchor="middle" dominant-baseline="central">Paste</text>
+<rect x="253.5" y="1008.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="275.0" y="1029.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="308.7" y="1008.2" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="330.2" y="1029.7" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="382.3" y="1008.2" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="403.8" y="1029.7" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="437.5" y="1008.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="459.0" y="1029.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="483.5" y="1001.3" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="505.0" y="1022.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">行首</text>
+<rect x="529.5" y="987.5" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="551.0" y="1009.0" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="575.5" y="1001.3" width="43.0" height="43.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="1"/>
+<text x="597.0" y="1022.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">行尾</text>
+<rect x="621.5" y="1019.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="643.0" y="1041.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="667.5" y="1019.7" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="689.0" y="1041.2" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="115.5" y="1047.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="137.0" y="1068.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="161.5" y="1033.5" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="183.0" y="1055.0" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="207.5" y="1047.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="229.0" y="1068.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="258.1" y="1056.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="279.6" y="1089.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="304.1" y="1056.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="325.6" y="1089.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="386.9" y="1056.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="408.4" y="1089.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="432.9" y="1056.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="454.4" y="1089.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="483.5" y="1047.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="505.0" y="1068.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="529.5" y="1033.5" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="551.0" y="1055.0" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="575.5" y="1047.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="597.0" y="1068.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<text x="22.0" y="1128.0" font-size="14" fill="#52606d" dominant-baseline="hanging">第 2 层：按住右手 RAISE 键时生效。右侧是方向键/翻页/词移动/编辑快捷键，左侧是</text>
+<text x="22.0" y="1148.0" font-size="14" fill="#52606d" dominant-baseline="hanging">Ins/Pscr/Menu/修饰键/撤销复制粘贴</text>
+<rect x="6.0" y="1192.0" width="722.0" height="394.0" rx="10" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
+<text x="22.0" y="1200.0" font-size="18" fill="#6423ad" dominant-baseline="hanging">第 3 层  ADJUST   ·   设置层</text>
+<rect x="23.5" y="1253.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="45.0" y="1275.2" font-size="10" fill="#202124" text-anchor="middle" dominant-baseline="central">灯 开/关</text>
+<rect x="69.5" y="1253.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="91.0" y="1275.2" font-size="13" fill="#202124" text-anchor="middle" dominant-baseline="central">灯效→</text>
+<rect x="115.5" y="1235.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="137.0" y="1256.8" font-size="13" fill="#202124" text-anchor="middle" dominant-baseline="central">灯效←</text>
+<rect x="161.5" y="1221.5" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="183.0" y="1243.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">亮 +</text>
+<rect x="207.5" y="1235.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="229.0" y="1256.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">亮 −</text>
+<rect x="253.5" y="1242.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="275.0" y="1263.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="437.5" y="1242.2" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="459.0" y="1263.7" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">色相 +</text>
+<rect x="483.5" y="1235.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="505.0" y="1256.8" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">色相 −</text>
+<rect x="529.5" y="1221.5" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="551.0" y="1243.0" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">饱和 +</text>
+<rect x="575.5" y="1235.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="597.0" y="1256.8" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">饱和 −</text>
+<rect x="621.5" y="1253.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="643.0" y="1275.2" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">速度 +</text>
+<rect x="667.5" y="1253.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="689.0" y="1275.2" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">速度 −</text>
+<rect x="23.5" y="1299.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="45.0" y="1321.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Boot</text>
+<rect x="69.5" y="1299.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="91.0" y="1321.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="115.5" y="1281.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="137.0" y="1302.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="161.5" y="1267.5" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="183.0" y="1289.0" font-size="13" fill="#202124" text-anchor="middle" dominant-baseline="central">OLED</text>
+<rect x="207.5" y="1281.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="229.0" y="1302.8" font-size="9" fill="#202124" text-anchor="middle" dominant-baseline="central">Mac/Win</text>
+<rect x="253.5" y="1288.2" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="275.0" y="1309.7" font-size="9" fill="#202124" text-anchor="middle" dominant-baseline="central">EE_CLR</text>
+<rect x="437.5" y="1288.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="459.0" y="1309.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="483.5" y="1281.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="505.0" y="1302.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="529.5" y="1267.5" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="551.0" y="1289.0" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="575.5" y="1281.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="597.0" y="1302.8" font-size="13" fill="#202124" text-anchor="middle" dominant-baseline="central">OLED</text>
+<rect x="621.5" y="1299.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="643.0" y="1321.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="667.5" y="1299.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="689.0" y="1321.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="23.5" y="1345.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="45.0" y="1367.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="69.5" y="1345.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="91.0" y="1367.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="115.5" y="1327.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="137.0" y="1348.8" font-size="9" fill="#202124" text-anchor="middle" dominant-baseline="central">Mac/Win</text>
+<rect x="161.5" y="1313.5" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="183.0" y="1335.0" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="207.5" y="1327.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="229.0" y="1348.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="253.5" y="1334.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="275.0" y="1355.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="437.5" y="1334.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="459.0" y="1355.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="483.5" y="1327.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="505.0" y="1348.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Vol−</text>
+<rect x="529.5" y="1313.5" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="551.0" y="1335.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Mute</text>
+<rect x="575.5" y="1327.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="597.0" y="1348.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Vol+</text>
+<rect x="621.5" y="1345.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="643.0" y="1367.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Prev</text>
+<rect x="667.5" y="1345.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="689.0" y="1367.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Next</text>
+<rect x="23.5" y="1391.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="45.0" y="1413.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">纯白</text>
+<rect x="69.5" y="1391.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="91.0" y="1413.2" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">波扩散</text>
+<rect x="115.5" y="1373.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="137.0" y="1394.8" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">彩虹波</text>
+<rect x="161.5" y="1359.5" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="183.0" y="1381.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">信标</text>
+<rect x="207.5" y="1373.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="229.0" y="1394.8" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">像素流</text>
+<rect x="253.5" y="1380.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="275.0" y="1401.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="308.7" y="1380.2" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="330.2" y="1401.7" font-size="10" fill="#202124" text-anchor="middle" dominant-baseline="central">灯 开/关</text>
+<rect x="382.3" y="1380.2" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="403.8" y="1401.7" font-size="13" fill="#202124" text-anchor="middle" dominant-baseline="central">灯效→</text>
+<rect x="437.5" y="1380.2" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="459.0" y="1401.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">彩点</text>
+<rect x="483.5" y="1373.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="505.0" y="1394.8" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">数字雨</text>
+<rect x="529.5" y="1359.5" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="551.0" y="1381.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">涟漪</text>
+<rect x="575.5" y="1373.3" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="597.0" y="1394.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">热图</text>
+<rect x="621.5" y="1391.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="643.0" y="1413.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Play</text>
+<rect x="667.5" y="1391.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="689.0" y="1413.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="115.5" y="1419.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="137.0" y="1440.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="161.5" y="1405.5" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="183.0" y="1427.0" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="207.5" y="1419.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="229.0" y="1440.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="258.1" y="1428.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="279.6" y="1461.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="304.1" y="1428.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="325.6" y="1461.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="386.9" y="1428.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="408.4" y="1461.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="432.9" y="1428.5" width="43.0" height="66.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="454.4" y="1461.5" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="483.5" y="1419.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="505.0" y="1440.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="529.5" y="1405.5" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="551.0" y="1427.0" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<rect x="575.5" y="1419.3" width="43.0" height="43.0" rx="6" fill="#f1f3f5" stroke="#dcdfe4" stroke-width="1"/>
+<text x="597.0" y="1440.8" font-size="16" fill="#9aa5b1" text-anchor="middle" dominant-baseline="central">▽</text>
+<text x="22.0" y="1500.0" font-size="14" fill="#52606d" dominant-baseline="hanging">第 3 层：LOWER + RAISE</text>
+<text x="22.0" y="1520.0" font-size="14" fill="#52606d" dominant-baseline="hanging">同时按住才进入（三键组合）。上排是灯光控制（左：开关/切灯效/亮度，右：色相/饱和/速度），下排左边</text>
+<text x="22.0" y="1540.0" font-size="14" fill="#52606d" dominant-baseline="hanging">4~5 列是 9 个灯效直达键（第一个「纯白」是默认灯效）；此外还有 Mac/Win 切换、OLED 画面切换、清</text>
+<text x="22.0" y="1560.0" font-size="14" fill="#52606d" dominant-baseline="hanging">EEPROM、烧录和媒体键。这一层两个旋钮也改成调灯（左=亮度、右=速度）</text>
+<rect x="6.0" y="1612.0" width="722.0" height="88.0" rx="10" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
+<text x="22.0" y="1620.0" font-size="16" fill="#1f2933" dominant-baseline="hanging">旋钮（左右各一个 EC11）</text>
+<text x="22.0" y="1644.0" font-size="13" fill="#52606d" dominant-baseline="hanging">左旋钮：左转 音量−　右转 音量+　按压 静音</text>
+<text x="367.0" y="1644.0" font-size="13" fill="#52606d" dominant-baseline="hanging">右旋钮：左转 上一首　右转 下一首　按压 播放/暂停</text>
+<text x="22.0" y="1668.0" font-size="13" fill="#52606d" dominant-baseline="hanging">换层：按住 LOWER（左拇指）/ RAISE（右拇指内侧）；两键同时按 = ADJUST；松开自动回基础层　｜　ADJUST</text>
+<text x="22.0" y="1688.0" font-size="13" fill="#52606d" dominant-baseline="hanging">层两个旋钮改成调灯：左 = 亮度、右 = 速度，按压 = 灯开/关、下一个灯效</text>
+</svg>

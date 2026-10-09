@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="763" height="1100" viewBox="0 0 763 1100">
+<rect width="763" height="1100" fill="#eef1f5"/>
+<style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Helvetica,Arial,sans-serif;}</style>
+<text x="30.0" y="16.0" font-size="30" fill="#1f2933" dominant-baseline="hanging">RP2040 Pico 引脚对照 · sofle_pico 用到的脚</text>
+<text x="30.0" y="56.0" font-size="16" fill="#52606d" dominant-baseline="hanging">两个半边各一块 Pico，接线方式相同；未列出的脚空着不用</text>
+<rect x="330.0" y="110.0" width="132.0" height="740.0" rx="14" fill="#e8f2e8" stroke="#2e7d32" stroke-width="2"/>
+<text x="396.0" y="136.0" font-size="20" fill="#2e7d32" text-anchor="middle" dominant-baseline="central">RP2040</text>
+<text x="396.0" y="162.0" font-size="20" fill="#2e7d32" text-anchor="middle" dominant-baseline="central">Pico</text>
+<rect x="369.6" y="96.0" width="52.8" height="14.0" rx="3" fill="#c8d6c8" stroke="#7ba17b" stroke-width="1"/>
+<text x="396.0" y="103.0" font-size="10" fill="#3d5a3d" text-anchor="middle" dominant-baseline="central">USB</text>
+<rect x="322.0" y="121.0" width="16.0" height="10.0" rx="2" fill="#d68910" stroke="#d68910" stroke-width="0"/>
+<text x="312.0" y="117.0" font-size="17" fill="#d68910" text-anchor="end" dominant-baseline="hanging">GP0</text>
+<text x="312.0" y="134.0" font-size="13" fill="#d68910" text-anchor="end" dominant-baseline="hanging">pin 1 · RGB 灯带数据</text>
+<rect x="322.0" y="157.0" width="16.0" height="10.0" rx="2" fill="#2471a3" stroke="#2471a3" stroke-width="0"/>
+<text x="312.0" y="153.0" font-size="17" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">GP1</text>
+<text x="312.0" y="170.0" font-size="13" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">pin 2 · 矩阵列 c0</text>
+<rect x="322.0" y="193.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="312.0" y="189.0" font-size="17" fill="#6b7684" text-anchor="end" dominant-baseline="hanging">GND</text>
+<text x="312.0" y="206.0" font-size="13" fill="#b0b8c1" text-anchor="end" dominant-baseline="hanging">pin 3</text>
+<rect x="322.0" y="229.0" width="16.0" height="10.0" rx="2" fill="#2471a3" stroke="#2471a3" stroke-width="0"/>
+<text x="312.0" y="225.0" font-size="17" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">GP2</text>
+<text x="312.0" y="242.0" font-size="13" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">pin 4 · 矩阵列 c1</text>
+<rect x="322.0" y="265.0" width="16.0" height="10.0" rx="2" fill="#2471a3" stroke="#2471a3" stroke-width="0"/>
+<text x="312.0" y="261.0" font-size="17" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">GP3</text>
+<text x="312.0" y="278.0" font-size="13" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">pin 5 · 矩阵列 c2</text>
+<rect x="322.0" y="301.0" width="16.0" height="10.0" rx="2" fill="#2471a3" stroke="#2471a3" stroke-width="0"/>
+<text x="312.0" y="297.0" font-size="17" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">GP4</text>
+<text x="312.0" y="314.0" font-size="13" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">pin 6 · 矩阵列 c3</text>
+<rect x="322.0" y="337.0" width="16.0" height="10.0" rx="2" fill="#2471a3" stroke="#2471a3" stroke-width="0"/>
+<text x="312.0" y="333.0" font-size="17" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">GP5</text>
+<text x="312.0" y="350.0" font-size="13" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">pin 7 · 矩阵列 c4</text>
+<rect x="322.0" y="373.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="312.0" y="369.0" font-size="17" fill="#6b7684" text-anchor="end" dominant-baseline="hanging">GND</text>
+<text x="312.0" y="386.0" font-size="13" fill="#b0b8c1" text-anchor="end" dominant-baseline="hanging">pin 8</text>
+<rect x="322.0" y="409.0" width="16.0" height="10.0" rx="2" fill="#7d3c98" stroke="#7d3c98" stroke-width="0"/>
+<text x="312.0" y="405.0" font-size="17" fill="#7d3c98" text-anchor="end" dominant-baseline="hanging">GP6</text>
+<text x="312.0" y="422.0" font-size="13" fill="#7d3c98" text-anchor="end" dominant-baseline="hanging">pin 9 · OLED SDA</text>
+<rect x="322.0" y="445.0" width="16.0" height="10.0" rx="2" fill="#7d3c98" stroke="#7d3c98" stroke-width="0"/>
+<text x="312.0" y="441.0" font-size="17" fill="#7d3c98" text-anchor="end" dominant-baseline="hanging">GP7</text>
+<text x="312.0" y="458.0" font-size="13" fill="#7d3c98" text-anchor="end" dominant-baseline="hanging">pin 10 · OLED SCL</text>
+<rect x="322.0" y="481.0" width="16.0" height="10.0" rx="2" fill="#2471a3" stroke="#2471a3" stroke-width="0"/>
+<text x="312.0" y="477.0" font-size="17" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">GP8</text>
+<text x="312.0" y="494.0" font-size="13" fill="#2471a3" text-anchor="end" dominant-baseline="hanging">pin 11 · 矩阵列 c5</text>
+<rect x="322.0" y="517.0" width="16.0" height="10.0" rx="2" fill="#1e8449" stroke="#1e8449" stroke-width="0"/>
+<text x="312.0" y="513.0" font-size="17" fill="#1e8449" text-anchor="end" dominant-baseline="hanging">GP9</text>
+<text x="312.0" y="530.0" font-size="13" fill="#1e8449" text-anchor="end" dominant-baseline="hanging">pin 12 · 矩阵行 r0</text>
+<rect x="322.0" y="553.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="312.0" y="549.0" font-size="17" fill="#6b7684" text-anchor="end" dominant-baseline="hanging">GND</text>
+<text x="312.0" y="566.0" font-size="13" fill="#b0b8c1" text-anchor="end" dominant-baseline="hanging">pin 13</text>
+<rect x="322.0" y="589.0" width="16.0" height="10.0" rx="2" fill="#1e8449" stroke="#1e8449" stroke-width="0"/>
+<text x="312.0" y="585.0" font-size="17" fill="#1e8449" text-anchor="end" dominant-baseline="hanging">GP10</text>
+<text x="312.0" y="602.0" font-size="13" fill="#1e8449" text-anchor="end" dominant-baseline="hanging">pin 14 · 矩阵行 r1</text>
+<rect x="322.0" y="625.0" width="16.0" height="10.0" rx="2" fill="#1e8449" stroke="#1e8449" stroke-width="0"/>
+<text x="312.0" y="621.0" font-size="17" fill="#1e8449" text-anchor="end" dominant-baseline="hanging">GP11</text>
+<text x="312.0" y="638.0" font-size="13" fill="#1e8449" text-anchor="end" dominant-baseline="hanging">pin 15 · 矩阵行 r2</text>
+<rect x="322.0" y="661.0" width="16.0" height="10.0" rx="2" fill="#1e8449" stroke="#1e8449" stroke-width="0"/>
+<text x="312.0" y="657.0" font-size="17" fill="#1e8449" text-anchor="end" dominant-baseline="hanging">GP12</text>
+<text x="312.0" y="674.0" font-size="13" fill="#1e8449" text-anchor="end" dominant-baseline="hanging">pin 16 · 矩阵行 r3</text>
+<rect x="322.0" y="697.0" width="16.0" height="10.0" rx="2" fill="#1e8449" stroke="#1e8449" stroke-width="0"/>
+<text x="312.0" y="693.0" font-size="17" fill="#1e8449" text-anchor="end" dominant-baseline="hanging">GP13</text>
+<text x="312.0" y="710.0" font-size="13" fill="#1e8449" text-anchor="end" dominant-baseline="hanging">pin 17 · 矩阵行 r4</text>
+<rect x="322.0" y="733.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="312.0" y="729.0" font-size="17" fill="#6b7684" text-anchor="end" dominant-baseline="hanging">GND</text>
+<text x="312.0" y="746.0" font-size="13" fill="#b0b8c1" text-anchor="end" dominant-baseline="hanging">pin 18</text>
+<rect x="322.0" y="769.0" width="16.0" height="10.0" rx="2" fill="#00838f" stroke="#00838f" stroke-width="0"/>
+<text x="312.0" y="765.0" font-size="17" fill="#00838f" text-anchor="end" dominant-baseline="hanging">GP14</text>
+<text x="312.0" y="782.0" font-size="13" fill="#00838f" text-anchor="end" dominant-baseline="hanging">pin 19 · 旋钮 A</text>
+<rect x="322.0" y="805.0" width="16.0" height="10.0" rx="2" fill="#00838f" stroke="#00838f" stroke-width="0"/>
+<text x="312.0" y="801.0" font-size="17" fill="#00838f" text-anchor="end" dominant-baseline="hanging">GP15</text>
+<text x="312.0" y="818.0" font-size="13" fill="#00838f" text-anchor="end" dominant-baseline="hanging">pin 20 · 旋钮 B</text>
+<rect x="454.0" y="121.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="117.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">VBUS</text>
+<text x="480.0" y="134.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 40</text>
+<rect x="454.0" y="157.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="153.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">VSYS</text>
+<text x="480.0" y="170.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 39</text>
+<rect x="454.0" y="193.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="189.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GND</text>
+<text x="480.0" y="206.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 38</text>
+<rect x="454.0" y="229.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="225.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">3V3_EN</text>
+<text x="480.0" y="242.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 37</text>
+<rect x="454.0" y="265.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="261.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">3V3(OUT)</text>
+<text x="480.0" y="278.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 36</text>
+<rect x="454.0" y="301.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="297.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">ADC_VREF</text>
+<text x="480.0" y="314.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 35</text>
+<rect x="454.0" y="337.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="333.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GP28</text>
+<text x="480.0" y="350.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 34</text>
+<rect x="454.0" y="373.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="369.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">AGND</text>
+<text x="480.0" y="386.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 33</text>
+<rect x="454.0" y="409.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="405.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GP27</text>
+<text x="480.0" y="422.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 32</text>
+<rect x="454.0" y="445.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="441.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GP26</text>
+<text x="480.0" y="458.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 31</text>
+<rect x="454.0" y="481.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="477.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">RUN</text>
+<text x="480.0" y="494.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 30</text>
+<rect x="454.0" y="517.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="513.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GP22</text>
+<text x="480.0" y="530.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 29</text>
+<rect x="454.0" y="553.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="549.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GND</text>
+<text x="480.0" y="566.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 28</text>
+<rect x="454.0" y="589.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="585.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GP21</text>
+<text x="480.0" y="602.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 27</text>
+<rect x="454.0" y="625.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="621.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GP20</text>
+<text x="480.0" y="638.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 26</text>
+<rect x="454.0" y="661.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="657.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GP19</text>
+<text x="480.0" y="674.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 25</text>
+<rect x="454.0" y="697.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="693.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GP18</text>
+<text x="480.0" y="710.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 24</text>
+<rect x="454.0" y="733.0" width="16.0" height="10.0" rx="2" fill="#b0b8c1" stroke="#b0b8c1" stroke-width="0"/>
+<text x="480.0" y="729.0" font-size="17" fill="#6b7684" dominant-baseline="hanging">GND</text>
+<text x="480.0" y="746.0" font-size="13" fill="#b0b8c1" dominant-baseline="hanging">pin 23</text>
+<rect x="454.0" y="769.0" width="16.0" height="10.0" rx="2" fill="#c0392b" stroke="#c0392b" stroke-width="0"/>
+<text x="480.0" y="765.0" font-size="17" fill="#c0392b" dominant-baseline="hanging">GP17</text>
+<text x="480.0" y="782.0" font-size="13" fill="#c0392b" dominant-baseline="hanging">pin 22 · TRRS RX（连另一半）</text>
+<rect x="454.0" y="805.0" width="16.0" height="10.0" rx="2" fill="#c0392b" stroke="#c0392b" stroke-width="0"/>
+<text x="480.0" y="801.0" font-size="17" fill="#c0392b" dominant-baseline="hanging">GP16</text>
+<text x="480.0" y="818.0" font-size="13" fill="#c0392b" dominant-baseline="hanging">pin 21 · TRRS TX（连另一半）</text>
+<text x="30.0" y="874.0" font-size="20" fill="#1f2933" dominant-baseline="hanging">图例</text>
+<rect x="30.0" y="908.0" width="14.0" height="14.0" rx="3" fill="#2471a3" stroke="#2471a3" stroke-width="0"/>
+<text x="54.0" y="904.0" font-size="16" fill="#52606d" dominant-baseline="hanging">矩阵列 c0-c5：GP1 GP2 GP3 GP4 GP5 GP8（带上拉的输入，最常见故障点）</text>
+<rect x="30.0" y="934.0" width="14.0" height="14.0" rx="3" fill="#1e8449" stroke="#1e8449" stroke-width="0"/>
+<text x="54.0" y="930.0" font-size="16" fill="#52606d" dominant-baseline="hanging">矩阵行 r0-r4：GP9 GP10 GP11 GP12 GP13（扫描时逐个拉低）</text>
+<rect x="30.0" y="960.0" width="14.0" height="14.0" rx="3" fill="#c0392b" stroke="#c0392b" stroke-width="0"/>
+<text x="54.0" y="956.0" font-size="16" fill="#52606d" dominant-baseline="hanging">分体链路：GP16/GP17，走 TRRS 线到另一半</text>
+<rect x="30.0" y="986.0" width="14.0" height="14.0" rx="3" fill="#00838f" stroke="#00838f" stroke-width="0"/>
+<text x="54.0" y="982.0" font-size="16" fill="#52606d" dominant-baseline="hanging">旋钮：GP14/GP15</text>
+<rect x="30.0" y="1012.0" width="14.0" height="14.0" rx="3" fill="#7d3c98" stroke="#7d3c98" stroke-width="0"/>
+<text x="54.0" y="1008.0" font-size="16" fill="#52606d" dominant-baseline="hanging">OLED I2C：GP6= SDA、GP7=SCL</text>
+<rect x="30.0" y="1038.0" width="14.0" height="14.0" rx="3" fill="#d68910" stroke="#d68910" stroke-width="0"/>
+<text x="54.0" y="1034.0" font-size="16" fill="#52606d" dominant-baseline="hanging">RGB 灯带数据：GP0</text>
+<text x="30.0" y="1066.0" font-size="15" fill="#8c1c1c" dominant-baseline="hanging">测列线：把 Pico 拔下单插 USB 跑 sofle_pico_pintest.uf2，或用跳线把引脚根部短接到 GP9 看 debug 输出。</text>
+</svg>

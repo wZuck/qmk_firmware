@@ -2,7 +2,7 @@
 
 ![四层键位图](keymap_layers.png)
 
-> 放大看不糊的矢量版：[keymap_layers.svg](keymap_layers.svg)
+> 放大看不糊的矢量版：[preview/keymap_layers.svg](preview/keymap_layers.svg)
 
 > 图片由 `gen_keymap_image.py` 从 `keymap.c` + `keyboard.json` 自动生成，改键后重跑该脚本即可刷新。
 
