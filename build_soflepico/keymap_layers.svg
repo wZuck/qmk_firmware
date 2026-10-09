@@ -28,9 +28,9 @@
 <rect x="621.5" y="157.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
 <text x="643.0" y="179.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">0</text>
 <rect x="667.5" y="157.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
-<text x="689.0" y="179.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">`</text>
+<text x="689.0" y="179.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">-</text>
 <rect x="23.5" y="203.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
-<text x="45.0" y="225.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Esc</text>
+<text x="45.0" y="225.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Tab</text>
 <rect x="69.5" y="203.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
 <text x="91.0" y="225.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Q</text>
 <rect x="115.5" y="185.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
@@ -52,9 +52,9 @@
 <rect x="621.5" y="203.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
 <text x="643.0" y="225.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">P</text>
 <rect x="667.5" y="203.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
-<text x="689.0" y="225.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Bspc</text>
+<text x="689.0" y="225.2" font-size="15" fill="#202124" text-anchor="middle" dominant-baseline="central">Enter</text>
 <rect x="23.5" y="249.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
-<text x="45.0" y="271.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Tab</text>
+<text x="45.0" y="271.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Esc</text>
 <rect x="69.5" y="249.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
 <text x="91.0" y="271.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">A</text>
 <rect x="115.5" y="231.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
@@ -114,7 +114,7 @@
 <rect x="258.1" y="332.5" width="43.0" height="66.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="3"/>
 <text x="279.6" y="365.5" font-size="9" fill="#202124" text-anchor="middle" dominant-baseline="central">LOWER</text>
 <rect x="304.1" y="332.5" width="43.0" height="66.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
-<text x="325.6" y="365.5" font-size="15" fill="#202124" text-anchor="middle" dominant-baseline="central">Enter</text>
+<text x="325.6" y="365.5" font-size="13" fill="#202124" text-anchor="middle" dominant-baseline="central">Space</text>
 <rect x="386.9" y="332.5" width="43.0" height="66.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
 <text x="408.4" y="365.5" font-size="13" fill="#202124" text-anchor="middle" dominant-baseline="central">Space</text>
 <rect x="432.9" y="332.5" width="43.0" height="66.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="3"/>
@@ -154,7 +154,7 @@
 <rect x="667.5" y="529.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
 <text x="689.0" y="551.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">F11</text>
 <rect x="23.5" y="575.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
-<text x="45.0" y="597.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">`</text>
+<text x="45.0" y="597.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">-</text>
 <rect x="69.5" y="575.7" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>
 <text x="91.0" y="597.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">1</text>
 <rect x="115.5" y="557.3" width="43.0" height="43.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="1"/>

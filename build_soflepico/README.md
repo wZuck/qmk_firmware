@@ -10,7 +10,7 @@
 | 键盘 | `sofle_pico`（RP2040 / Raspberry Pi Pico，分体，左右各一个 EC11） |
 | keymap | `default` |
 | 编译命令 | `qmk compile -kb sofle_pico -km default` |
-| QMK 版本 | tag `0.34.5-23-g22e26f00d7`，commit `22e26f00d7`，分支 `master` |
+| QMK 版本 | tag `0.34.5-25-g372aee9bad`，commit `372aee9bad`，分支 `master` |
 | 构建时间 | 2026-10-01 |
 | 源文件 | `keyboards/sofle_pico/`（工作区修改，尚未提交） |
 
@@ -56,9 +56,9 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-e43f25fde7cb681e5201c7914567e69727b7f9b5612745651c685eeb55ac9150  sofle_pico_default.uf2
-b7361aeadc6d98bf645f8335fade9d9052144de4331276a766a8b9723b972710  sofle_pico_default_split-left.uf2
-d7118ea1253c048e3925b8c6ba8945cef9d9eaa328a8d508c50d2091e4e89add  sofle_pico_default_split-right.uf2
+f64693b6731622d128889bfe07fd6ac94e1c32dfb91c31b160d794e06f5786b8  sofle_pico_default.uf2
+a2df233be7301b9a8eff060ac48928d5da8b2f6f36b68bc9c2ed9351b05daa1c  sofle_pico_default_split-left.uf2
+85d7862eb5f64cd18e5b74c1e28b3c687be81389d40ad14cb99aa4659ffc7046  sofle_pico_default_split-right.uf2
 ```
 
 （`split-left` / `split-right` 不是 `qmk compile` 能直接出的目标：按
@@ -280,8 +280,9 @@ ADJUST 层（`LOWER` + `RAISE` 同时按住）上新增了一整组灯光键，�
   「关了灯再按预设键，看起来像键坏了」。
 - 每个直达键外面套了一层对应的 `ENABLE_RGB_MATRIX_*`：哪天在 `keyboard.json` 里关掉某个灯效，
   这里跟着失效而不是编译报错。没编 RGB 的构建（`probe` 那种）里，这些键会退化成空键。
-- 因为键位表本身变了（ADJUST 层新增 20 个键、媒体键挪了位置），`SOFLE_EEPROM_VERSION`
-  从 2 提到了 **4**：烧完第一次启动会自动用固件里的键位重写 EEPROM，不用手动清。
+- 键位表每次变动都要把 `SOFLE_EEPROM_VERSION` +1（现在是 **7**）：4 是加灯光键那次、
+  5/6 是雪人键的加与撤、7 是这次改基础层（左半 ESC/Tab 对调、右上角 `` ` `` 改 `-`、
+  右半 Bspc 改 Enter、两个拇指键都成 Space）。烧完第一次启动会自动用固件里的键位重写 EEPROM，不用手动清。
 - 灯光设置（灯效 / 色相 / 饱和 / 亮度）**存在另一块 EEPROM 里**，`dynamic_keymap_reset()`
   碰不到它。所以版本对不上时顺手调一次 `eeconfig_update_rgb_matrix_default()`，
   老机器烧完新固件才会真的变成纯白常亮；之后你在 VIA / 键盘上改的灯效会一直留着。
@@ -415,16 +416,17 @@ VIA 的改键、宏、灯光等功能不受影响，只是测试器会重新变�
    `encoder_map` / `keymaps` 只在 EEPROM 首次初始化时写入一次。如果之前已经烧过 VIA 版固件
    且 EEPROM 仍然有效，这次的新映射**不会自动生效**，需要：
    - 在 VIA 里重新设置编码器映射，或
-   - 现在**不需要手动清了**：固件里有个 `SOFLE_EEPROM_VERSION`（这份固件里是 **4**，
-     上一次加灯光键时 +1 过），启动时发现 EEPROM 里的版本对不上，
+   - 现在**不需要手动清了**：固件里有个 `SOFLE_EEPROM_VERSION`（这份固件里是 **7**），
+     启动时发现 EEPROM 里的版本对不上，
      就自动用固件里的键位重写一遍（`dynamic_keymap_reset()`）。改了层结构之后把这个常量 +1 即可。
-   - 仍然保留 `ADJUST` 层的 `EE_CLR` 键（左手 `T` 键位置）作为手动兜底，VIA 的 Reset Keymap 也一样有效。
+   - 仍然保留 `ADJUST` 层的 `EE_CLR` 键（左手 `G` 键位置）作为手动兜底，VIA 的 Reset Keymap 也一样有效。
 3. 两半都必须烧新固件；只烧一半会出现两层版本不一致的奇怪现象。
 4. 更换旋钮分辨率等编码器硬件配置后，**带旋钮的那一半必须重新烧录**。
 5. **ADJUST 层新增的灯光键是要写进 EEPROM 的键位表**：只烧一半固件时，如果手性/EEPROM 版本
    不一致，可能出现一半的 ADJUST 层还是旧键位。稳妥做法是两半都烧 `split-left` / `split-right`。
    这一版也动过 ADJUST 层（曾经加过一个 `SNOW_TOGG`，后来撤掉了），所以 `SOFLE_EEPROM_VERSION`
-   提到了 **6**：烧完第一次启动会自动用固件里的键位重写 EEPROM，把那个遗留的键清掉。
+   提到了 **7**（6 是撤掉 SNOW_TOGG 那次，7 是这次改基础层 ESC/Tab/右上角/Bspc/拇指键）：
+   烧完第一次启动会自动用固件里的键位重写 EEPROM，否则还是老键位。
    雪人现在是 OLED 循环里的一屏，不占任何按键。
 
 ## 7. 相关源文件
