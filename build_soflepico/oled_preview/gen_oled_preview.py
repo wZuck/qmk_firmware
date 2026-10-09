@@ -436,6 +436,19 @@ def main():
 
     # 吉祥物的正/反对照（反色那套的四组动画，各取第一帧）
     anim_inv = parse_anims(ANIM_INV_H, "oled_anim_inv")
+    # ③b 反色动画：和正色一样，逐帧出图 + 每组一个 GIF（页面第 ③ 节要引用）
+    for name, frames in anim_inv:
+        imgs = []
+        for i, frame in enumerate(frames):
+            c = Canvas()
+            c.buf[:] = bytes(frame)
+            c.to_image(1).save(png(1, "1x", f"anim_inv_{name}_{i:02d}"))
+            img = c.to_image(4)
+            img.save(png(4, "4x", f"anim_inv_{name}_{i:02d}"))
+            imgs.append(img)
+        imgs[0].save(os.path.join(HERE, f"anim_inv_{name}.gif"), save_all=True,
+                     append_images=imgs[1:], duration=125, loop=0, optimize=False)
+
     mascot_both = Image.new("RGB", (W * 2 * 4 + 12 * 3, H * 2 * 2 + 12), "#f2f4f7")
     for k, (name, frames) in enumerate(anims):
         c = Canvas(); c.buf[:] = bytes(frames[0])
@@ -531,7 +544,7 @@ def main():
 
     sheet.save(os.path.join(HERE, "oled_overview.png"))
     print("已生成:", os.path.join(HERE, "oled_overview.png"))
-    print(f"状态屏 {len(made)} 张，信息屏 {len(info)} 张，动画 {len(anim_rows)} 组 x {nframes} 帧 + 雪人 {len(snow)} 帧(正/反)，GIF {len(anim_rows)} 个")
+    print(f"状态屏 {len(made)} 张，信息屏 {len(info)} 张，动画 {len(anim_rows)} 组 x {nframes} 帧 + 反色 {len(anim_inv)} 组，雪人 {len(snow)} 帧(正/反)，GIF {len(anim_rows) + len(anim_inv)} 个")
 
 
 def wrap(d, text, font, max_w):

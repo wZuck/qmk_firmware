@@ -21,6 +21,16 @@
   code { background:#eef1f5; padding:1px 5px; border-radius:5px; font-size:13.5px; }
   .hash { font-family:ui-monospace,Menlo,Monaco,monospace; font-size:12.5px; word-break:break-all; }
   .grid { display:grid; gap:18px; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); }
+  /* 键位表：两层并排（左手 / 右手），格子紧凑、可横向滚动 */
+  .km-wrap { display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); margin:0 0 8px; }
+  .km-wrap h4 { font-size:14px; margin:0 0 6px; color:var(--dim); font-weight:600; }
+  .km-wrap > div { overflow-x:auto; }
+  table.km { width:auto; min-width:100%; font-size:13px; background:var(--card);
+              border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  table.km th, table.km td { padding:5px 9px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  table.km tr:last-child td { border-bottom:none; }
+  table.km td:first-child, table.km th:first-child { color:var(--dim); font-weight:600; }
+  table.km td { font-variant-numeric:tabular-nums; }
   .card { margin:0; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:10px; }
   .card img { display:block; width:100%; image-rendering:pixelated; border-radius:8px; background:var(--oled); }
   .card figcaption { font-size:13px; margin-top:8px; line-height:1.45; }
@@ -58,7 +68,7 @@
       <tr><th>键盘 / keymap</th><td><code>sofle_pico</code> / <code>default</code>（RP2040，分体，左右各一个 EC11）</td></tr>
       <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 277,504 字节 · 构建于 2026-10-09 20:39</td></tr>
       <tr><th>SHA-256</th><td class="hash">f64693b6731622d128889bfe07fd6ac94e1c32dfb91c31b160d794e06f5786b8</td></tr>
-      <tr><th>QMK</th><td>tag <code>0.34.5-25-g372aee9bad</code> · commit <code>372aee9bad</code>（2026-10-09）</td></tr>
+      <tr><th>QMK</th><td>tag <code>0.34.5-28-ga0dff1899c</code> · commit <code>a0dff1899c</code>（2026-10-10）</td></tr>
       <tr><th>硬件排查</th><td><code>matrix_map_left.svg</code>（左手矩阵图）· <code>pico_pinout.svg</code>（Pico 引脚图）· <code>hardware_check.md</code>（排查流程）</td></tr>
       <tr><th>键位图</th><td><code>keymap_layers.svg</code>（矢量）· <code>keymap_layers.png</code>（2 倍光栅）</td></tr>
       <tr><th>灯光</th><td><code>led_map.svg</code>（矢量）· <code>led_map.png</code>（2 倍光栅）——58 颗逐键 RGB 的索引、矩阵位置和灯带走向；ADJUST 层上有开关/切换/色相/饱和/亮度/速度键和 9 个灯效直达键（含默认的纯白常亮，见下面「LED 灯效」）</td></tr>
@@ -82,12 +92,93 @@
       </figure>
       <figure class="card wide">
         <a href="keymap_layers.svg"><img src="keymap_layers.svg" alt="四层键位图（矢量）" loading="lazy"></a>
-        <figcaption><b>四层键位图（矢量）</b><br><span class="dim">矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍，1468x3300）；文字版见 keymap.md</span></figcaption>
+        <figcaption><b>四层键位图（矢量）</b><br><span class="dim">矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍）；下面的表格内容与它同源（都由 keymap.c 生成）</span></figcaption>
       </figure>
       <figure class="card wide">
         <a href="led_map.svg"><img src="led_map.svg" alt="逐键 RGB 灯位图" loading="lazy"></a>
         <figcaption><b>逐键 RGB 灯位图</b><br><span class="dim">58 颗 WS2812 逐键灯的全局索引、本半灯带序号、矩阵位置和灯带走向；左右各一条独立灯带，数据脚 GP0</span></figcaption>
       </figure>
+  </div>
+
+  <h3>四层键位表（文字版）</h3>
+  <p class="lead">右手那几张表按<b>从内到外</b>排列（最左边是靠近中间缝的那一列）。
+     <code>▽</code> = 穿透到下一层，<code>✗</code> = 无功能。基础层的 Esc/Tab、右上角的 <code>-</code>、
+     右半的 Enter 和两个拇指 Space 是当前这版固件的绑定。</p>
+  <h3>第 0 层 · QWERTY <span class="dim">— 基础层（默认）</span></h3>
+  <div class="km-wrap">
+    <div><h4>左手</h4><table class="km">
+<tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>数字行</td><td>`</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+<tr><td>上排</td><td>Tab</td><td>Q</td><td>W</td><td>E</td><td>R</td><td>T</td></tr>
+<tr><td>中排</td><td>Esc</td><td>A</td><td>S</td><td>D</td><td>F</td><td>G</td></tr>
+<tr><td>下排</td><td>Shift</td><td>Z</td><td>X</td><td>C</td><td>V</td><td>B</td></tr>
+<tr><td>拇指/旋钮</td><td>GUI</td><td>Alt</td><td>Ctrl</td><td>LOWER</td><td>Space</td><td>Mute</td></tr>
+</table></div>
+    <div><h4>右手</h4><table class="km">
+<tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>数字行</td><td>6</td><td>7</td><td>8</td><td>9</td><td>0</td><td>-</td></tr>
+<tr><td>上排</td><td>Y</td><td>U</td><td>I</td><td>O</td><td>P</td><td>Enter</td></tr>
+<tr><td>中排</td><td>H</td><td>J</td><td>K</td><td>L</td><td>;</td><td>&#x27;</td></tr>
+<tr><td>下排</td><td>N</td><td>M</td><td>,</td><td>.</td><td>/</td><td>Shift</td></tr>
+<tr><td>拇指/旋钮</td><td>Play</td><td>Space</td><td>RAISE</td><td>Ctrl</td><td>Alt</td><td>GUI</td></tr>
+</table></div>
+  </div>
+  <h3>第 1 层 · LOWER <span class="dim">— 数字/符号层</span></h3>
+  <div class="km-wrap">
+    <div><h4>左手</h4><table class="km">
+<tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>数字行</td><td>▽</td><td>F1</td><td>F2</td><td>F3</td><td>F4</td><td>F5</td></tr>
+<tr><td>上排</td><td>-</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+<tr><td>中排</td><td>▽</td><td>!</td><td>@</td><td>#</td><td>$</td><td>%</td></tr>
+<tr><td>下排</td><td>▽</td><td>=</td><td>-</td><td>+</td><td>{</td><td>}</td></tr>
+<tr><td>拇指/旋钮</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td></tr>
+</table></div>
+    <div><h4>右手</h4><table class="km">
+<tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>数字行</td><td>F6</td><td>F7</td><td>F8</td><td>F9</td><td>F10</td><td>F11</td></tr>
+<tr><td>上排</td><td>6</td><td>7</td><td>8</td><td>9</td><td>0</td><td>F12</td></tr>
+<tr><td>中排</td><td>^</td><td>&amp;</td><td>*</td><td>(</td><td>)</td><td></td><td></td></tr>
+<tr><td>下排</td><td>[</td><td>]</td><td>;</td><td>:</td><td>\</td><td>▽</td></tr>
+<tr><td>拇指/旋钮</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td></tr>
+</table></div>
+  </div>
+  <h3>第 2 层 · RAISE <span class="dim">— 导航/编辑层</span></h3>
+  <div class="km-wrap">
+    <div><h4>左手</h4><table class="km">
+<tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>数字行</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td></tr>
+<tr><td>上排</td><td>▽</td><td>Ins</td><td>Pscr</td><td>Menu</td><td>✗</td><td>✗</td></tr>
+<tr><td>中排</td><td>▽</td><td>Alt</td><td>Ctrl</td><td>Shift</td><td>✗</td><td>Caps</td></tr>
+<tr><td>下排</td><td>▽</td><td>Undo</td><td>Cut</td><td>Copy</td><td>Paste</td><td>✗</td></tr>
+<tr><td>拇指/旋钮</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td></tr>
+</table></div>
+    <div><h4>右手</h4><table class="km">
+<tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>数字行</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td></tr>
+<tr><td>上排</td><td>PgUp</td><td>词←</td><td>↑</td><td>词→</td><td>删行</td><td>Bspc</td></tr>
+<tr><td>中排</td><td>PgDn</td><td>←</td><td>↓</td><td>→</td><td>Del</td><td>Bspc</td></tr>
+<tr><td>下排</td><td>✗</td><td>行首</td><td>✗</td><td>行尾</td><td>✗</td><td>▽</td></tr>
+<tr><td>拇指/旋钮</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td></tr>
+</table></div>
+  </div>
+  <h3>第 3 层 · ADJUST <span class="dim">— 设置层</span></h3>
+  <div class="km-wrap">
+    <div><h4>左手</h4><table class="km">
+<tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>数字行</td><td>灯 开/关</td><td>灯效→</td><td>灯效←</td><td>亮 +</td><td>亮 −</td><td>✗</td></tr>
+<tr><td>上排</td><td>Boot</td><td>✗</td><td>✗</td><td>OLED</td><td>Mac/Win</td><td>EE_CLR</td></tr>
+<tr><td>中排</td><td>✗</td><td>✗</td><td>Mac/Win</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>下排</td><td>纯白</td><td>波扩散</td><td>彩虹波</td><td>信标</td><td>像素流</td><td>✗</td></tr>
+<tr><td>拇指/旋钮</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>灯 开/关</td></tr>
+</table></div>
+    <div><h4>右手</h4><table class="km">
+<tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>数字行</td><td>色相 +</td><td>色相 −</td><td>饱和 +</td><td>饱和 −</td><td>速度 +</td><td>速度 −</td></tr>
+<tr><td>上排</td><td>✗</td><td>✗</td><td>✗</td><td>OLED</td><td>✗</td><td>✗</td></tr>
+<tr><td>中排</td><td>✗</td><td>Vol−</td><td>Mute</td><td>Vol+</td><td>Prev</td><td>Next</td></tr>
+<tr><td>下排</td><td>彩点</td><td>数字雨</td><td>涟漪</td><td>热图</td><td>Play</td><td>✗</td></tr>
+<tr><td>拇指/旋钮</td><td>灯效→</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td></tr>
+</table></div>
   </div>
 
   <h2>LED 灯效（逐键 RGB · 左右各 29 颗）</h2>
@@ -385,10 +476,176 @@
       </figure>
   </div>
 
-  <h3>③ 雪人那组（另一套动画图）</h3>
+  <h3>③ anim 反色版（白天模式）</h3>
+  <p class="lead">同样四组循环，<b>每个像素翻转</b>：小怪物变成亮底黑画。它排在正色四组之后，
+     所以从右半默认的 <code>anim 0</code> 一路按下去，第 5~8 屏就是这四个反色版。</p>
+  <div class="grid">
+      <figure class="card">
+        <a href="oled_preview/mascot_polarities.png"><img src="oled_preview/mascot_polarities.png" alt="小怪物：上行正色 / 下行反色" loading="lazy"></a>
+        <figcaption><b>小怪物：上行正色 / 下行反色</b><br><span class="dim">四组动画各取第 1 帧</span></figcaption>
+      </figure>
+  </div>
+  <h4>anim inv 1/4 · bounce 反色 <span class="dim">— hop, squash on landing, blink, arms swing，每个像素翻转（白天模式）</span></h4>
+  <div class="grid">
+      <figure class="card">
+        <a href="oled_preview/anim_inv_bounce.gif"><img src="oled_preview/anim_inv_bounce.gif" alt="bounce 反色（GIF）" loading="lazy"></a>
+        <figcaption><b>bounce 反色（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_bounce_00.png"><img src="oled_preview/4x/anim_inv_bounce_00.png" alt="帧 1" loading="lazy"></a>
+        <figcaption><b>帧 1</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_bounce_01.png"><img src="oled_preview/4x/anim_inv_bounce_01.png" alt="帧 2" loading="lazy"></a>
+        <figcaption><b>帧 2</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_bounce_02.png"><img src="oled_preview/4x/anim_inv_bounce_02.png" alt="帧 3" loading="lazy"></a>
+        <figcaption><b>帧 3</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_bounce_03.png"><img src="oled_preview/4x/anim_inv_bounce_03.png" alt="帧 4" loading="lazy"></a>
+        <figcaption><b>帧 4</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_bounce_04.png"><img src="oled_preview/4x/anim_inv_bounce_04.png" alt="帧 5" loading="lazy"></a>
+        <figcaption><b>帧 5</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_bounce_05.png"><img src="oled_preview/4x/anim_inv_bounce_05.png" alt="帧 6" loading="lazy"></a>
+        <figcaption><b>帧 6</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_bounce_06.png"><img src="oled_preview/4x/anim_inv_bounce_06.png" alt="帧 7" loading="lazy"></a>
+        <figcaption><b>帧 7</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_bounce_07.png"><img src="oled_preview/4x/anim_inv_bounce_07.png" alt="帧 8" loading="lazy"></a>
+        <figcaption><b>帧 8</b></figcaption>
+      </figure>
+  </div>
+  <h4>anim inv 2/4 · wave 反色 <span class="dim">— standing, waving one arm hello，每个像素翻转（白天模式）</span></h4>
+  <div class="grid">
+      <figure class="card">
+        <a href="oled_preview/anim_inv_wave.gif"><img src="oled_preview/anim_inv_wave.gif" alt="wave 反色（GIF）" loading="lazy"></a>
+        <figcaption><b>wave 反色（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_wave_00.png"><img src="oled_preview/4x/anim_inv_wave_00.png" alt="帧 1" loading="lazy"></a>
+        <figcaption><b>帧 1</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_wave_01.png"><img src="oled_preview/4x/anim_inv_wave_01.png" alt="帧 2" loading="lazy"></a>
+        <figcaption><b>帧 2</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_wave_02.png"><img src="oled_preview/4x/anim_inv_wave_02.png" alt="帧 3" loading="lazy"></a>
+        <figcaption><b>帧 3</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_wave_03.png"><img src="oled_preview/4x/anim_inv_wave_03.png" alt="帧 4" loading="lazy"></a>
+        <figcaption><b>帧 4</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_wave_04.png"><img src="oled_preview/4x/anim_inv_wave_04.png" alt="帧 5" loading="lazy"></a>
+        <figcaption><b>帧 5</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_wave_05.png"><img src="oled_preview/4x/anim_inv_wave_05.png" alt="帧 6" loading="lazy"></a>
+        <figcaption><b>帧 6</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_wave_06.png"><img src="oled_preview/4x/anim_inv_wave_06.png" alt="帧 7" loading="lazy"></a>
+        <figcaption><b>帧 7</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_wave_07.png"><img src="oled_preview/4x/anim_inv_wave_07.png" alt="帧 8" loading="lazy"></a>
+        <figcaption><b>帧 8</b></figcaption>
+      </figure>
+  </div>
+  <h4>anim inv 3/4 · walk 反色 <span class="dim">— marching in place, arms swinging the other way，每个像素翻转（白天模式）</span></h4>
+  <div class="grid">
+      <figure class="card">
+        <a href="oled_preview/anim_inv_walk.gif"><img src="oled_preview/anim_inv_walk.gif" alt="walk 反色（GIF）" loading="lazy"></a>
+        <figcaption><b>walk 反色（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_walk_00.png"><img src="oled_preview/4x/anim_inv_walk_00.png" alt="帧 1" loading="lazy"></a>
+        <figcaption><b>帧 1</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_walk_01.png"><img src="oled_preview/4x/anim_inv_walk_01.png" alt="帧 2" loading="lazy"></a>
+        <figcaption><b>帧 2</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_walk_02.png"><img src="oled_preview/4x/anim_inv_walk_02.png" alt="帧 3" loading="lazy"></a>
+        <figcaption><b>帧 3</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_walk_03.png"><img src="oled_preview/4x/anim_inv_walk_03.png" alt="帧 4" loading="lazy"></a>
+        <figcaption><b>帧 4</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_walk_04.png"><img src="oled_preview/4x/anim_inv_walk_04.png" alt="帧 5" loading="lazy"></a>
+        <figcaption><b>帧 5</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_walk_05.png"><img src="oled_preview/4x/anim_inv_walk_05.png" alt="帧 6" loading="lazy"></a>
+        <figcaption><b>帧 6</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_walk_06.png"><img src="oled_preview/4x/anim_inv_walk_06.png" alt="帧 7" loading="lazy"></a>
+        <figcaption><b>帧 7</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_walk_07.png"><img src="oled_preview/4x/anim_inv_walk_07.png" alt="帧 8" loading="lazy"></a>
+        <figcaption><b>帧 8</b></figcaption>
+      </figure>
+  </div>
+  <h4>anim inv 4/4 · sleep 反色 <span class="dim">— eyes shut, breathing slowly, z&#x27;s drifting up，每个像素翻转（白天模式）</span></h4>
+  <div class="grid">
+      <figure class="card">
+        <a href="oled_preview/anim_inv_sleep.gif"><img src="oled_preview/anim_inv_sleep.gif" alt="sleep 反色（GIF）" loading="lazy"></a>
+        <figcaption><b>sleep 反色（GIF）</b><br><span class="dim">8 帧 / 8 fps</span></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_sleep_00.png"><img src="oled_preview/4x/anim_inv_sleep_00.png" alt="帧 1" loading="lazy"></a>
+        <figcaption><b>帧 1</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_sleep_01.png"><img src="oled_preview/4x/anim_inv_sleep_01.png" alt="帧 2" loading="lazy"></a>
+        <figcaption><b>帧 2</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_sleep_02.png"><img src="oled_preview/4x/anim_inv_sleep_02.png" alt="帧 3" loading="lazy"></a>
+        <figcaption><b>帧 3</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_sleep_03.png"><img src="oled_preview/4x/anim_inv_sleep_03.png" alt="帧 4" loading="lazy"></a>
+        <figcaption><b>帧 4</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_sleep_04.png"><img src="oled_preview/4x/anim_inv_sleep_04.png" alt="帧 5" loading="lazy"></a>
+        <figcaption><b>帧 5</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_sleep_05.png"><img src="oled_preview/4x/anim_inv_sleep_05.png" alt="帧 6" loading="lazy"></a>
+        <figcaption><b>帧 6</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_sleep_06.png"><img src="oled_preview/4x/anim_inv_sleep_06.png" alt="帧 7" loading="lazy"></a>
+        <figcaption><b>帧 7</b></figcaption>
+      </figure>
+      <figure class="card">
+        <a href="oled_preview/1x/anim_inv_sleep_07.png"><img src="oled_preview/4x/anim_inv_sleep_07.png" alt="帧 8" loading="lazy"></a>
+        <figcaption><b>帧 8</b></figcaption>
+      </figure>
+  </div>
+
+  <h3>④ 雪人（另一套图，正色 + 反色）</h3>
   <p class="lead">从 <code>oled_snow1.pdf</code> / <code>oled_snow2.pdf</code> 里抽出来的两个滑雪小人，
-     缩到 64 px 宽后就是 <code>oled_snow.h</code> 的两帧。右半的动画屏由 ADJUST 层的
-     就是<b>原来那个 <code>OLED</code> 键</b>循环里的画面——四组小怪物动画之后，正色一屏、反色一屏，
+     缩到 64 px 宽后就是 <code>oled_snow.h</code> 的两帧，来回播就是慢慢挥手。
+     它同样在<b>原来那个 <code>OLED</code> 键</b>的循环里——排在四组反色动画之后，正色一屏、反色一屏，
      不用另按别的键。</p>
   <h4>雪人 · snow_pair <span class="dim">— oled_snow.h（oled_snow1/2.pdf 抽出的 2 帧）；OLED 键循环里的 snow 画面（四组反色动画之后）</span></h4>
   <div class="grid">

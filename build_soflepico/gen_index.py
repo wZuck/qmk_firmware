@@ -11,6 +11,7 @@ import hashlib
 import html
 import importlib.util
 import os
+import re
 import subprocess
 import sys
 import time
@@ -64,6 +65,40 @@ def card(src, title, note="", link=None, wide=False):
       </figure>"""
 
 
+# --------------------------------------------------------------------------
+# 键位表：直接从 keymap.md 里抽（单一数据源，改键后重跑生成器就同步了）
+# --------------------------------------------------------------------------
+
+
+def parse_keymap_md(path):
+    """keymap.md -> [(层标题, 说明, 左手 HTML, 右手 HTML), ...]"""
+    text = open(path, encoding="utf-8").read()
+    layers = []
+    for block in text.split("### ")[1:]:
+        title = block.splitlines()[0].strip()
+        m = re.match(r"第\s*(\d)\s*层\s*·\s*([^—]+)—\s*(.*)$", title)
+        if not m:
+            continue
+        head = f"第 {m.group(1)} 层 · {m.group(2).strip()}"
+        desc = m.group(3).strip()
+        tables = []
+        for tb in re.findall(r"((?:^\|.*\n)+)", block, re.M):
+            rows = [r.strip() for r in tb.strip().splitlines()]
+            rows = [r for r in rows if not re.match(r"^\|[\s\-:|]+\|$", r)]
+            if len(rows) < 2:
+                continue
+            cells = [[c.strip() for c in r.strip("|").split("|")] for r in rows]
+            rows_html = ['<table class="km">']
+            for i, row in enumerate(cells):
+                tag = "th" if i == 0 else "td"
+                rows_html.append("<tr>" + "".join(f"<{tag}>{html.escape(c)}</{tag}>" for c in row) + "</tr>")
+            rows_html.append("</table>")
+            tables.append("\n".join(rows_html))
+        if len(tables) >= 2:
+            layers.append((head, desc, tables[0], tables[1]))
+    return layers
+
+
 def main():
     preview = preview_module()
     ledfx = led_effects_module()
@@ -82,6 +117,15 @@ def main():
         if os.path.exists(os.path.join(HERE, fx_files[cid]))
     )
     fx_missing = [cid for cid in fx_files if not os.path.exists(os.path.join(HERE, fx_files[cid]))]
+
+    km_layers = parse_keymap_md(os.path.join(HERE, "keymap.md"))
+    km_blocks = "\n".join(
+        f'  <h3>{html.escape(head)} <span class="dim">— {html.escape(desc)}</span></h3>\n'
+        f'  <div class="km-wrap">\n    <div><h4>左手</h4>{left}</div>\n'
+        f'    <div><h4>右手</h4>{right}</div>\n  </div>'
+        for head, desc, left, right in km_layers
+    )
+    print(f"键位表: {len(km_layers)} 层")
 
     info_screens = ([(n, d) for n, d, _ in preview.LEFT_STATES]
                     + [(n, d) for n, d, _ in preview.STATS_STATES]
@@ -176,6 +220,16 @@ def main():
   code {{ background:#eef1f5; padding:1px 5px; border-radius:5px; font-size:13.5px; }}
   .hash {{ font-family:ui-monospace,Menlo,Monaco,monospace; font-size:12.5px; word-break:break-all; }}
   .grid {{ display:grid; gap:18px; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); }}
+  /* 键位表：两层并排（左手 / 右手），格子紧凑、可横向滚动 */
+  .km-wrap {{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); margin:0 0 8px; }}
+  .km-wrap h4 {{ font-size:14px; margin:0 0 6px; color:var(--dim); font-weight:600; }}
+  .km-wrap > div {{ overflow-x:auto; }}
+  table.km {{ width:auto; min-width:100%; font-size:13px; background:var(--card);
+              border:1px solid var(--line); border-radius:10px; overflow:hidden; }}
+  table.km th, table.km td {{ padding:5px 9px; border-bottom:1px solid var(--line); white-space:nowrap; }}
+  table.km tr:last-child td {{ border-bottom:none; }}
+  table.km td:first-child, table.km th:first-child {{ color:var(--dim); font-weight:600; }}
+  table.km td {{ font-variant-numeric:tabular-nums; }}
   .card {{ margin:0; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:10px; }}
   .card img {{ display:block; width:100%; image-rendering:pixelated; border-radius:8px; background:var(--oled); }}
   .card figcaption {{ font-size:13px; margin-top:8px; line-height:1.45; }}
@@ -229,9 +283,15 @@ def main():
   <div class="grid">
 {card("matrix_map_left.svg", "左手矩阵排查图", "每个键标出物理键位和 rXcY，绿色=实测能出、红色=实测不出；边框颜色=所属列。配 pico_pinout.svg 一起看", wide=True)}
 {card("pico_pinout.svg", "Pico 引脚对照", "40 脚里矩阵行/列、RGB、OLED、旋钮、TRRS 各是哪些，测引脚时对着找", wide=True)}
-{card("keymap_layers.svg", "四层键位图（矢量）", "矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍，1468x3300）；文字版见 keymap.md", wide=True)}
+{card("keymap_layers.svg", "四层键位图（矢量）", "矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍）；下面的表格内容与它同源（都由 keymap.c 生成）", wide=True)}
 {card("led_map.svg", "逐键 RGB 灯位图", "58 颗 WS2812 逐键灯的全局索引、本半灯带序号、矩阵位置和灯带走向；左右各一条独立灯带，数据脚 GP0", wide=True)}
   </div>
+
+  <h3>四层键位表（文字版）</h3>
+  <p class="lead">右手那几张表按<b>从内到外</b>排列（最左边是靠近中间缝的那一列）。
+     <code>▽</code> = 穿透到下一层，<code>✗</code> = 无功能。基础层的 Esc/Tab、右上角的 <code>-</code>、
+     右半的 Enter 和两个拇指 Space 是当前这版固件的绑定。</p>
+{km_blocks}
 
   <h2>LED 灯效（逐键 RGB · 左右各 29 颗）</h2>
   <p class="lead">出厂默认是<b>纯白常亮</b>（<code>solid_color</code> + 饱和 0，58 颗灯一起白），
@@ -287,10 +347,18 @@ def main():
      每组都有 GIF，下面按组列出全部帧。</p>
 {anim_sections}
 
-  <h3>③ 雪人那组（另一套动画图）</h3>
+  <h3>③ anim 反色版（白天模式）</h3>
+  <p class="lead">同样四组循环，<b>每个像素翻转</b>：小怪物变成亮底黑画。它排在正色四组之后，
+     所以从右半默认的 <code>anim 0</code> 一路按下去，第 5~8 屏就是这四个反色版。</p>
+  <div class="grid">
+{card_mascot_polarities}
+  </div>
+{anim_inv_sections}
+
+  <h3>④ 雪人（另一套图，正色 + 反色）</h3>
   <p class="lead">从 <code>oled_snow1.pdf</code> / <code>oled_snow2.pdf</code> 里抽出来的两个滑雪小人，
-     缩到 64 px 宽后就是 <code>oled_snow.h</code> 的两帧。右半的动画屏由 ADJUST 层的
-     就是<b>原来那个 <code>OLED</code> 键</b>循环里的画面——四组小怪物动画之后，正色一屏、反色一屏，
+     缩到 64 px 宽后就是 <code>oled_snow.h</code> 的两帧，来回播就是慢慢挥手。
+     它同样在<b>原来那个 <code>OLED</code> 键</b>的循环里——排在四组反色动画之后，正色一屏、反色一屏，
      不用另按别的键。</p>
 {snow_section}
 
