@@ -21,7 +21,7 @@
 
 ```
       左手拇指区                     右手拇指区
-  GUI  Alt  Ctrl  [LOWER]  Enter | Space  [RAISE]  Ctrl  Alt  GUI
+  GUI  Alt  Ctrl  [LOWER]  Space | Space  [RAISE]  Ctrl  Alt  GUI
                      ↑                        ↑
               按住 = 第1层              按住 = 第2层
               两个一起按住 = 第3层 ADJUST（三键组合，不会误触）
@@ -36,7 +36,6 @@
 > （按键本身照常生效）。"有没有人打字"是两半通过 split 事务 `SOFLE_SCREENSAVER_SYNC` 对过的，
 > 所以不会出现"一边睡一边还在打字"；唤醒则是本地判断，按下去就醒，不用等通信。
 > 时长是 `keymap.c` 里的 `SOFLE_SLEEP_MS`。
-
 - `EE_CLR`：清空 EEPROM。因为 VIA 把键位存在 EEPROM 里，改了 keymap 之后需要清一次才会生效。
 - `Mac/Win`（`CG_TOGG`）：切换 Mac 与 Win/Linux 模式，影响修饰键顺序以及 RAISE 层的行首/行尾/词移动等快捷键，选择同样存 EEPROM。
 - `Boot`（`QK_BOOT`）：进入 bootloader 准备烧录；按住 Pico 的 BOOT 键插 USB 也可以。
@@ -54,17 +53,17 @@
 | | 1 | 2 | 3 | 4 | 5 | 6 |
 |---|---|---|---|---|---|---|
 | 数字行 | ` | 1 | 2 | 3 | 4 | 5 |
-| 上排 | Esc | Q | W | E | R | T |
-| 中排 | Tab | A | S | D | F | G |
+| 上排 | Tab | Q | W | E | R | T |
+| 中排 | Esc | A | S | D | F | G |
 | 下排 | Shift | Z | X | C | V | B |
-| 拇指/旋钮 | GUI | Alt | Ctrl | LOWER | Enter | Mute |
+| 拇指/旋钮 | GUI | Alt | Ctrl | LOWER | Space | Mute |
 
 **右手**
 
 | | 1 | 2 | 3 | 4 | 5 | 6 |
 |---|---|---|---|---|---|---|
-| 数字行 | 6 | 7 | 8 | 9 | 0 | ` |
-| 上排 | Y | U | I | O | P | Bspc |
+| 数字行 | 6 | 7 | 8 | 9 | 0 | - |
+| 上排 | Y | U | I | O | P | Enter |
 | 中排 | H | J | K | L | ; | ' |
 | 下排 | N | M | , | . | / | Shift |
 | 拇指/旋钮 | Play | Space | RAISE | Ctrl | Alt | GUI |
@@ -78,7 +77,7 @@
 | | 1 | 2 | 3 | 4 | 5 | 6 |
 |---|---|---|---|---|---|---|
 | 数字行 | ▽ | F1 | F2 | F3 | F4 | F5 |
-| 上排 | ` | 1 | 2 | 3 | 4 | 5 |
+| 上排 | - | 1 | 2 | 3 | 4 | 5 |
 | 中排 | ▽ | ! | @ | # | $ | % |
 | 下排 | ▽ | = | - | + | { | } |
 | 拇指/旋钮 | ▽ | ▽ | ▽ | ▽ | ▽ | ▽ |
