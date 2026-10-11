@@ -289,8 +289,9 @@ def main():
 
   <h3>四层键位表（文字版）</h3>
   <p class="lead">右手那几张表按<b>从内到外</b>排列（最左边是靠近中间缝的那一列）。
-     <code>▽</code> = 穿透到下一层，<code>✗</code> = 无功能。基础层的 Esc/Tab、右上角的 <code>-</code>、
-     右半的 Enter 和两个拇指 Space 是当前这版固件的绑定。</p>
+     <code>▽</code> = 穿透到下一层，<code>✗</code> = 无功能。
+     基础层这几处是当前固件的绑定：左半 <b>Esc/Tab 对调</b>、右半最上排最右是 <b>Bspc</b>、
+     它下面那个是 <b>Enter</b>、右半拇指区最外侧是 <b>-</b>（减号/下划线）、两个拇指大键都是 <b>Space</b>。</p>
 {km_blocks}
 
   <h2>LED 灯效（逐键 RGB · 左右各 29 颗）</h2>

@@ -28,7 +28,7 @@
 <rect x="621.5" y="157.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
 <text x="643.0" y="179.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">0</text>
 <rect x="667.5" y="157.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
-<text x="689.0" y="179.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">-</text>
+<text x="689.0" y="179.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Bspc</text>
 <rect x="23.5" y="203.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
 <text x="45.0" y="225.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Tab</text>
 <rect x="69.5" y="203.7" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
@@ -124,7 +124,7 @@
 <rect x="529.5" y="309.5" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
 <text x="551.0" y="331.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Alt</text>
 <rect x="575.5" y="323.3" width="43.0" height="43.0" rx="6" fill="#ffffff" stroke="#c9ced6" stroke-width="1"/>
-<text x="597.0" y="344.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">GUI</text>
+<text x="597.0" y="344.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">-</text>
 <text x="22.0" y="404.0" font-size="14" fill="#52606d" dominant-baseline="hanging">基础层 0：平时就是这个。按住左拇指 LOWER → 第 1 层；按住右拇指 RAISE → 第 2 层；两个同时按住 → 第 3</text>
 <text x="22.0" y="424.0" font-size="14" fill="#52606d" dominant-baseline="hanging">层 ADJUST</text>
 <rect x="6.0" y="468.0" width="722.0" height="334.0" rx="10" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>

@@ -373,6 +373,10 @@ def write_md(layout, layers):
     parts.append("> 放大看不糊的矢量版：[keymap_layers.svg](keymap_layers.svg)\n")
     parts.append("> 图片由 `gen_keymap_image.py` 从 `keymap.c` + `keyboard.json` 自动生成，"
                  "改键后重跑该脚本即可刷新。\n")
+    parts.append("")
+    parts.append("> **与键帽丝印不同的几处**（当前这版固件）：左半上排 / 中排行首 **Tab / Esc 对调**；"
+                 "右半最上排最右是 **Bspc**（原 `` ` ``），它下面那个是 **Enter**（原 Bspc）；"
+                 "右半拇指区最外侧是 **-**（原 GUI）；左右两个拇指大键都是 **Space**（左原 Enter）。")
 
     parts.append("## 一、层的切换方式\n")
     parts.append("固件一共 4 层，**只有两个键负责换层，全部在拇指区**：\n")

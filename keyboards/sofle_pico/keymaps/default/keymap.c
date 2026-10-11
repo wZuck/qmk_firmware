@@ -184,7 +184,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * QWERTY
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |  `   |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |  -   |
+ * |  `   |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  | Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  | Enter|
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -192,17 +192,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  MUTE |    |       |------+------+------+------+------+------|
  * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            | LGUI | LAlt | LCTR |LOWER | /Space  /       \Space \  |RAISE | RCTR | RAlt | RGUI |
+ *            | LGUI | LAlt | LCTR |LOWER | /Space  /       \Space \  |RAISE | RCTR | RAlt |  -   |
  *            |      |      |      |      |/       /         \      \ |      |      |      |      |
  *            `----------------------------------'           '------''---------------------------'
  */
 
 [_QWERTY] = LAYOUT(
-  KC_GRV,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                   KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_MINS,
+  KC_GRV,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                   KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_BSPC,
   KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,   KC_ENT,
   KC_ESC,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                     KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN,  KC_QUOT,
   KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B, KC_MUTE,     KC_MPLY,KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_RSFT,
-                 KC_LGUI,KC_LALT,KC_LCTL, MO(_LOWER), KC_SPC,      KC_SPC,  MO(_RAISE), KC_RCTL, KC_RALT, KC_RGUI
+                 KC_LGUI,KC_LALT,KC_LCTL, MO(_LOWER), KC_SPC,      KC_SPC,  MO(_RAISE), KC_RCTL, KC_RALT, KC_MINS
 ),
 /* LOWER
  * ,-----------------------------------------.                    ,-----------------------------------------.
@@ -841,7 +841,9 @@ bool oled_task_user(void) {
 //    所以 6 又刷一次，把两半 EEPROM 里遗留的那个键清掉。
 // 7：基础层动了 5 个键（左半 ESC/Tab 对调、右上角 ` 改 -、右半 Bspc 改 Enter、
 //    两个拇指键都成 Space）。按键表变了，不刷 EEPROM 的话烧完还是老键位。
-#define SOFLE_EEPROM_VERSION 7
+// 8：右上角那个键又从 - 改成退格，右半最上排最右回到 Bspc；Enter 留在原处不动。
+// 9：右半拇指区最外侧的 GUI 改成 -_（KC_MINS），给无名指/小指留一个不用移位就够到的减号。
+#define SOFLE_EEPROM_VERSION 9
 
 // Out of the box: pure white on both halves; the left OLED shows the status
 // screen, the right one the first animation.

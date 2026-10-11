@@ -10,7 +10,7 @@
 | 键盘 | `sofle_pico`（RP2040 / Raspberry Pi Pico，分体，左右各一个 EC11） |
 | keymap | `default` |
 | 编译命令 | `qmk compile -kb sofle_pico -km default` |
-| QMK 版本 | tag `0.34.5-25-g372aee9bad`，commit `372aee9bad`，分支 `master` |
+| QMK 版本 | tag `0.34.5-29-gb4c26b26cb`，commit `b4c26b26cb`，分支 `master` |
 | 构建时间 | 2026-10-01 |
 | 源文件 | `keyboards/sofle_pico/`（工作区修改，尚未提交） |
 
@@ -56,9 +56,9 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-f64693b6731622d128889bfe07fd6ac94e1c32dfb91c31b160d794e06f5786b8  sofle_pico_default.uf2
-a2df233be7301b9a8eff060ac48928d5da8b2f6f36b68bc9c2ed9351b05daa1c  sofle_pico_default_split-left.uf2
-85d7862eb5f64cd18e5b74c1e28b3c687be81389d40ad14cb99aa4659ffc7046  sofle_pico_default_split-right.uf2
+f0b870dfe8794999cdf21b31f72153c83fe47627d67b1ade4ba6338f7ac1f0f0  sofle_pico_default.uf2
+74fc2c68eb9c2a4f86d3d198ca43fff1abc9c4e844a2447e5da60f5c46c7c7b6  sofle_pico_default_split-left.uf2
+5726155c69dfa474dee7535fb7dde4b6e279cf4577c1c2c818d9f65fbb3d6cda  sofle_pico_default_split-right.uf2
 ```
 
 （`split-left` / `split-right` 不是 `qmk compile` 能直接出的目标：按
@@ -280,9 +280,9 @@ ADJUST 层（`LOWER` + `RAISE` 同时按住）上新增了一整组灯光键，�
   「关了灯再按预设键，看起来像键坏了」。
 - 每个直达键外面套了一层对应的 `ENABLE_RGB_MATRIX_*`：哪天在 `keyboard.json` 里关掉某个灯效，
   这里跟着失效而不是编译报错。没编 RGB 的构建（`probe` 那种）里，这些键会退化成空键。
-- 键位表每次变动都要把 `SOFLE_EEPROM_VERSION` +1（现在是 **7**）：4 是加灯光键那次、
-  5/6 是雪人键的加与撤、7 是这次改基础层（左半 ESC/Tab 对调、右上角 `` ` `` 改 `-`、
-  右半 Bspc 改 Enter、两个拇指键都成 Space）。烧完第一次启动会自动用固件里的键位重写 EEPROM，不用手动清。
+- 键位表每次变动都要把 `SOFLE_EEPROM_VERSION` +1（现在是 **9**）：4 是加灯光键那次、5/6 是雪人键的加与撤、
+  7 改基础层（ESC/Tab 对调、右上角 `` ` ``→`-`、右半 Bspc→Enter、两个拇指→Space）、
+  8 右上角 `-`→退格、9 右半拇指外侧 GUI→`-_`。烧完第一次启动会自动用固件里的键位重写 EEPROM，不用手动清。
 - 灯光设置（灯效 / 色相 / 饱和 / 亮度）**存在另一块 EEPROM 里**，`dynamic_keymap_reset()`
   碰不到它。所以版本对不上时顺手调一次 `eeconfig_update_rgb_matrix_default()`，
   老机器烧完新固件才会真的变成纯白常亮；之后你在 VIA / 键盘上改的灯效会一直留着。
