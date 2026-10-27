@@ -1258,7 +1258,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
  * 例外是 ADJUST(3)：旋钮在这一层临时变成调灯——左旋钮亮度、右旋钮灯效速度
  * （和 ADJUST 层 row0 上那几个 RM_* 键是同一组功能）。
  *
- * If a knob turns the wrong way, swap the two keycodes in its pair.
+ * If a knob turns the wrong way, swap the two keycodes in its pair - but the
+ * better fix is the pad order for that half in `keyboard.json`: that is where
+ * the phase really lives, and it takes effect without an EEPROM reset. This
+ * map is read back from EEPROM under VIA, so a swap here only shows up once
+ * SOFLE_EEPROM_VERSION below is bumped (which wipes VIA edits).
  * ------------------------------------------------------------------------ */
 
 #ifdef ENCODER_MAP_ENABLE

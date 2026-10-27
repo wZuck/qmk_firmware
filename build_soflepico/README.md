@@ -10,12 +10,13 @@
 | 键盘 | `sofle_pico`（RP2040 / Raspberry Pi Pico，分体，左右各一个 EC11） |
 | keymap | `default` |
 | 编译命令 | `qmk compile -kb sofle_pico -km default` |
-| QMK 版本 | tag `0.34.5-29-gb4c26b26cb`，commit `b4c26b26cb`，分支 `master` |
-| 构建时间 | 2026-10-01 |
-| 源文件 | `keyboards/sofle_pico/`（工作区修改，尚未提交） |
+| QMK 版本 | tag `0.34.5-31-g0b7e03de35`，commit `0b7e03de35`，分支 `master` |
+| 构建时间 | 2026-10-15 |
+| 源文件 | `keyboards/sofle_pico/`（本次改动：左半编码器引脚顺序 + 相关注释，见第 6 节第 1 条） |
 
-> 注意：仓库根目录的 `.gitignore` 里有 `*.uf2`，所以本目录中的固件不会被 git 跟踪；
-> 本目录整体处于未跟踪状态，不会被提交，也不会影响 QMK 编译。
+> 注意：仓库根目录的 `.gitignore` 排掉了 `*.uf2` / 图片，所以本目录用一份自己的 `.gitignore`
+> 把可烧录的 `.uf2` 和文档用到的图片又收了回来（这些是跟着仓库提交的）；
+> `.hex` / `.bin` / `.elf` / `.map` 是同一份构建的派生物，仍然不提交，只留在本地磁盘上。
 
 ## 2. 文件清单
 
@@ -56,17 +57,26 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-f0b870dfe8794999cdf21b31f72153c83fe47627d67b1ade4ba6338f7ac1f0f0  sofle_pico_default.uf2
-74fc2c68eb9c2a4f86d3d198ca43fff1abc9c4e844a2447e5da60f5c46c7c7b6  sofle_pico_default_split-left.uf2
-5726155c69dfa474dee7535fb7dde4b6e279cf4577c1c2c818d9f65fbb3d6cda  sofle_pico_default_split-right.uf2
+4e65c38e47ff204b80fee1366e424a46b3fe9adc8d7faffd550c5e2bee40fa85  sofle_pico_default.uf2
+9026cc8b3c14421b48c61936730ef830b38ee110e5ac933279c9377b9c7780e5  sofle_pico_default_split-left.uf2
+002885136087f2f9e051908303851e403208c9198ef1509d72748d6c05170f7c  sofle_pico_default_split-right.uf2
 ```
 
 （`split-left` / `split-right` 不是 `qmk compile` 能直接出的目标：按
 `platforms/chibios/flash.mk:50-64`，`uf2-split-left` 这个 goal 只是在编译时多加一个
 `-DINIT_EE_HANDS_LEFT`（右半是 `-DINIT_EE_HANDS_RIGHT`，见 `quantum/split_common/split_util.c:160`），
-然后**接着往设备里烧**——所以才用等价的
-`make sofle_pico:default EXTRAFLAGS=-DINIT_EE_HANDS_LEFT` 只出 uf2 不烧录。
+然后**接着往设备里烧**——所以改用等价的两步：编译时把这个宏塞进去，再把 uf2 拷成对应名字。
 直接跑 `make sofle_pico:default:uf2-split-left` 不插键盘会一直卡在刷写那一步。）
+
+```bash
+# 左手（右手把 LEFT 换成 RIGHT）
+qmk compile -kb sofle_pico -km default -e EXTRAFLAGS=-DINIT_EE_HANDS_LEFT
+cp .build/sofle_pico_default.uf2 build_soflepico/sofle_pico_default_split-left.uf2
+```
+
+> `make sofle_pico:default EXTRAFLAGS=-DINIT_EE_HANDS_LEFT` 效果一样，但要求
+> `~/Library/Application Support/qmk/bin` 在 `PATH` 里（否则 `compiler.txt` 那步报 127）；
+> `qmk compile -e ...` 会自己把工具链配好，所以上面用的是它。
 
 ## 3. 烧录方法
 
@@ -116,6 +126,9 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 | **左旋钮**（index 0） | 音量 − | 音量 + | `KC_MUTE` 静音（matrix `[4,5]`） |
 | **右旋钮**（index 1） | 上一首 `KC_MPRV` | 下一首 `KC_MNXT` | `KC_MPLY` 播放/暂停（matrix `[9,5]`） |
 
+- **方向**：实物顺时针 = 表格里的「右旋」那一列。左旋钮原先正好相反（顺时针反而音量 −），
+  已在 `keyboard.json` 里把**左半**的编码器引脚顺序对调修正（原因与做法见第 6 节第 1 条）。
+  右半仍按 `GP14`/`GP15` 的默认相序走，**没有在实物上验证过**：若右旋钮也反，照第 6 节第 1 条同样把右半换过来即可。
 - 旋钮 index 由**物理侧**决定（`is_keyboard_left()`），不是由插 USB 的那一半决定：
   驱动会给右半的 index 加上 `NUM_ENCODERS_LEFT`，所以 `encoder_map` 两个槽位都必须填。
 - 右旋钮在**所有层**都有效：只有第 0 层写了键码，上层用 `KC_TRNS` 穿透回基础层。
@@ -340,6 +353,16 @@ GIF 的体积是调过的：整段动画共用一张 32 色调色板（每帧各
 ## 5. 已验证
 
 - `qmk compile -kb sofle_pico -km default` 通过，无 warning 阻断。
+- **旋钮方向（这次改的就是它）**：`.build/obj_sofle_pico_default/src/info_config.h` 里
+  `ENCODER_A_PINS { GP15 }` / `ENCODER_B_PINS { GP14 }`（左半已对调），而
+  `ENCODER_A_PINS_RIGHT { GP14 }` / `ENCODER_B_PINS_RIGHT { GP15 }`（右半不动）；
+  再从 ELF 的 `.data` 里读运行时的引脚表：`encoders_pad_a = 0x0f`（GP15）、`encoders_pad_b = 0x0e`（GP14），
+  对调确实编进去了。`encoder_map` 那 32 字节与上一版**逐字节相同**（见下面的 verify_keymap 输出），
+  所以这次不需要动 `SOFLE_EEPROM_VERSION`、也不会清掉 VIA 里的键位；新旧 uf2 只差 5 个字节。
+  最后把驱动里的 `encoder_LUT`（`drivers/encoder/encoder_quadrature.c`）拿出来跑完整正交序列：
+  同一段顺时针波形在 A/B 对调前累加 **−15**、对调后 **+15**，符号相反，也就是上报的方向确实翻了过来
+  （绝对值超过 `resolution = 4`，照常每格出一次事件）。
+  注意这只能证明"固件按新相序读数"，**实物左旋钮顺时针 = 音量 +** 还要上手拧一下确认。
 - **`python3 verify_keymap.py`** 从 ELF 里读回 `keymaps`（480 字节 = 4 层 × 10 行 × 6 列）和
   `encoder_map`（32 字节）并打印键码名字，比手抄十六进制靠谱。这次的输出：
 
@@ -410,13 +433,26 @@ VIA 的改键、宏、灯光等功能不受影响，只是测试器会重新变�
 
 ## 6. 注意事项
 
-1. **方向反了怎么办**：若某一侧旋钮左右拧反，把该侧 `ENCODER_CCW_CW(a, b)` 里的两个键码对调
-   （第一个是逆时针/左旋，第二个是顺时针/右旋），重新编译即可。这与编码器 A/B 相序有关。
+1. **方向反了怎么办**：旋钮「哪边算顺时针」由 `keyboard.json` 里**那一半的引脚顺序**决定
+   （`pin_a` / `pin_b`），不是由 `encoder_map` 里的键码决定。
+   左半这次就反了，所以顶层 `encoder.rotary` 改成 `{"pin_a": "GP15", "pin_b": "GP14"}`；
+   右半（`split.encoder.right`）保持 `GP14`/`GP15` 不动。**右旋钮如果也反**，把右半那两个引脚同样对调。
+   引脚顺序就是"哪一路先跳变"的相序，QMK 官方文档给的修法也就是这个
+   （`docs/features/encoders.md`：*If your encoder's clockwise directions are incorrect, you can swap
+   the A & B pad definitions*）。
+   **为什么不按老办法在 `encoder_map` 里对调两个键码**：这份固件开了 VIA，`encoder_map` 是**从 EEPROM
+   读的**（见下面第 2 条）。在 keymap 里对调键码，必须同时把 `SOFLE_EEPROM_VERSION` +1 才会生效，
+   而版本号一变就会 `dynamic_keymap_reset()`，把在 VIA 里改过的键位一起清掉。改引脚不动 `encoder_map`
+   （这次核对过：ELF 里那 32 字节与上一版逐字节相同），烧上去立刻生效，不用清 EEPROM，
+   `ENCODER_CCW_CW(a, b)` 里"第一个 = 逆时针、第二个 = 顺时针"也才是名副其实的
+   （VIA 的 Encoder 页显示的 CCW/CW 同样跟着对上实物）。
+   改的是左手那半读自己旋钮的引脚，所以两边都重烧一遍最省事（同一份 uf2，不用分左右）。
 2. **VIA 的 EEPROM 行为**：因为启用了 VIA，编码器映射与键位在运行时是**从 EEPROM 读的**，
    `encoder_map` / `keymaps` 只在 EEPROM 首次初始化时写入一次。如果之前已经烧过 VIA 版固件
    且 EEPROM 仍然有效，这次的新映射**不会自动生效**，需要：
    - 在 VIA 里重新设置编码器映射，或
-   - 现在**不需要手动清了**：固件里有个 `SOFLE_EEPROM_VERSION`（这份固件里是 **7**），
+   - 现在**不需要手动清了**：固件里有个 `SOFLE_EEPROM_VERSION`（这份固件里是 **9**，
+     历次改动逐条写在 `keymap.c` 顶上那段注释里），
      启动时发现 EEPROM 里的版本对不上，
      就自动用固件里的键位重写一遍（`dynamic_keymap_reset()`）。改了层结构之后把这个常量 +1 即可。
    - 仍然保留 `ADJUST` 层的 `EE_CLR` 键（左手 `G` 键位置）作为手动兜底，VIA 的 Reset Keymap 也一样有效。
@@ -424,10 +460,11 @@ VIA 的改键、宏、灯光等功能不受影响，只是测试器会重新变�
 4. 更换旋钮分辨率等编码器硬件配置后，**带旋钮的那一半必须重新烧录**。
 5. **ADJUST 层新增的灯光键是要写进 EEPROM 的键位表**：只烧一半固件时，如果手性/EEPROM 版本
    不一致，可能出现一半的 ADJUST 层还是旧键位。稳妥做法是两半都烧 `split-left` / `split-right`。
-   这一版也动过 ADJUST 层（曾经加过一个 `SNOW_TOGG`，后来撤掉了），所以 `SOFLE_EEPROM_VERSION`
-   提到了 **7**（6 是撤掉 SNOW_TOGG 那次，7 是这次改基础层 ESC/Tab/右上角/Bspc/拇指键）：
+   这一版也动过 ADJUST 层（曾经加过一个 `SNOW_TOGG`，后来撤掉了），`SOFLE_EEPROM_VERSION`
+   现在走到 **9**（7/8/9 分别是基础层那 5 个键、右上角改退格、右半拇指改 `-`，逐条记在 `keymap.c` 顶部）：
    烧完第一次启动会自动用固件里的键位重写 EEPROM，否则还是老键位。
    雪人现在是 OLED 循环里的一屏，不占任何按键。
+   本次旋钮方向改的是**引脚顺序**、没碰键位表，所以版本号故意保持 9 不变，也就不需要重写 EEPROM。
 
 ## 7. 相关源文件
 

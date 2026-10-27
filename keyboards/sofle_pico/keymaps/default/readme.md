@@ -20,6 +20,11 @@ Features:
   (the `sleep` loop, the one with the drifting z's); the first key press brings both back to their own
   screens. See the OLED section below.
 - Left encoder: volume down/up, press mutes. Right encoder: previous/next track, press play/pause.
+  The left half's encoder pads are swapped in `keyboard.json` (`"pin_a": "GP15"`) because as built it
+  counted the other way round and clockwise turned the volume *down*; if a knob ever turns the wrong way,
+  fix the pad order for that half there rather than swapping the keycodes below - VIA keeps this encoder
+  map in EEPROM, so a keycode swap only takes effect after bumping `SOFLE_EEPROM_VERSION` (which also
+  resets whatever was remapped in VIA).
 - `VIA_INSECURE` in this keymap's `config.h` lets VIA's Key Tester read the live matrix over raw
   HID; without it QMK answers that request with zeroes and the tester looks dead. It does mean any
   raw HID client can see which keys are down, so drop the line if that matters more than the tester.

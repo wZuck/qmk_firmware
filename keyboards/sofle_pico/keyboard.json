@@ -160,14 +160,23 @@
     },
     "diode_direction": "COL2ROW",
     "encoder": {
+        // The pad order is what decides which way "clockwise" comes out - not
+        // the A/B silkscreen. As built, the left half's EC11 counts the other
+        // way round from QMK's default, so A and B are swapped here: with
+        // GP14/GP15 as below the volume knob went *down* when turned
+        // clockwise. Do not "fix" the same symptom by swapping keycodes in the
+        // keymap's encoder_map - the encoder map lives in EEPROM under VIA and
+        // would need SOFLE_EEPROM_VERSION bumped to take effect.
         "rotary": [
-            {"pin_a": "GP14", "pin_b": "GP15", "resolution": 4}
+            {"pin_a": "GP15", "pin_b": "GP14", "resolution": 4}
         ]
     },
     "split": {
         "enabled": true,
         "encoder": {
             "right": {
+                // Right half as QMK expects it. If that knob also turns the
+                // wrong way, swap these two as well.
                 "rotary": [
                     {"pin_a": "GP14", "pin_b": "GP15", "resolution": 4}
                 ]
