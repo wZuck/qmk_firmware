@@ -4,6 +4,7 @@
 #include QMK_KEYBOARD_H
 // Not pulled in by quantum.h, needed for keycode_at_keymap_location_raw()
 #include "keymap_introspection.h"
+#include "game.h"
 #ifdef SPLIT_KEYBOARD
 // Also not pulled in by quantum.h: transaction_register_rpc() and
 // transaction_rpc_exec(), the split transport's user transaction API the OLED
@@ -17,6 +18,7 @@ enum sofle_layers {
     _LOWER,
     _RAISE,
     _ADJUST,
+    _GAME,
 };
 
 enum custom_keycodes {
@@ -42,6 +44,17 @@ enum custom_keycodes {
     FX_REACTIVE_NEXUS,
     FX_TYPING_HEATMAP,
 #endif
+    /* OLED games. These only make sense on _GAME, so they are declared after
+     * the RGB block and are always present regardless of the RGB build. */
+    GAME_CONFIRM,
+    GAME_PAUSE,
+    GAME_RESTART,
+    GAME_EXIT,
+    GAME_LEFT,
+    GAME_RIGHT,
+    GAME_DOWN,
+    GAME_ROTATE,
+    GAME_DROP,
 };
 
 /* 没有编进 RGB 的构建（比如排查用的 probe keymap 抄了这份键位）：
@@ -273,7 +286,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |RM_TOGG|RM_NEXT|RM_PREV|RM_VALU|RM_VALD|      |               |RM_HUEU|RM_HUED|RM_SATU|RM_SATD|RM_SPDU|RM_SPDD|
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | QK_BOOT|      |      |OLED |MACWIN|EE_CLR|                    |      |      |      |OLED |      |      |
+ * | QK_BOOT|灯效→ |      |OLED |MACWIN|EE_CLR|                    |      |      |      |OLED |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      |MACWIN|      |      |      |-------.    ,-------|      | VOLDO| MUTE | VOLUP| PREV | NEXT |
  * |------+------+------+------+------+------| RM_TOG |    |RM_NEXT|------+------+------+------+------+------|
@@ -285,10 +298,46 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
   [_ADJUST] = LAYOUT(
   RM_TOGG  , RM_NEXT,  RM_PREV,  RM_VALU,  RM_VALD, XXXXXXX,                     RM_HUEU, RM_HUED, RM_SATU, RM_SATD, RM_SPDU, RM_SPDD,
-  QK_BOOT  , XXXXXXX, XXXXXXX,OLED_NEXT,CG_TOGG, EE_CLR,                     XXXXXXX, XXXXXXX, XXXXXXX,OLED_NEXT,XXXXXXX, XXXXXXX,
+  QK_BOOT  ,TG(_GAME),XXXXXXX,OLED_NEXT,CG_TOGG, EE_CLR,                     XXXXXXX, XXXXXXX, XXXXXXX,OLED_NEXT,XXXXXXX, XXXXXXX,
   XXXXXXX  , XXXXXXX,CG_TOGG, XXXXXXX,    XXXXXXX,  XXXXXXX,                     XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, KC_MPRV, KC_MNXT,
   FX_WHITE, FX_CYCLE_OUT_IN, FX_HUE_WAVE, FX_RAINBOW_BEACON, FX_PIXEL_FLOW, XXXXXXX, RM_TOGG, RM_NEXT, FX_JELLYBEAN, FX_DIGITAL_RAIN, FX_REACTIVE_NEXUS, FX_TYPING_HEATMAP, KC_MPLY, XXXXXXX,
                    _______, _______, _______, _______, _______,     _______, _______, _______, _______, _______
+  ),
+/* GAME —— OLED 小游戏
+ *
+ * ADJUST 层左手第二排第 2 个键（QWERTY 的 Q 键位置，TG(_GAME)）进入。
+ * 游戏层不会把按键发给电脑。左右手都有一套方向/旋转键，方便换手操作。
+ *
+ *   WASD / IJKL 同时是菜单和游戏方向键。菜单中用方向键移动高亮，Enter 确认。
+ *   SNAKE 左屏显示标题/分数/长度/状态，右屏只显示带边框的棋盘。
+ *   TETRIS 左屏显示 NEXT/分数/等级/消行，右屏只显示带边框的棋盘。
+ *
+ * 游戏全部使用 64×128 竖屏。所有文字只在左屏；右屏不显示文字，最外层是 1 像素边框。
+ * 俄罗斯方块的最小格固定为 6×6 像素，保持正方形。
+ *
+ * 菜单：任意方向键移动高亮，右手 Enter 确认。
+ * 游戏：WASD 或 IJKL 是方向；俄罗斯方块的 W/I 为旋转。
+ * 上排：暂停 / 重开 / 退出；G 或 ' 落底；同时按 LOWER + RAISE 退出游戏层。
+ *
+ * ,-----------------------------------------.                    ,-----------------------------------------.
+ * |PAUSE |RESET | EXIT |      |      |      |                    |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      |      |  ↑   |      |      |      |                    |      |      |  ↑   |      |      |ENTER |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      |  ←   |  ↓   |  →   |      | DROP |-------.    ,-------|      |  ←   |  ↓   |  →   |      | DROP |
+ * |------+------+------+------+------+------| DROP  |    | PAUSE |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |-------|    |-------|      |      |      |      |      |      |
+ * `-----------------------------------------/       /     \      \-----------------------------------------'
+ *            |      |      |      |LOWER | /       /       \      \ |SPACE |RAISE |      |      |
+ *            |      |      |      |      |/       /         \      \ |      |      |      |      |
+ *            `----------------------------------'           '------''---------------------------'
+ */
+  [_GAME] = LAYOUT(
+  GAME_PAUSE, GAME_RESTART, GAME_EXIT, XXXXXXX, XXXXXXX, XXXXXXX,            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  XXXXXXX, XXXXXXX, GAME_ROTATE, XXXXXXX, XXXXXXX, XXXXXXX,                 XXXXXXX, XXXXXXX, GAME_ROTATE, XXXXXXX, XXXXXXX, GAME_CONFIRM,
+  XXXXXXX, GAME_LEFT, GAME_DOWN, GAME_RIGHT, XXXXXXX, GAME_DROP,           XXXXXXX, GAME_LEFT, GAME_DOWN, GAME_RIGHT, XXXXXXX, GAME_DROP,
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, GAME_DROP, GAME_PAUSE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                   XXXXXXX, XXXXXXX, XXXXXXX, MO(_LOWER), GAME_DROP,     GAME_DROP, MO(_RAISE), XXXXXXX, XXXXXXX, XXXXXXX
   )
 };
 
@@ -402,6 +451,8 @@ static const char *layer_banner(void) {
             return "LOWER";
         case _ADJUST:
             return "ADJ";
+        case _GAME:
+            return "GAME";
         default:
             return "BASE";
     }
@@ -675,13 +726,13 @@ static void render_graph(void) {
 /* ------------------------------------------------------------------------
  * Layers screen
  *
- * Which of the four layers are active. LOWER and RAISE are only on while held,
+ * Which of the five layers are active. LOWER and RAISE are only on while held,
  * and both together bring up ADJUST (update_tri_layer_state), so this is also
  * a way to see the tri-layer do its thing.
  * ------------------------------------------------------------------------ */
 
 static void render_layers(void) {
-    static const char *const names[] = {"BASE", "LOWER", "RAISE", "ADJ"};
+    static const char *const names[] = {"BASE", "LOWER", "RAISE", "ADJ", "GAME"};
     layer_state_t           active  = layer_state | default_layer_state;
     char                    text[11];
 
@@ -689,7 +740,7 @@ static void render_layers(void) {
     render_banner(SOFLE_LINE_BANNER, "LAYER");
     render_rule(SOFLE_LINE_RULE_BOTTOM, false);
 
-    for (uint8_t i = 0; i < 4; i++) {
+    for (uint8_t i = 0; i < ARRAY_SIZE(names); i++) {
         bool        on    = active & ((layer_state_t)1 << i);
         const char *state = on ? "ON" : "OFF";
         uint8_t     len   = strlen(names[i]);
@@ -778,8 +829,18 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
  * ------------------------------------------------------------------------ */
 
 bool oled_task_user(void) {
+    static uint8_t drawn = 0xFF;
+
     anim_advance_frame();
     wpm_history_sample();
+
+    // Game mode uses the same portrait 64 x 128 canvas as the regular screens.
+    // The game module returns true when it has drawn this display.
+    if (game_oled_task(layer_state_is(_GAME))) {
+        // Force one clean redraw when returning to a normal information screen.
+        drawn = 0xFF;
+        return false;
+    }
 
     // The screensaver outranks everything else: it covers the boot animation
     // too, so a half that is left alone straight after power-up just goes to
@@ -793,10 +854,9 @@ bool oled_task_user(void) {
         want = oled_screen;
     }
 
-    // Switching screens leaves the previous one's pixels behind - the status
-    // screen only paints some of the rows, and the info screens fewer still
-    // than the animations - so blank the buffer whenever the screen changes.
-    static uint8_t drawn = 0xFF;
+    // A full 64 x 128 clear marks all 1024 OLED bytes dirty. Doing that every
+    // frame at a 20 ms interval can outrun the I2C bus and tear the lower half
+    // of the panel, so clear only when the selected screen actually changes.
     if (drawn != want) {
         oled_clear();
         drawn = want;
@@ -843,7 +903,9 @@ bool oled_task_user(void) {
 //    两个拇指键都成 Space）。按键表变了，不刷 EEPROM 的话烧完还是老键位。
 // 8：右上角那个键又从 - 改成退格，右半最上排最右回到 Bspc；Enter 留在原处不动。
 // 9：右半拇指区最外侧的 GUI 改成 -_（KC_MINS），给无名指/小指留一个不用移位就够到的减号。
-#define SOFLE_EEPROM_VERSION 9
+// 10：新增第 5 层 GAME（OLED 贪吃蛇/俄罗斯方块），层数从 4 增加到 5。
+// 11：GAME 层改为方向键菜单、Enter 确认、WASD/IJKL 双套方向键，并加入 LOWER+RAISE 退出。
+#define SOFLE_EEPROM_VERSION 11
 
 // Out of the box: pure white on both halves; the left OLED shows the status
 // screen, the right one the first animation.
@@ -856,6 +918,7 @@ void keyboard_post_init_user(void) {
 
     // Both halves register: the slave's copy is the one the master calls.
     transaction_register_rpc(SOFLE_SCREENSAVER_SYNC, screensaver_sync_slave_handler);
+    game_init();
 
 #if defined(VIA_ENABLE)
     if (eeconfig_read_user() != SOFLE_EEPROM_VERSION) {
@@ -1037,11 +1100,24 @@ void housekeeping_task_user(void) {
             last_advance = now_ms;
         }
     }
+
+    // The right half always owns the game engine. When the right half is the
+    // USB master it pushes state left; when it is the slave, this function
+    // advances its engine and the left master polls it over the same RPC.
+    game_housekeeping(layer_state_is(_GAME));
 }
 
 #endif
 
 layer_state_t layer_state_set_user(layer_state_t state) {
+    layer_state_t game_mask = (layer_state_t)1 << _GAME;
+    layer_state_t chord_mask = ((layer_state_t)1 << _LOWER) | ((layer_state_t)1 << _RAISE);
+    if ((state & game_mask) && ((state & chord_mask) == chord_mask)) {
+        state &= ~game_mask;
+        if (is_keyboard_master()) {
+            game_handle_action(GAME_ACTION_EXIT);
+        }
+    }
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
@@ -1055,8 +1131,42 @@ static void fx_select(uint8_t mode) {
 }
 #endif
 
+static void game_keycode_action(enum game_action action) {
+    game_handle_action(action);
+    if (action == GAME_ACTION_EXIT) {
+        layer_off(_GAME);
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case GAME_CONFIRM:
+            if (record->event.pressed) game_keycode_action(GAME_ACTION_CONFIRM);
+            return false;
+        case GAME_PAUSE:
+            if (record->event.pressed) game_keycode_action(GAME_ACTION_PAUSE);
+            return false;
+        case GAME_RESTART:
+            if (record->event.pressed) game_keycode_action(GAME_ACTION_RESTART);
+            return false;
+        case GAME_EXIT:
+            if (record->event.pressed) game_keycode_action(GAME_ACTION_EXIT);
+            return false;
+        case GAME_LEFT:
+            if (record->event.pressed) game_keycode_action(GAME_ACTION_LEFT);
+            return false;
+        case GAME_RIGHT:
+            if (record->event.pressed) game_keycode_action(GAME_ACTION_RIGHT);
+            return false;
+        case GAME_DOWN:
+            if (record->event.pressed) game_keycode_action(GAME_ACTION_DOWN);
+            return false;
+        case GAME_ROTATE:
+            if (record->event.pressed) game_keycode_action(GAME_ACTION_ROTATE);
+            return false;
+        case GAME_DROP:
+            if (record->event.pressed) game_keycode_action(GAME_ACTION_DROP);
+            return false;
         case OLED_NEXT:
             // Not handled here: only the master sees keycodes, and both halves
             // need to switch, so housekeeping_task_user() picks this up on the
@@ -1272,6 +1382,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
        [1] = { ENCODER_CCW_CW(_______, _______),  ENCODER_CCW_CW(_______, _______) },
        [2] = { ENCODER_CCW_CW(_______, _______),  ENCODER_CCW_CW(_______, _______) },
        [3] = { ENCODER_CCW_CW(RM_VALD, RM_VALU),   ENCODER_CCW_CW(RM_SPDD, RM_SPDU) },
+       [4] = { ENCODER_CCW_CW(GAME_LEFT, GAME_RIGHT), ENCODER_CCW_CW(GAME_ROTATE, GAME_DROP) },
       };
 #endif
 

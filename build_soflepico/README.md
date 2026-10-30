@@ -3,6 +3,12 @@
 本目录保存 **sofle_pico `default` keymap** 的编译产物，以及这份固件的功能说明与烧录方法。
 （本目录是纯产物目录，不参与 QMK 构建；重新编译不会自动更新这里，需要手动重新拷贝。）
 
+> [!IMPORTANT]
+> **不要给左右两半都刷 `sofle_pico_default.uf2`。** 这块键盘用 `EE_HANDS` 保存左右手身份；
+> 通用 UF2 不含强制手性，双刷通用固件后可能两边都以同一手启动，表现为键盘不枚举、无法输入或
+> split/OLED 不工作。左手刷 `sofle_pico_default_split-left.uf2`，右手刷
+> `sofle_pico_default_split-right.uf2`。只有已经确认两边 EEPROM 手性正确时，通用 UF2 才适用。
+
 ## 1. 构建信息
 
 | 项目 | 值 |
@@ -10,9 +16,9 @@
 | 键盘 | `sofle_pico`（RP2040 / Raspberry Pi Pico，分体，左右各一个 EC11） |
 | keymap | `default` |
 | 编译命令 | `qmk compile -kb sofle_pico -km default` |
-| QMK 版本 | tag `0.34.5-31-g0b7e03de35`，commit `0b7e03de35`，分支 `master` |
-| 构建时间 | 2026-10-15 |
-| 源文件 | `keyboards/sofle_pico/`（本次改动：左半编码器引脚顺序 + 相关注释，见第 6 节第 1 条） |
+| QMK 版本 | commit `67644a4553`，分支 `master` |
+| 构建时间 | 2026-10-31 |
+| 源文件 | `keyboards/sofle_pico/keymaps/default/`（本次改动：新增 GAME 层、右手固定游戏引擎、64×128 竖屏贪吃蛇/俄罗斯方块） |
 
 > 注意：仓库根目录的 `.gitignore` 排掉了 `*.uf2` / 图片，所以本目录用一份自己的 `.gitignore`
 > 把可烧录的 `.uf2` 和文档用到的图片又收了回来（这些是跟着仓库提交的）；
@@ -33,12 +39,13 @@
 | `gen_matrix_image.py` / `gen_pico_pinout.py` / `gen_led_map.py` | 生成上面三张排查图 / 灯位图 |
 | `hardware_check.md` | **硬件排查指南**：从引脚自检、万用表测量到换 Pico 的完整流程 |
 | `keymap.md` | **键位图与分层说明**：每层有哪些键、怎么换层 |
-| `keymap_layers.svg` | **四层键位图（矢量）**：按真实坐标绘制，放多大都不糊 |
-| `keymap_layers.png` | 同一张图的光栅版，默认 2 倍（1468×3300），可 `python3 gen_keymap_image.py 4` 出 4 倍 |
+| `keymap_layers.svg` | **五层键位图（矢量）**：按真实坐标绘制，放多大都不糊 |
+| `keymap_layers.png` | 同一张图的光栅版，默认 2 倍，可 `python3 gen_keymap_image.py 4` 出 4 倍 |
 | `gen_keymap_image.py` | 由 `keymap.c` + `keyboard.json` 重新生成键位图（PNG + SVG）与 `keymap.md` |
 | `oled_preview/fit_reference.py` | 把参考图矢量化（Hough 找圆、最小二乘拟合椭圆），算出角色各图元的参数 |
 | `oled_preview/reference.png` | 参考原图（角色的出处） |
 | `oled_preview/` | **OLED 显示内容预览**：信息屏 13 种 + 小怪物动画 32 帧 + 反色 32 帧 + 雪人正/反 4 帧，含 `1x`/`4x`/6 个 GIF/总览图 |
+| `oled_preview/game_preview.png` | **64×128 游戏界面示意图**：所有文字在左屏，右侧棋盘/游戏画面无文字 |
 | `oled_snow1.pdf` / `oled_snow2.pdf` | 雪人那组图的原始素材（两个滑雪小人，两帧只差一只手） |
 | `index.html` | **一页看全**：固件信息 + 键位图 + LED 灯效（互动播放器 + 8 段 GIF）+ OLED 的 14 个画面（含正/反两套图，打开即可，图片/数据走相对路径，不用起服务器） |
 | `gen_index.py` | 重新生成 `index.html`（自动带上 uf2 的 SHA-256、QMK 版本、图片清单） |
@@ -46,6 +53,7 @@
 | `gen_led_effects.py` | 把 `led_frames.json` 画成 `led_effects/fx_*.gif`，并生成网页播放器要的 `led_effects.js` |
 | `led_player.js` | `index.html` 里那块互动播放器（点灯效、拖亮度/色相/速度） |
 | `verify_keymap.py` | 从编译好的 ELF 里读回 `keymaps` / `encoder_map`，按层打印键码名字 |
+| `check_tetrominoes.py` | 校验俄罗斯方块 28 个旋转形态：每块 4 格、形状连通、相邻状态是真实 90° 旋转 |
 | `sync_to_keymap.py` | 把 `keymap.md` 和预览图同步到 `keyboards/sofle_pico/keymaps/default/` |
 
 > `.uf2` 与 `.hex`/`.bin` 内容等价，选一个用即可。
@@ -57,9 +65,9 @@
 `.uf2` 校验值（SHA-256），用于确认烧录的就是这一份：
 
 ```
-4e65c38e47ff204b80fee1366e424a46b3fe9adc8d7faffd550c5e2bee40fa85  sofle_pico_default.uf2
-9026cc8b3c14421b48c61936730ef830b38ee110e5ac933279c9377b9c7780e5  sofle_pico_default_split-left.uf2
-002885136087f2f9e051908303851e403208c9198ef1509d72748d6c05170f7c  sofle_pico_default_split-right.uf2
+b18236b2f21374af498b4c205db9691d1dff87abdafdadc5e299de8893ca2b3a  sofle_pico_default.uf2
+faa2927b8c3de76167fd279fcc5d7e6a0b9fe38aaa07aa0763279753bf282b5e  sofle_pico_default_split-left.uf2
+24b53f02a53c6fb1fc923e127b7692ecf73cc59c18314771a2ca8a9d6ad96de4  sofle_pico_default_split-right.uf2
 ```
 
 （`split-left` / `split-right` 不是 `qmk compile` 能直接出的目标：按
@@ -139,11 +147,11 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 
 ### 4.2 其它
 
-- 层：`QWERTY`(0) / `LOWER`(1) / `RAISE`(2) / `ADJUST`(3)（Colemak 层已删除），`LOWER`+`RAISE` 三键组合出 `ADJUST`。
+- 层：`QWERTY`(0) / `LOWER`(1) / `RAISE`(2) / `ADJUST`(3) / `GAME`(4)，`LOWER`+`RAISE` 组合出 `ADJUST`，ADJUST 层再进入 GAME。
 - Mac/Win 模式在 `ADJUST` 层切换，选择存 EEPROM；`QK_BOOT`、`EE_CLR` 也在该层。
 - OLED：每一半都能在 14 个画面之间切换（见 4.3），切换键是 `ADJUST` 层左右各一个 `OLED` 键（按住可快速翻页）；
   另外有**屏保**：任意一半一分钟没被按过，两块屏一起显示睡觉的 zzz 动画，按任意键立刻都回到原来那屏。
-- VIA 已启用（层数用核心默认的 4 层），可用 VIA 网页版改键。
+- VIA 已启用（keymap 覆盖为 5 层），可用 VIA 网页版改键。
 - 灯光：**逐键 RGB**，左右各 29 颗（共 58 颗）WS2812 兼容灯珠，各自一条灯带、数据脚都是 `GP0`；
   默认开机就亮，**出厂是纯白常亮**（`solid_color`、饱和 0、亮度上限 127、速度 16），**控制键全在 ADJUST 层**（见 4.6），
   也可以用 VIA 的 Lighting 页控制。灯位图见 `led_map.svg` / `led_map.png`。
@@ -158,7 +166,7 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 | `status` | 层名大字 · Mac/Win · 实时修饰键（C S A G）· 峰值 WPM · 当前 WPM 与进度条 · Caps Lock | 左半 |
 | `stats` | 统计：按键数（本半边）· 当前 WPM · 峰值 WPM · 当前层 · 上电运行时间 · Caps | — |
 | `graph` | WPM 曲线：2 倍大号当前 WPM + 最近 21 秒的柱状图 | — |
-| `layers` | 四个层的开关状态（能直观看到 LOWER+RAISE 组合出 ADJUST）| — |
+| `layers` | 五个层的开关状态（能直观看到 LOWER+RAISE 组合出 ADJUST，以及 GAME）| — |
 | `anim 0` | bounce：跳 + 落地压扁 + 眨眼 + 摆手 | 右半 |
 | `anim 1` | wave：站着挥手打招呼 | — |
 | `anim 2` | walk：原地踏步，手臂反向摆 | — |
@@ -241,6 +249,24 @@ qmk flash -kb sofle_pico -km default -bl uf2-split-right
 - **左右必须都烧这一版**：这一版给 split 加了一个用户事务，两半固件不一致时同步会拿不到应答，
   表现为"两边各睡各的"（不会死机，其他功能也不受影响）。
 
+### 4.4 OLED 游戏（GAME 层）
+
+![Sofle Pico 128x64 OLED game screens](oled_preview/game_preview.png)
+
+`ADJUST` 层左手第二排第 2 键（QWERTY 的 Q 键位置）是 `游戏`（`TG(_GAME)`）。进入 GAME 层后：
+
+- 菜单：`WASD` 或 `IJKL` 的任意方向移动高亮，右手 `Enter` 确认。
+- 游戏：`W/I` 向上或旋转，`A/J` 向左，`S/K` 向下，`D/L` 向右。
+- 上排：暂停 / 重开 / 退出；`G`、`'`、拇指键或旋钮可落底。
+- 同时按 `LOWER + RAISE` 直接退出游戏层并回到普通模式。
+- 贪吃蛇棋盘只画在右屏；左屏显示标题、分数、长度和状态。
+- 俄罗斯方块左屏是 NEXT、分数、等级、消行，右屏是 10×20 棋盘。
+- 游戏逻辑固定运行在右手，与哪边插 USB、哪边当主控无关。右手是主控时直接推送状态；
+  左手是主控时只转发按键并轮询右手。
+- 游戏使用完整的 64×128 竖屏；所有文字都在左屏，右屏游戏本体最外层有一个边框且不显示文字。
+- 俄罗斯方块每个最小元素固定为 `6×6` 像素，保持正方形；旋转表已按真实 90° 旋转逐项校正。
+- 游戏按键全部由键盘吞掉，不会输入到电脑。
+
 ### 4.5 按键不正常时的排查
 
 完整的硬件排查流程（怀疑 Pico / 板子坏）见 [`hardware_check.md`](hardware_check.md)：先烧
@@ -293,7 +319,7 @@ ADJUST 层（`LOWER` + `RAISE` 同时按住）上新增了一整组灯光键，�
   「关了灯再按预设键，看起来像键坏了」。
 - 每个直达键外面套了一层对应的 `ENABLE_RGB_MATRIX_*`：哪天在 `keyboard.json` 里关掉某个灯效，
   这里跟着失效而不是编译报错。没编 RGB 的构建（`probe` 那种）里，这些键会退化成空键。
-- 键位表每次变动都要把 `SOFLE_EEPROM_VERSION` +1（现在是 **9**）：4 是加灯光键那次、5/6 是雪人键的加与撤、
+- 键位表每次变动都要把 `SOFLE_EEPROM_VERSION` +1（现在是 **11**）：4 是加灯光键那次、5/6 是雪人键的加与撤、
   7 改基础层（ESC/Tab 对调、右上角 `` ` ``→`-`、右半 Bspc→Enter、两个拇指→Space）、
   8 右上角 `-`→退格、9 右半拇指外侧 GUI→`-_`。烧完第一次启动会自动用固件里的键位重写 EEPROM，不用手动清。
 - 灯光设置（灯效 / 色相 / 饱和 / 亮度）**存在另一块 EEPROM 里**，`dynamic_keymap_reset()`
@@ -363,7 +389,9 @@ GIF 的体积是调过的：整段动画共用一张 32 色调色板（每帧各
   同一段顺时针波形在 A/B 对调前累加 **−15**、对调后 **+15**，符号相反，也就是上报的方向确实翻了过来
   （绝对值超过 `resolution = 4`，照常每格出一次事件）。
   注意这只能证明"固件按新相序读数"，**实物左旋钮顺时针 = 音量 +** 还要上手拧一下确认。
-- **`python3 verify_keymap.py`** 从 ELF 里读回 `keymaps`（480 字节 = 4 层 × 10 行 × 6 列）和
+- **`python3 check_tetrominoes.py`** 解析固件里的旋转表，验证 7 种方块 × 4 个旋转都有
+  4 个连通格，并且相邻状态确实是真实 90° 旋转；这次修正了 T、J、L 的错误形态。
+- **`python3 verify_keymap.py`** 从 ELF 里读回 `keymaps`（600 字节 = 5 层 × 10 行 × 6 列）和
   `encoder_map`（32 字节）并打印键码名字，比手抄十六进制靠谱。这次的输出：
 
   ```
@@ -451,7 +479,7 @@ VIA 的改键、宏、灯光等功能不受影响，只是测试器会重新变�
    `encoder_map` / `keymaps` 只在 EEPROM 首次初始化时写入一次。如果之前已经烧过 VIA 版固件
    且 EEPROM 仍然有效，这次的新映射**不会自动生效**，需要：
    - 在 VIA 里重新设置编码器映射，或
-   - 现在**不需要手动清了**：固件里有个 `SOFLE_EEPROM_VERSION`（这份固件里是 **9**，
+   - 现在**不需要手动清了**：固件里有个 `SOFLE_EEPROM_VERSION`（这份固件里是 **11**，
      历次改动逐条写在 `keymap.c` 顶上那段注释里），
      启动时发现 EEPROM 里的版本对不上，
      就自动用固件里的键位重写一遍（`dynamic_keymap_reset()`）。改了层结构之后把这个常量 +1 即可。

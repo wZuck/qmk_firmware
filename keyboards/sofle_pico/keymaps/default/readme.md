@@ -7,6 +7,12 @@
 Ported directly from the classic Sofle Keyboard by Josef Adamcik.
 Layout in [Keyboard Layout Editor](http://www.keyboard-layout-editor.com/#/gists/76efb423a46cbbea75465cb468eef7ff) and [adjust layer](http://www.keyboard-layout-editor.com/#/gists/4bcf66f922cfd54da20ba04905d56bd4)
 
+> [!IMPORTANT]
+> Flash `sofle_pico_default_split-left.uf2` to the left half and
+> `sofle_pico_default_split-right.uf2` to the right half. Do not flash the generic
+> `sofle_pico_default.uf2` to both halves: this keyboard stores handedness with `EE_HANDS`, and two
+> identical generic images can both start as the same hand, leaving the split link and OLEDs unusable.
+
 
 Features:
 
@@ -16,6 +22,9 @@ Features:
   four mascot animations and their four inverted twins, and the snowboarding pair in both polarities
   (normal and inverted, i.e. night and day) - all cycled with the same `OLED` key on the adjust layer
   (hold it to auto-advance). Status on the left and `bounce` on the right by default.
+- A fifth `GAME` layer adds Snake and Tetris on the OLEDs. The game engine is fixed to the physical
+  right half, regardless of which side is connected over USB, and both game screens use the full
+  64 x 128 portrait panel.
 - Screensaver: a minute with no key pressed on either half and *both* OLEDs show the sleeping mascot
   (the `sleep` loop, the one with the drifting z's); the first key press brings both back to their own
   screens. See the OLED section below.
@@ -32,6 +41,37 @@ Features:
   firmware once, so on boot each half compares this number with what is stored and re-seeds the
   keymap (and encoder map) when it differs. Bump it whenever the layer structure or the keys move.
   `EE_CLR` on the adjust layer still clears the EEPROM by hand if needed.
+
+
+## OLED games
+
+![Sofle Pico 64x128 OLED game screens](preview/game_preview.png)
+
+Enter the `GAME` layer from `ADJUST`: the left half's second-row second key (the Q position) is labelled `游戏`
+(`TG(_GAME)`). The menu is navigated with any direction key and confirmed with the right-hand `Enter`.
+Both `WASD` and `IJKL` are available as direction keys during play:
+
+| action | Snake | Tetris |
+|---|---|---|
+| `A` / `J` | turn left | move left |
+| `D` / `L` | turn right | move right |
+| `S` / `K` | turn down | soft drop |
+| `W` / `I` | turn up | rotate clockwise |
+| `G`, `'`, thumb or encoder | - | hard drop |
+
+The top row provides pause, restart and exit. Pressing `LOWER` and `RAISE` together exits game mode
+immediately and returns to the normal layers. Every game key is consumed by the keyboard and never
+reaches the host.
+
+The engine always runs on the right half. When the right half is the USB master it pushes state to
+the left; when the left half is master it only forwards game actions and polls the right. This keeps
+the game state on the same physical side no matter where the cable is plugged in.
+
+All game text is on the left OLED. Snake uses the left OLED for title, score, length and status; its
+board appears only on the right. Tetris uses the left OLED for `NEXT`, score, level and lines, and
+the right OLED for a 10 x 20 board with square 6 x 6 cells. Every right-hand game screen has a
+one-pixel outer border and no text at all. Both game screens use the complete 64 x 128 portrait
+canvas that the regular OLED screens already use.
 
 
 ## OLED

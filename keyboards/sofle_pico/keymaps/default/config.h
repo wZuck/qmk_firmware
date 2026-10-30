@@ -18,6 +18,20 @@
 #define SPLIT_WPM_ENABLE
 
 /* ------------------------------------------------------------------------
+ * The OLED game engine is fixed to the physical right half, but either half
+ * can be the USB master. The packet therefore has to travel in both
+ * directions: right master pushes state left, while left master polls and
+ * forwards key actions to the right. The default 32-byte RPC payload is too
+ * small for the game grid and metadata; 96 bytes leaves room for alignment.
+ * ------------------------------------------------------------------------ */
+
+#define RPC_M2S_BUFFER_SIZE 96
+#define RPC_S2M_BUFFER_SIZE 96
+
+/* Game mode is a fifth keymap layer. VIA needs to know about it as well. */
+#define DYNAMIC_KEYMAP_LAYER_COUNT 5
+
+/* ------------------------------------------------------------------------
  * The OLED screensaver has to be agreed on by both halves - they go to sleep
  * together and wake together - and the split has no built-in transaction for
  * that. The one user slot QMK reserves for exactly this is enough: keymap.c
@@ -29,7 +43,7 @@
  * not pay for the extra transaction.
  * ------------------------------------------------------------------------ */
 
-#define SPLIT_TRANSACTION_IDS_USER SOFLE_SCREENSAVER_SYNC
+#define SPLIT_TRANSACTION_IDS_USER SOFLE_SCREENSAVER_SYNC, SOFLE_GAME_SYNC
 
 /* ------------------------------------------------------------------------
  * VIA's "Key Tester" is driven by the live matrix state over raw HID, and QMK

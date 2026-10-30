@@ -107,6 +107,8 @@ def main():
     commit = git("rev-parse", "--short", "HEAD")
     commit_date = git("log", "-1", "--format=%cd", "--date=short")
     tag = git("describe", "--tags")
+    if not tag or tag == "?":
+        tag = commit
 
     # 灯效：GIF 由 gen_led_effects.py 从「跑真实灯效源码」的逐帧数据画出来
     fx_files = {cid: f"led_effects/fx_{cid}.gif" for cid, _, _, _ in ledfx.EFFECTS}
@@ -272,27 +274,45 @@ def main():
       <tr><th>键位图</th><td><code>keymap_layers.svg</code>（矢量）· <code>keymap_layers.png</code>（2 倍光栅）</td></tr>
       <tr><th>灯光</th><td><code>led_map.svg</code>（矢量）· <code>led_map.png</code>（2 倍光栅）——58 颗逐键 RGB 的索引、矩阵位置和灯带走向；ADJUST 层上有开关/切换/色相/饱和/亮度/速度键和 9 个灯效直达键（含默认的纯白常亮，见下面「LED 灯效」）</td></tr>
       <tr><th>编译命令</th><td><code>qmk compile -kb sofle_pico -km default</code></td></tr>
-      <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3)，<code>LOWER</code>+<code>RAISE</code> 三键组合出 ADJUST</td></tr>
+      <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3) / GAME(4)；<code>LOWER</code>+<code>RAISE</code> 组合出 ADJUST，ADJUST 层再按 <code>游戏</code> 进入 GAME</td></tr>
       <tr><th>旋钮</th><td>左：音量 ± / 按压静音　右：上一首·下一首 / 按压播放暂停</td></tr>
       <tr><th>VIA 测试器</th><td>固件里开了 <code>VIA_INSECURE</code>，VIA 网页版的 Key Tester 才能读到实时按键（代价：raw HID 可被读键盘，见 README）</td></tr>
       <tr><th>ADJUST 层</th><td>灯光键（开关 / 切换 / 色相 / 饱和 / 亮度 / 速度 + 9 个灯效直达，第一个是纯白常亮）· <code>OLED</code>（左右各一个，切换本侧画面）· <code>EE_CLR</code>（清 EEPROM）· <code>Mac/Win</code> · <code>Boot</code> · 媒体键；这一层两个旋钮临时改成调灯（左=亮度、右=速度）</td></tr>
+      <tr><th>OLED 游戏</th><td>GAME 层运行贪吃蛇和俄罗斯方块；引擎固定在右手，不跟随 USB 主控；完整使用 64×128 竖屏，所有文字在左屏，右屏游戏无文字</td></tr>
     </table>
   </div>
 
-  <h2>键位图（四层）</h2>
+  <h2>键位图（五层）</h2>
   <div class="grid">
 {card("matrix_map_left.svg", "左手矩阵排查图", "每个键标出物理键位和 rXcY，绿色=实测能出、红色=实测不出；边框颜色=所属列。配 pico_pinout.svg 一起看", wide=True)}
 {card("pico_pinout.svg", "Pico 引脚对照", "40 脚里矩阵行/列、RGB、OLED、旋钮、TRRS 各是哪些，测引脚时对着找", wide=True)}
-{card("keymap_layers.svg", "四层键位图（矢量）", "矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍）；下面的表格内容与它同源（都由 keymap.c 生成）", wide=True)}
+{card("keymap_layers.svg", "五层键位图（矢量）", "矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍）；下面的表格内容与它同源（都由 keymap.c 生成）", wide=True)}
 {card("led_map.svg", "逐键 RGB 灯位图", "58 颗 WS2812 逐键灯的全局索引、本半灯带序号、矩阵位置和灯带走向；左右各一条独立灯带，数据脚 GP0", wide=True)}
   </div>
 
-  <h3>四层键位表（文字版）</h3>
+  <h3>五层键位表（文字版）</h3>
   <p class="lead">右手那几张表按<b>从内到外</b>排列（最左边是靠近中间缝的那一列）。
      <code>▽</code> = 穿透到下一层，<code>✗</code> = 无功能。
      基础层这几处是当前固件的绑定：左半 <b>Esc/Tab 对调</b>、右半最上排最右是 <b>Bspc</b>、
      它下面那个是 <b>Enter</b>、右半拇指区最外侧是 <b>-</b>（减号/下划线）、两个拇指大键都是 <b>Space</b>。</p>
 {km_blocks}
+
+  <h2>OLED 游戏</h2>
+  <div class="panel">
+    <figure style="margin:0 0 20px">
+      <a href="oled_preview/game_preview.png"><img src="oled_preview/game_preview.png"
+        alt="Sofle Pico 64×128 OLED 游戏界面示意图" style="display:block;width:100%;border-radius:10px"></a>
+      <figcaption class="dim">示意图：所有文字在左屏；右屏是带外边框、无文字的游戏本体。</figcaption>
+    </figure>
+    <p>从 ADJUST 层左手第二排第 2 键（Q 键位置）进入 GAME。菜单中用方向键移动高亮，右手 Enter 确认。
+       游戏中 <code>WASD</code> 和 <code>IJKL</code> 都是方向键；俄罗斯方块的 W/I 是旋转。
+       同时按 LOWER+RAISE 直接退出游戏层。游戏按键不会发给电脑。</p>
+    <p><b>固定右手：</b>游戏引擎始终运行在右手。右手是 USB 主控时直接推送状态；左手是主控时只转发按键并轮询右手。</p>
+    <p><b>贪吃蛇：</b>棋盘只显示在右屏，使用 16 × 31 个 4×4 像素格；左屏显示标题、分数、长度和状态。</p>
+    <p><b>俄罗斯方块：</b>左屏显示 NEXT、分数、等级、消行；右屏显示 10 × 20 棋盘。游戏层使用独立的
+       64×128 竖屏画布，每个方块单元固定为 6×6 像素。右屏最外层有边框，游戏界面不出现文字。
+       28 个旋转形态已逐项校验为真实 90° 旋转。</p>
+  </div>
 
   <h2>LED 灯效（逐键 RGB · 左右各 29 颗）</h2>
   <p class="lead">出厂默认是<b>纯白常亮</b>（<code>solid_color</code> + 饱和 0，58 颗灯一起白），
@@ -318,7 +338,7 @@ def main():
           <code>FX_RAINBOW_BEACON</code> · <code>FX_PIXEL_FLOW</code> · <code>FX_JELLYBEAN</code> ·
           <code>FX_DIGITAL_RAIN</code> · <code>FX_REACTIVE_NEXUS</code> · <code>FX_TYPING_HEATMAP</code></td></tr>
       <tr><th>其它层</th><td>这几个键只写在 ADJUST 层，别的层上旋钮照旧是音量 / 切歌；直达键只改 RAM，重启回到 EEPROM 里的设置</td></tr>
-      <tr><th>EEPROM</th><td>键位表变了（<code>SOFLE_EEPROM_VERSION</code> 现在是 4），烧完第一次启动会顺手把键位和<b>灯光设置</b>都刷回固件默认——也就是纯白常亮；之后在 VIA / 键盘上改的灯效会一直留着</td></tr>
+      <tr><th>EEPROM</th><td>键位表变了（<code>SOFLE_EEPROM_VERSION</code> 现在是 11），烧完第一次启动会顺手把键位和<b>灯光设置</b>都刷回固件默认——也就是纯白常亮；之后在 VIA / 键盘上改的灯效会一直留着</td></tr>
     </table>
   </div>
 
@@ -338,7 +358,7 @@ def main():
   <p class="lead">四类共 13 个画面：<b>status</b> 状态屏（层名 / Mac-Win / 实时修饰键 / 峰值 / WPM 进度条 / Caps）、
      <b>stats</b> 统计（按键数 / WPM / 峰值 / 当前层 / 运行时间）、
      <b>graph</b> WPM 曲线（大号数字 + 最近 21 秒柱状图）、
-     <b>layers</b> 层状态（四个层的开关，能看出三键组合出 ADJUST）。</p>
+     <b>layers</b> 层状态（五个层的开关，能看出三键组合出 ADJUST，以及 GAME 层）。</p>
   <div class="grid">
 {status_cards}
   </div>
@@ -392,7 +412,7 @@ def main():
   <h2>相关文件</h2>
   <ul>
     <li><a href="README.md">README.md</a> —— 构建信息、功能要点、验证记录、注意事项</li>
-    <li><a href="keymap.md">keymap.md</a> —— 四层键位表、换层方式、旋钮、自定义键</li>
+    <li><a href="keymap.md">keymap.md</a> —— 五层键位表、换层方式、旋钮、自定义键、OLED 游戏操作</li>
     <li><a href="oled_preview/README.md">oled_preview/README.md</a> —— OLED 三种画面、切换机制、换图方法</li>
     <li><a href="sofle_pico_default.uf2">sofle_pico_default.uf2</a> ← 烧录用这一份；
       <code>.hex</code> / <code>.elf</code> / <code>.map</code> 是同一份构建的派生物

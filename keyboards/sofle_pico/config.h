@@ -63,5 +63,5 @@
 
 #endif
 
-// Four layers (QWERTY / LOWER / RAISE / ADJUST) - the same as the core default
-// for DYNAMIC_KEYMAP_LAYER_COUNT, so VIA needs no override here.
+// The default keymap adds a fifth GAME layer and overrides
+// DYNAMIC_KEYMAP_LAYER_COUNT in its keymap config.

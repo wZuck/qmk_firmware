@@ -24,7 +24,7 @@ ROOT = os.path.dirname(HERE)
 # QMK 自带的 ARM 工具链（没有 arm-none-eabi-* 前缀）
 TOOLCHAIN = os.path.expanduser("~/Library/Application Support/qmk/arm-none-eabi/bin")
 
-LAYER_NAMES = ["QWERTY", "LOWER", "RAISE", "ADJUST"]
+LAYER_NAMES = ["QWERTY", "LOWER", "RAISE", "ADJUST", "GAME"]
 MATRIX_ROWS, MATRIX_COLS = 10, 6
 NUM_ENCODERS = 2
 

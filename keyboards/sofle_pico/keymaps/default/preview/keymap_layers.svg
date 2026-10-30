@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="734" height="1710" viewBox="0 0 734 1710">
-<rect width="734" height="1710" fill="#eef1f5"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="734" height="2122" viewBox="0 0 734 2122">
+<rect width="734" height="2122" fill="#eef1f5"/>
 <style>text{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Helvetica,Arial,sans-serif;}</style>
 <text x="22.0" y="20.0" font-size="26" fill="#1f2933" dominant-baseline="hanging">Sofle Pico · default keymap 键位图</text>
 <text x="22.0" y="54.0" font-size="15" fill="#52606d" dominant-baseline="hanging">每个面板：左边 = 左手，右边 = 右手。▽ = 穿透到下一层（用下层的键）　✗ = 无功能</text>
@@ -402,8 +402,8 @@
 <text x="689.0" y="1275.2" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">速度 −</text>
 <rect x="23.5" y="1299.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
 <text x="45.0" y="1321.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">Boot</text>
-<rect x="69.5" y="1299.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
-<text x="91.0" y="1321.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="69.5" y="1299.7" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
+<text x="91.0" y="1321.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">游戏</text>
 <rect x="115.5" y="1281.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
 <text x="137.0" y="1302.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
 <rect x="161.5" y="1267.5" width="43.0" height="43.0" rx="6" fill="#f1e8fd" stroke="#8a4fd8" stroke-width="1"/>
@@ -500,10 +500,136 @@
 <text x="22.0" y="1520.0" font-size="14" fill="#52606d" dominant-baseline="hanging">同时按住才进入（三键组合）。上排是灯光控制（左：开关/切灯效/亮度，右：色相/饱和/速度），下排左边</text>
 <text x="22.0" y="1540.0" font-size="14" fill="#52606d" dominant-baseline="hanging">4~5 列是 9 个灯效直达键（第一个「纯白」是默认灯效）；此外还有 Mac/Win 切换、OLED 画面切换、清</text>
 <text x="22.0" y="1560.0" font-size="14" fill="#52606d" dominant-baseline="hanging">EEPROM、烧录和媒体键。这一层两个旋钮也改成调灯（左=亮度、右=速度）</text>
-<rect x="6.0" y="1612.0" width="722.0" height="88.0" rx="10" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
-<text x="22.0" y="1620.0" font-size="16" fill="#1f2933" dominant-baseline="hanging">旋钮（左右各一个 EC11）</text>
-<text x="22.0" y="1644.0" font-size="13" fill="#52606d" dominant-baseline="hanging">左旋钮：左转 音量−　右转 音量+　按压 静音</text>
-<text x="367.0" y="1644.0" font-size="13" fill="#52606d" dominant-baseline="hanging">右旋钮：左转 上一首　右转 下一首　按压 播放/暂停</text>
-<text x="22.0" y="1668.0" font-size="13" fill="#52606d" dominant-baseline="hanging">换层：按住 LOWER（左拇指）/ RAISE（右拇指内侧）；两键同时按 = ADJUST；松开自动回基础层　｜　ADJUST</text>
-<text x="22.0" y="1688.0" font-size="13" fill="#52606d" dominant-baseline="hanging">层两个旋钮改成调灯：左 = 亮度、右 = 速度，按压 = 灯开/关、下一个灯效</text>
+<rect x="6.0" y="1604.0" width="722.0" height="394.0" rx="10" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
+<text x="22.0" y="1612.0" font-size="18" fill="#17663e" dominant-baseline="hanging">第 4 层  GAME   ·   游戏层</text>
+<rect x="23.5" y="1665.7" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="45.0" y="1687.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">暂停</text>
+<rect x="69.5" y="1665.7" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="91.0" y="1687.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">重开</text>
+<rect x="115.5" y="1647.3" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="137.0" y="1668.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">退出</text>
+<rect x="161.5" y="1633.5" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="183.0" y="1655.0" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="207.5" y="1647.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="229.0" y="1668.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="253.5" y="1654.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="275.0" y="1675.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="437.5" y="1654.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="459.0" y="1675.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="483.5" y="1647.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="505.0" y="1668.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="529.5" y="1633.5" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="551.0" y="1655.0" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="575.5" y="1647.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="597.0" y="1668.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="621.5" y="1665.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="643.0" y="1687.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="667.5" y="1665.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="689.0" y="1687.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="23.5" y="1711.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="45.0" y="1733.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="69.5" y="1711.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="91.0" y="1733.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="115.5" y="1693.3" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="137.0" y="1714.8" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">↑/旋转</text>
+<rect x="161.5" y="1679.5" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="183.0" y="1701.0" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="207.5" y="1693.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="229.0" y="1714.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="253.5" y="1700.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="275.0" y="1721.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="437.5" y="1700.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="459.0" y="1721.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="483.5" y="1693.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="505.0" y="1714.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="529.5" y="1679.5" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="551.0" y="1701.0" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">↑/旋转</text>
+<rect x="575.5" y="1693.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="597.0" y="1714.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="621.5" y="1711.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="643.0" y="1733.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="667.5" y="1711.7" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="689.0" y="1733.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">确认</text>
+<rect x="23.5" y="1757.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="45.0" y="1779.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="69.5" y="1757.7" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="91.0" y="1779.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">←</text>
+<rect x="115.5" y="1739.3" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="137.0" y="1760.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">↓</text>
+<rect x="161.5" y="1725.5" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="183.0" y="1747.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">→</text>
+<rect x="207.5" y="1739.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="229.0" y="1760.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="253.5" y="1746.2" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="275.0" y="1767.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">落底</text>
+<rect x="437.5" y="1746.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="459.0" y="1767.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="483.5" y="1739.3" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="505.0" y="1760.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">←</text>
+<rect x="529.5" y="1725.5" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="551.0" y="1747.0" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">↓</text>
+<rect x="575.5" y="1739.3" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="597.0" y="1760.8" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">→</text>
+<rect x="621.5" y="1757.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="643.0" y="1779.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="667.5" y="1757.7" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="689.0" y="1779.2" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">落底</text>
+<rect x="23.5" y="1803.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="45.0" y="1825.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="69.5" y="1803.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="91.0" y="1825.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="115.5" y="1785.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="137.0" y="1806.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="161.5" y="1771.5" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="183.0" y="1793.0" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="207.5" y="1785.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="229.0" y="1806.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="253.5" y="1792.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="275.0" y="1813.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="308.7" y="1792.2" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="330.2" y="1813.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">落底</text>
+<rect x="382.3" y="1792.2" width="43.0" height="43.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="403.8" y="1813.7" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">暂停</text>
+<rect x="437.5" y="1792.2" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="459.0" y="1813.7" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="483.5" y="1785.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="505.0" y="1806.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="529.5" y="1771.5" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="551.0" y="1793.0" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="575.5" y="1785.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="597.0" y="1806.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="621.5" y="1803.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="643.0" y="1825.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="667.5" y="1803.7" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="689.0" y="1825.2" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="115.5" y="1831.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="137.0" y="1852.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="161.5" y="1817.5" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="183.0" y="1839.0" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="207.5" y="1831.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="229.0" y="1852.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="258.1" y="1840.5" width="43.0" height="66.0" rx="6" fill="#e8f0fe" stroke="#4a86e8" stroke-width="3"/>
+<text x="279.6" y="1873.5" font-size="9" fill="#202124" text-anchor="middle" dominant-baseline="central">LOWER</text>
+<rect x="304.1" y="1840.5" width="43.0" height="66.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="325.6" y="1873.5" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">落底</text>
+<rect x="386.9" y="1840.5" width="43.0" height="66.0" rx="6" fill="#e8f8ef" stroke="#258a57" stroke-width="1"/>
+<text x="408.4" y="1873.5" font-size="16" fill="#202124" text-anchor="middle" dominant-baseline="central">落底</text>
+<rect x="432.9" y="1840.5" width="43.0" height="66.0" rx="6" fill="#fdeee0" stroke="#e8811a" stroke-width="3"/>
+<text x="454.4" y="1873.5" font-size="12" fill="#202124" text-anchor="middle" dominant-baseline="central">RAISE</text>
+<rect x="483.5" y="1831.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="505.0" y="1852.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="529.5" y="1817.5" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="551.0" y="1839.0" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<rect x="575.5" y="1831.3" width="43.0" height="43.0" rx="6" fill="#eceff2" stroke="#e0e3e7" stroke-width="1"/>
+<text x="597.0" y="1852.8" font-size="16" fill="#b0b8c1" text-anchor="middle" dominant-baseline="central">✗</text>
+<text x="22.0" y="1912.0" font-size="14" fill="#52606d" dominant-baseline="hanging">第 4 层：OLED 游戏。ADJUST 层左手第二排第 2 键（Q 键位置）进入；菜单用 WASD/IJKL</text>
+<text x="22.0" y="1932.0" font-size="14" fill="#52606d" dominant-baseline="hanging">任意方向移动高亮，右手 Enter 确认。游戏时 W/I=上或旋转，A/J=左，S/K=下，D/L=右；同时按</text>
+<text x="22.0" y="1952.0" font-size="14" fill="#52606d" dominant-baseline="hanging">LOWER+RAISE 退出。游戏引擎固定在右手，画面使用整块 64×128</text>
+<text x="22.0" y="1972.0" font-size="14" fill="#52606d" dominant-baseline="hanging">竖屏；所有文字都在左屏，右屏只画带外边框的游戏本体。</text>
+<rect x="6.0" y="2024.0" width="722.0" height="88.0" rx="10" fill="#ffffff" stroke="#d7dce3" stroke-width="1"/>
+<text x="22.0" y="2032.0" font-size="16" fill="#1f2933" dominant-baseline="hanging">旋钮（左右各一个 EC11）</text>
+<text x="22.0" y="2056.0" font-size="13" fill="#52606d" dominant-baseline="hanging">左旋钮：左转 音量−　右转 音量+　按压 静音</text>
+<text x="367.0" y="2056.0" font-size="13" fill="#52606d" dominant-baseline="hanging">右旋钮：左转 上一首　右转 下一首　按压 播放/暂停</text>
+<text x="22.0" y="2080.0" font-size="13" fill="#52606d" dominant-baseline="hanging">换层：按住 LOWER（左拇指）/ RAISE（右拇指内侧）；两键同时按 = ADJUST；松开自动回基础层　｜　ADJUST</text>
+<text x="22.0" y="2100.0" font-size="13" fill="#52606d" dominant-baseline="hanging">层两个旋钮改成调灯：左 = 亮度、右 = 速度，按压 = 灯开/关、下一个灯效</text>
 </svg>

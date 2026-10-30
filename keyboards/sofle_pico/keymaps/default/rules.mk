@@ -1,5 +1,6 @@
 ENCODER_MAP_ENABLE = yes
 VIA_ENABLE = yes
+SRC += game.c
 
 # Feeds the WPM readout on the left half's status screen. The split link
 # needs the number mirrored too, which is what SPLIT_WPM_ENABLE in config.h

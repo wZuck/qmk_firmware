@@ -66,21 +66,22 @@
   <div class="panel">
     <table>
       <tr><th>键盘 / keymap</th><td><code>sofle_pico</code> / <code>default</code>（RP2040，分体，左右各一个 EC11）</td></tr>
-      <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 277,504 字节 · 构建于 2026-10-15 00:41</td></tr>
-      <tr><th>SHA-256</th><td class="hash">4e65c38e47ff204b80fee1366e424a46b3fe9adc8d7faffd550c5e2bee40fa85</td></tr>
-      <tr><th>QMK</th><td>tag <code>0.34.5-31-g0b7e03de35</code> · commit <code>0b7e03de35</code>（2026-10-11）</td></tr>
+      <tr><th>固件</th><td><code>sofle_pico_default.uf2</code> · 288,256 字节 · 构建于 2026-10-31 00:19</td></tr>
+      <tr><th>SHA-256</th><td class="hash">b18236b2f21374af498b4c205db9691d1dff87abdafdadc5e299de8893ca2b3a</td></tr>
+      <tr><th>QMK</th><td>tag <code>67644a4553</code> · commit <code>67644a4553</code>（2026-10-28）</td></tr>
       <tr><th>硬件排查</th><td><code>matrix_map_left.svg</code>（左手矩阵图）· <code>pico_pinout.svg</code>（Pico 引脚图）· <code>hardware_check.md</code>（排查流程）</td></tr>
       <tr><th>键位图</th><td><code>keymap_layers.svg</code>（矢量）· <code>keymap_layers.png</code>（2 倍光栅）</td></tr>
       <tr><th>灯光</th><td><code>led_map.svg</code>（矢量）· <code>led_map.png</code>（2 倍光栅）——58 颗逐键 RGB 的索引、矩阵位置和灯带走向；ADJUST 层上有开关/切换/色相/饱和/亮度/速度键和 9 个灯效直达键（含默认的纯白常亮，见下面「LED 灯效」）</td></tr>
       <tr><th>编译命令</th><td><code>qmk compile -kb sofle_pico -km default</code></td></tr>
-      <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3)，<code>LOWER</code>+<code>RAISE</code> 三键组合出 ADJUST</td></tr>
+      <tr><th>层</th><td>QWERTY(0) / LOWER(1) / RAISE(2) / ADJUST(3) / GAME(4)；<code>LOWER</code>+<code>RAISE</code> 组合出 ADJUST，ADJUST 层再按 <code>游戏</code> 进入 GAME</td></tr>
       <tr><th>旋钮</th><td>左：音量 ± / 按压静音　右：上一首·下一首 / 按压播放暂停</td></tr>
       <tr><th>VIA 测试器</th><td>固件里开了 <code>VIA_INSECURE</code>，VIA 网页版的 Key Tester 才能读到实时按键（代价：raw HID 可被读键盘，见 README）</td></tr>
       <tr><th>ADJUST 层</th><td>灯光键（开关 / 切换 / 色相 / 饱和 / 亮度 / 速度 + 9 个灯效直达，第一个是纯白常亮）· <code>OLED</code>（左右各一个，切换本侧画面）· <code>EE_CLR</code>（清 EEPROM）· <code>Mac/Win</code> · <code>Boot</code> · 媒体键；这一层两个旋钮临时改成调灯（左=亮度、右=速度）</td></tr>
+      <tr><th>OLED 游戏</th><td>GAME 层运行贪吃蛇和俄罗斯方块；引擎固定在右手，不跟随 USB 主控；完整使用 64×128 竖屏，所有文字在左屏，右屏游戏无文字</td></tr>
     </table>
   </div>
 
-  <h2>键位图（四层）</h2>
+  <h2>键位图（五层）</h2>
   <div class="grid">
       <figure class="card wide">
         <a href="matrix_map_left.svg"><img src="matrix_map_left.svg" alt="左手矩阵排查图" loading="lazy"></a>
@@ -91,8 +92,8 @@
         <figcaption><b>Pico 引脚对照</b><br><span class="dim">40 脚里矩阵行/列、RGB、OLED、旋钮、TRRS 各是哪些，测引脚时对着找</span></figcaption>
       </figure>
       <figure class="card wide">
-        <a href="keymap_layers.svg"><img src="keymap_layers.svg" alt="四层键位图（矢量）" loading="lazy"></a>
-        <figcaption><b>四层键位图（矢量）</b><br><span class="dim">矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍）；下面的表格内容与它同源（都由 keymap.c 生成）</span></figcaption>
+        <a href="keymap_layers.svg"><img src="keymap_layers.svg" alt="五层键位图（矢量）" loading="lazy"></a>
+        <figcaption><b>五层键位图（矢量）</b><br><span class="dim">矢量版放多大都不糊；PNG 版：keymap_layers.png（2 倍）；下面的表格内容与它同源（都由 keymap.c 生成）</span></figcaption>
       </figure>
       <figure class="card wide">
         <a href="led_map.svg"><img src="led_map.svg" alt="逐键 RGB 灯位图" loading="lazy"></a>
@@ -100,7 +101,7 @@
       </figure>
   </div>
 
-  <h3>四层键位表（文字版）</h3>
+  <h3>五层键位表（文字版）</h3>
   <p class="lead">右手那几张表按<b>从内到外</b>排列（最左边是靠近中间缝的那一列）。
      <code>▽</code> = 穿透到下一层，<code>✗</code> = 无功能。
      基础层这几处是当前固件的绑定：左半 <b>Esc/Tab 对调</b>、右半最上排最右是 <b>Bspc</b>、
@@ -110,18 +111,18 @@
     <div><h4>左手</h4><table class="km">
 <tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
 <tr><td>数字行</td><td>`</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
-<tr><td>上排</td><td>**Tab**</td><td>Q</td><td>W</td><td>E</td><td>R</td><td>T</td></tr>
-<tr><td>中排</td><td>**Esc**</td><td>A</td><td>S</td><td>D</td><td>F</td><td>G</td></tr>
+<tr><td>上排</td><td>Tab</td><td>Q</td><td>W</td><td>E</td><td>R</td><td>T</td></tr>
+<tr><td>中排</td><td>Esc</td><td>A</td><td>S</td><td>D</td><td>F</td><td>G</td></tr>
 <tr><td>下排</td><td>Shift</td><td>Z</td><td>X</td><td>C</td><td>V</td><td>B</td></tr>
 <tr><td>拇指/旋钮</td><td>GUI</td><td>Alt</td><td>Ctrl</td><td>LOWER</td><td>Space</td><td>Mute</td></tr>
 </table></div>
     <div><h4>右手</h4><table class="km">
 <tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
 <tr><td>数字行</td><td>6</td><td>7</td><td>8</td><td>9</td><td>0</td><td>Bspc</td></tr>
-<tr><td>上排</td><td>Y</td><td>U</td><td>I</td><td>O</td><td>P</td><td>**Enter**</td></tr>
+<tr><td>上排</td><td>Y</td><td>U</td><td>I</td><td>O</td><td>P</td><td>Enter</td></tr>
 <tr><td>中排</td><td>H</td><td>J</td><td>K</td><td>L</td><td>;</td><td>&#x27;</td></tr>
 <tr><td>下排</td><td>N</td><td>M</td><td>,</td><td>.</td><td>/</td><td>Shift</td></tr>
-<tr><td>拇指/旋钮</td><td>Play</td><td>Space</td><td>RAISE</td><td>Ctrl</td><td>Alt</td><td>**-**</td></tr>
+<tr><td>拇指/旋钮</td><td>Play</td><td>Space</td><td>RAISE</td><td>Ctrl</td><td>Alt</td><td>-</td></tr>
 </table></div>
   </div>
   <h3>第 1 层 · LOWER <span class="dim">— 数字/符号层</span></h3>
@@ -167,7 +168,7 @@
     <div><h4>左手</h4><table class="km">
 <tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
 <tr><td>数字行</td><td>灯 开/关</td><td>灯效→</td><td>灯效←</td><td>亮 +</td><td>亮 −</td><td>✗</td></tr>
-<tr><td>上排</td><td>Boot</td><td>✗</td><td>✗</td><td>OLED</td><td>Mac/Win</td><td>EE_CLR</td></tr>
+<tr><td>上排</td><td>Boot</td><td>游戏</td><td>✗</td><td>OLED</td><td>Mac/Win</td><td>EE_CLR</td></tr>
 <tr><td>中排</td><td>✗</td><td>✗</td><td>Mac/Win</td><td>✗</td><td>✗</td><td>✗</td></tr>
 <tr><td>下排</td><td>纯白</td><td>波扩散</td><td>彩虹波</td><td>信标</td><td>像素流</td><td>✗</td></tr>
 <tr><td>拇指/旋钮</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>灯 开/关</td></tr>
@@ -180,6 +181,42 @@
 <tr><td>下排</td><td>彩点</td><td>数字雨</td><td>涟漪</td><td>热图</td><td>Play</td><td>✗</td></tr>
 <tr><td>拇指/旋钮</td><td>灯效→</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td><td>▽</td></tr>
 </table></div>
+  </div>
+  <h3>第 4 层 · GAME <span class="dim">— 游戏层</span></h3>
+  <div class="km-wrap">
+    <div><h4>左手</h4><table class="km">
+<tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>数字行</td><td>暂停</td><td>重开</td><td>退出</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>上排</td><td>✗</td><td>✗</td><td>↑/旋转</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>中排</td><td>✗</td><td>←</td><td>↓</td><td>→</td><td>✗</td><td>落底</td></tr>
+<tr><td>下排</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>拇指/旋钮</td><td>✗</td><td>✗</td><td>✗</td><td>LOWER</td><td>落底</td><td>落底</td></tr>
+</table></div>
+    <div><h4>右手</h4><table class="km">
+<tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>数字行</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>上排</td><td>✗</td><td>✗</td><td>↑/旋转</td><td>✗</td><td>✗</td><td>确认</td></tr>
+<tr><td>中排</td><td>✗</td><td>←</td><td>↓</td><td>→</td><td>✗</td><td>落底</td></tr>
+<tr><td>下排</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td><td>✗</td></tr>
+<tr><td>拇指/旋钮</td><td>暂停</td><td>落底</td><td>RAISE</td><td>✗</td><td>✗</td><td>✗</td></tr>
+</table></div>
+  </div>
+
+  <h2>OLED 游戏</h2>
+  <div class="panel">
+    <figure style="margin:0 0 20px">
+      <a href="oled_preview/game_preview.png"><img src="oled_preview/game_preview.png"
+        alt="Sofle Pico 64×128 OLED 游戏界面示意图" style="display:block;width:100%;border-radius:10px"></a>
+      <figcaption class="dim">示意图：所有文字在左屏；右屏是带外边框、无文字的游戏本体。</figcaption>
+    </figure>
+    <p>从 ADJUST 层左手第二排第 2 键（Q 键位置）进入 GAME。菜单中用方向键移动高亮，右手 Enter 确认。
+       游戏中 <code>WASD</code> 和 <code>IJKL</code> 都是方向键；俄罗斯方块的 W/I 是旋转。
+       同时按 LOWER+RAISE 直接退出游戏层。游戏按键不会发给电脑。</p>
+    <p><b>固定右手：</b>游戏引擎始终运行在右手。右手是 USB 主控时直接推送状态；左手是主控时只转发按键并轮询右手。</p>
+    <p><b>贪吃蛇：</b>棋盘只显示在右屏，使用 16 × 31 个 4×4 像素格；左屏显示标题、分数、长度和状态。</p>
+    <p><b>俄罗斯方块：</b>左屏显示 NEXT、分数、等级、消行；右屏显示 10 × 20 棋盘。游戏层使用独立的
+       64×128 竖屏画布，每个方块单元固定为 6×6 像素。右屏最外层有边框，游戏界面不出现文字。
+       28 个旋转形态已逐项校验为真实 90° 旋转。</p>
   </div>
 
   <h2>LED 灯效（逐键 RGB · 左右各 29 颗）</h2>
@@ -206,7 +243,7 @@
           <code>FX_RAINBOW_BEACON</code> · <code>FX_PIXEL_FLOW</code> · <code>FX_JELLYBEAN</code> ·
           <code>FX_DIGITAL_RAIN</code> · <code>FX_REACTIVE_NEXUS</code> · <code>FX_TYPING_HEATMAP</code></td></tr>
       <tr><th>其它层</th><td>这几个键只写在 ADJUST 层，别的层上旋钮照旧是音量 / 切歌；直达键只改 RAM，重启回到 EEPROM 里的设置</td></tr>
-      <tr><th>EEPROM</th><td>键位表变了（<code>SOFLE_EEPROM_VERSION</code> 现在是 4），烧完第一次启动会顺手把键位和<b>灯光设置</b>都刷回固件默认——也就是纯白常亮；之后在 VIA / 键盘上改的灯效会一直留着</td></tr>
+      <tr><th>EEPROM</th><td>键位表变了（<code>SOFLE_EEPROM_VERSION</code> 现在是 11），烧完第一次启动会顺手把键位和<b>灯光设置</b>都刷回固件默认——也就是纯白常亮；之后在 VIA / 键盘上改的灯效会一直留着</td></tr>
     </table>
   </div>
 
@@ -261,7 +298,7 @@
   <p class="lead">四类共 13 个画面：<b>status</b> 状态屏（层名 / Mac-Win / 实时修饰键 / 峰值 / WPM 进度条 / Caps）、
      <b>stats</b> 统计（按键数 / WPM / 峰值 / 当前层 / 运行时间）、
      <b>graph</b> WPM 曲线（大号数字 + 最近 21 秒柱状图）、
-     <b>layers</b> 层状态（四个层的开关，能看出三键组合出 ADJUST）。</p>
+     <b>layers</b> 层状态（五个层的开关，能看出三键组合出 ADJUST，以及 GAME 层）。</p>
   <div class="grid">
       <figure class="card">
         <a href="oled_preview/1x/status_01_idle_win.png"><img src="oled_preview/4x/status_01_idle_win.png" alt="空闲 · Win 模式 · 无修饰键" loading="lazy"></a>
@@ -709,7 +746,7 @@
   <h2>相关文件</h2>
   <ul>
     <li><a href="README.md">README.md</a> —— 构建信息、功能要点、验证记录、注意事项</li>
-    <li><a href="keymap.md">keymap.md</a> —— 四层键位表、换层方式、旋钮、自定义键</li>
+    <li><a href="keymap.md">keymap.md</a> —— 五层键位表、换层方式、旋钮、自定义键、OLED 游戏操作</li>
     <li><a href="oled_preview/README.md">oled_preview/README.md</a> —— OLED 三种画面、切换机制、换图方法</li>
     <li><a href="sofle_pico_default.uf2">sofle_pico_default.uf2</a> ← 烧录用这一份；
       <code>.hex</code> / <code>.elf</code> / <code>.map</code> 是同一份构建的派生物
@@ -721,7 +758,7 @@
     <li><code>gen_led_effects.py</code> · <code>led_effects.js</code> · <code>led_player.js</code> —— 把逐帧数据画成 GIF，并给本页的互动播放器用</li>
   </ul>
 
-  <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">4e65c38e47ff204b…</span></footer>
+  <footer>本页由 <code>gen_index.py</code> 生成 · 固件 SHA-256 <span class="hash">b18236b2f21374af…</span></footer>
 </div>
 
 <script src="led_effects.js"></script>

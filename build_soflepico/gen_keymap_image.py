@@ -74,6 +74,11 @@ LABELS = {
     "FX_WHITE": "纯白", "FX_CYCLE_OUT_IN": "波扩散", "FX_HUE_WAVE": "彩虹波", "FX_RAINBOW_BEACON": "信标",
     "FX_PIXEL_FLOW": "像素流", "FX_JELLYBEAN": "彩点", "FX_DIGITAL_RAIN": "数字雨",
     "FX_REACTIVE_NEXUS": "涟漪", "FX_TYPING_HEATMAP": "热图",
+    # OLED 游戏层
+    "TG(_GAME)": "游戏",
+    "GAME_CONFIRM": "确认", "GAME_PAUSE": "暂停", "GAME_RESTART": "重开", "GAME_EXIT": "退出",
+    "GAME_LEFT": "←", "GAME_RIGHT": "→", "GAME_DOWN": "↓",
+    "GAME_ROTATE": "↑/旋转", "GAME_DROP": "落底",
 }
 for _i in range(1, 13):
     LABELS[f"KC_F{_i}"] = f"F{_i}"
@@ -126,8 +131,47 @@ def parse_keymap(src):
     return layers
 
 
+def strip_json_comments(text):
+    """QMK's keyboard.json accepts // comments; Python's json does not."""
+    result = []
+    i = 0
+    in_string = False
+    escaped = False
+    while i < len(text):
+        ch = text[i]
+        if in_string:
+            result.append(ch)
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                in_string = False
+            i += 1
+            continue
+        if ch == '"':
+            in_string = True
+            result.append(ch)
+            i += 1
+            continue
+        if ch == "/" and i + 1 < len(text) and text[i + 1] == "/":
+            i += 2
+            while i < len(text) and text[i] not in "\r\n":
+                i += 1
+            continue
+        if ch == "/" and i + 1 < len(text) and text[i + 1] == "*":
+            i += 2
+            while i + 1 < len(text) and not (text[i] == "*" and text[i + 1] == "/"):
+                i += 1
+            i += 2
+            continue
+        result.append(ch)
+        i += 1
+    return "".join(result)
+
+
 def parse_layout(path):
-    data = json.load(open(path))["layouts"]["LAYOUT"]["layout"]
+    data = json.loads(strip_json_comments(open(path, encoding="utf-8").read()))["layouts"]["LAYOUT"]["layout"]
     return [
         {
             "label": k.get("label", ""),
@@ -157,6 +201,7 @@ STYLE = {  # 层: (键底色, 键边框, 面板标题色)
     "_LOWER": ("#e8f0fe", "#4a86e8", "#1a56b8"),
     "_RAISE": ("#fdeee0", "#e8811a", "#a85a06"),
     "_ADJUST": ("#f1e8fd", "#8a4fd8", "#6423ad"),
+    "_GAME": ("#e8f8ef", "#258a57", "#17663e"),
 }
 NOTE = {
     "_QWERTY": "基础层 0：平时就是这个。按住左拇指 LOWER → 第 1 层；按住右拇指 RAISE → 第 2 层；两个同时按住 → 第 3 层 ADJUST",
@@ -166,6 +211,10 @@ NOTE = {
                "右：色相/饱和/速度），下排左边 4~5 列是 9 个灯效直达键（第一个「纯白」是默认灯效）；"
                "此外还有 Mac/Win 切换、OLED 画面切换、清 EEPROM、烧录和媒体键。"
                "这一层两个旋钮也改成调灯（左=亮度、右=速度）",
+    "_GAME": "第 4 层：OLED 游戏。ADJUST 层左手第二排第 2 键（Q 键位置）进入；"
+             "菜单用 WASD/IJKL 任意方向移动高亮，右手 Enter 确认。游戏时 W/I=上或旋转，A/J=左，S/K=下，D/L=右；"
+             "同时按 LOWER+RAISE 退出。游戏引擎固定在右手，画面使用整块 64×128 竖屏；"
+             "所有文字都在左屏，右屏只画带外边框的游戏本体。",
 }
 
 
@@ -175,6 +224,9 @@ LAYER_INTRO = {
     "_RAISE": ("导航/编辑层", "方向、翻页、词移动、撤销/复制/粘贴；按住右手 RAISE 进入。"),
     "_ADJUST": ("设置层", "灯光控制（开关/切换/色相/饱和/亮度/速度 + 9 个灯效直达，含默认的纯白常亮）、"
                             "模式切换、OLED 画面切换、清 EEPROM、烧录、媒体键；LOWER+RAISE 同时按住进入。"),
+    "_GAME": ("游戏层", "OLED 贪吃蛇与俄罗斯方块。方向键菜单 + Enter 确认；WASD/IJKL 双套方向键；"
+                          "LOWER+RAISE 退出。游戏逻辑固定运行在右手，"
+                          "整块 64×128 竖屏使用；所有文字在左屏，右屏游戏无文字。"),
 }
 
 ROW_NAMES = ["数字行", "上排", "中排", "下排"]
@@ -369,7 +421,7 @@ def write_md(layout, layers):
     names = [n.lstrip("_") for n, _ in layers]
     parts = []
     parts.append("# sofle_pico `default` 键位图与分层说明\n")
-    parts.append("![四层键位图](keymap_layers.png)\n")
+    parts.append("![五层键位图](keymap_layers.png)\n")
     parts.append("> 放大看不糊的矢量版：[keymap_layers.svg](keymap_layers.svg)\n")
     parts.append("> 图片由 `gen_keymap_image.py` 从 `keymap.c` + `keyboard.json` 自动生成，"
                  "改键后重跑该脚本即可刷新。\n")
@@ -379,13 +431,14 @@ def write_md(layout, layers):
                  "右半拇指区最外侧是 **-**（原 GUI）；左右两个拇指大键都是 **Space**（左原 Enter）。")
 
     parts.append("## 一、层的切换方式\n")
-    parts.append("固件一共 4 层，**只有两个键负责换层，全部在拇指区**：\n")
+    parts.append("固件一共 5 层。前三层在拇指区，ADJUST 由 LOWER+RAISE 组合进入，GAME 再从 ADJUST 进入：\n")
     parts.append("| 层号 | 层名 | 怎么进入 | 松开后 |")
     parts.append("|---|---|---|---|")
     parts.append("| 0 | QWERTY | 默认基础层（开机即此层） | — |")
     parts.append("| 1 | LOWER | **按住**左手拇指的 `LOWER` 键 | 松开回到基础层 |")
     parts.append("| 2 | RAISE | **按住**右手拇指的 `RAISE` 键 | 松开回到基础层 |")
     parts.append("| 3 | ADJUST | **同时按住** `LOWER` + `RAISE` | 松开任意一个即退出 |")
+    parts.append("| 4 | GAME | 在 ADJUST 层按左手第二排第 2 键（Q 键位置）`游戏`（`TG(_GAME)`） | 按 `退出` 或同时按 LOWER+RAISE |")
     parts.append("")
     parts.append("拇指区的两个换层键位置（看图更直观）：\n")
     parts.append("```")
@@ -407,6 +460,13 @@ def write_md(layout, layers):
     parts.append("- `Mac/Win`（`CG_TOGG`）：切换 Mac 与 Win/Linux 模式，"
                  "影响修饰键顺序以及 RAISE 层的行首/行尾/词移动等快捷键，选择同样存 EEPROM。")
     parts.append("- `Boot`（`QK_BOOT`）：进入 bootloader 准备烧录；按住 Pico 的 BOOT 键插 USB 也可以。\n")
+    parts.append("### OLED 游戏操作\n")
+    parts.append("`ADJUST` 层按 `游戏` 进入第 4 层。菜单中用方向键移动高亮，右手 `Enter` 确认。"
+                 "`W/A/S/D` 与 `I/J/K/L` 都映射为方向键；俄罗斯方块的 `W/I` 是旋转。"
+                 "同时按 `LOWER + RAISE` 会退出游戏层并恢复普通模式。\n")
+    parts.append("游戏状态由**右手**计算，不跟随 USB 主控。右手是主控时直接推送；左手是主控时只转发按键并轮询右手。"
+                 "游戏使用完整的 64×128 竖屏：所有文字都放在左屏；右屏只画带外边框的游戏本体，不显示任何文字。"
+                 "贪吃蛇的棋盘只在右屏；俄罗斯方块左屏显示 NEXT、分数、等级、消行，右屏显示 6×6 正方形格子的 10×20 棋盘。\n")
 
     parts.append("## 二、每层的键位\n")
     parts.append("每层给两张表：**左手**从最左列到最右列；**右手**按从内到外（靠近中间缝 → 最外侧）排列。"
@@ -474,7 +534,7 @@ def main():
 
     unknown = sorted({a for _, args in layers for a in args
                       if a not in LABELS and not a.startswith("KC_")})
-    base_names = ["基础层 · QWERTY", "符号层", "导航/编辑层", "设置层"]
+    base_names = ["基础层 · QWERTY", "符号层", "导航/编辑层", "设置层", "游戏层"]
     prims, W, H = build(layout, layers, base_names[: len(layers)])
     png = emit_png(prims, W, H, OUT_PNG, SCALE)
     svg = emit_svg(prims, W, H, OUT_SVG)
